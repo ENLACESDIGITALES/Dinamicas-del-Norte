@@ -120,6 +120,7 @@
     width: {{ section.settings.timer_size }}px;
     height: {{ section.settings.timer_size }}px;
     perspective: 1000px;
+    position: relative;
   }
 
   .flip-card {
@@ -127,14 +128,26 @@
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
-    transform-origin: center center;
+    transition: transform 0.3s;
+    transform-origin: center bottom;
     border-radius: {{ section.settings.timer_border_radius }}px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 
   .flip-card.flipping {
-    transform: rotateX(180deg);
+    animation: flipTop 0.3s ease-out;
+  }
+
+  @keyframes flipTop {
+    0% {
+      transform: rotateX(0deg);
+    }
+    50% {
+      transform: rotateX(-90deg);
+    }
+    100% {
+      transform: rotateX(0deg);
+    }
   }
 
   .flip-card-front, .flip-card-back {
@@ -325,21 +338,20 @@
       // Marcar como animando
       isFlipping[unit] = true;
 
-      // Establecer el nuevo valor en la parte posterior
-      nextEl.textContent = newValue;
-
       // Iniciar el flip
       card.classList.add('flipping');
 
-      // Cuando termina la animación
+      // Actualizar el valor a mitad de la animación
       setTimeout(function() {
-        // Actualizar el valor frontral
         currentEl.textContent = newValue;
-        // Quitar clase de animación
+        nextEl.textContent = newValue;
+      }, 150);
+
+      // Quitar clase de animación después
+      setTimeout(function() {
         card.classList.remove('flipping');
-        // Ya no está animando
         isFlipping[unit] = false;
-      }, 500);
+      }, 300);
     }
 
     // Actualizar contador cada segundo
@@ -379,13 +391,16 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Verificar cambios para aplicar flip
+  // Verificar cambios para aplicar flip
       if (hours !== currentHours) {
-        // Detectar si cambió el último dígito
-        const lastDigitChanged = (hours % 10) !== (currentHours % 10);
+        // Detectar si cambió el último dígito (unidades)
+        const lastDigitHours = hours % 10;
+        const lastDigitCurrentHours = currentHours % 10;
+        const lastDigitChanged = (lastDigitHours !== lastDigitCurrentHours);
 
         // Solo hacer flip si cambió el último dígito o es la primera vez
-        if (currentHours === -1 || lastDigitChanged) {
+        if ((currentHours === -1) || lastDigitChanged) {
+          console.log("Flip hours: ", hours, currentHours, lastDigitHours, lastDigitCurrentHours);
           flipCard(hoursCard, hoursCurrent, hoursNext, hours);
         } else {
           // Actualizar sin animación
@@ -396,8 +411,13 @@
       }
 
       if (minutes !== currentMinutes) {
-        const lastDigitChanged = (minutes % 10) !== (currentMinutes % 10);
-        if (currentMinutes === -1 || lastDigitChanged) {
+        // Detectar si cambió el último dígito (unidades)
+        const lastDigitMinutes = minutes % 10;
+        const lastDigitCurrentMinutes = currentMinutes % 10;
+        const lastDigitChanged = (lastDigitMinutes !== lastDigitCurrentMinutes);
+
+        if ((currentMinutes === -1) || lastDigitChanged) {
+          console.log("Flip minutes: ", minutes, currentMinutes, lastDigitMinutes, lastDigitCurrentMinutes);
           flipCard(minutesCard, minutesCurrent, minutesNext, minutes);
         } else {
           minutesCurrent.textContent = formatNumber(minutes);
@@ -407,8 +427,13 @@
       }
 
       if (seconds !== currentSeconds) {
-        const lastDigitChanged = (seconds % 10) !== (currentSeconds % 10);
-        if (currentSeconds === -1 || lastDigitChanged) {
+        // Detectar si cambió el último dígito (unidades)
+        const lastDigitSeconds = seconds % 10;
+        const lastDigitCurrentSeconds = currentSeconds % 10;
+        const lastDigitChanged = (lastDigitSeconds !== lastDigitCurrentSeconds);
+
+        if ((currentSeconds === -1) || lastDigitChanged) {
+          console.log("Flip seconds: ", seconds, currentSeconds, lastDigitSeconds, lastDigitCurrentSeconds);
           flipCard(secondsCard, secondsCurrent, secondsNext, seconds);
         } else {
           secondsCurrent.textContent = formatNumber(seconds);
