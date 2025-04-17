@@ -1,61 +1,678 @@
-<div class="countdown-container">
+{% comment %}
+  Contador Regresivo Tecnológico
+  - Diseño moderno y personalizable
+  - Efectos visuales avanzados
+  - Opciones configurables desde el personalizador de Shopify
+{% endcomment %}
+
+<div
+  class="countdown-container {% if section.settings.dark_mode %}dark-mode{% endif %}"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+>
   <div class="container">
-    <div class="countdown-title">FALTA POCO TIEMPO PARA QUE ESTA OFERTA TERMINE</div>
+    {% if section.settings.show_title %}
+      <div class="countdown-title" style="font-size: {{ section.settings.title_size }}px;">
+        {{ section.settings.title_text }}
+      </div>
+    {% endif %}
+
     <div class="countdown-timer">
+      {% if section.settings.show_days %}
+        <div class="timer-item">
+          <div class="timer-value">
+            <span id="days">00</span>
+          </div>
+          <div class="timer-label">{{ section.settings.days_label }}</div>
+        </div>
+      {% endif %}
+
       <div class="timer-item">
-        <span id="hours">00</span>
-        <div class="timer-label">Horas</div>
+        <div class="timer-value">
+          <span id="hours">00</span>
+        </div>
+        <div class="timer-label">{{ section.settings.hours_label }}</div>
       </div>
+
       <div class="timer-item">
-        <span id="minutes">15</span>
-        <div class="timer-label">Minutos</div>
+        <div class="timer-value">
+          <span id="minutes">00</span>
+        </div>
+        <div class="timer-label">{{ section.settings.minutes_label }}</div>
       </div>
+
       <div class="timer-item">
-        <span id="seconds">06</span>
-        <div class="timer-label">Segundos</div>
+        <div class="timer-value">
+          <span id="seconds">00</span>
+        </div>
+        <div class="timer-label">{{ section.settings.seconds_label }}</div>
       </div>
     </div>
+
+    {% if section.settings.show_message_after and section.settings.message_after_end != blank %}
+      <div class="post-countdown-message" id="post-countdown-message" style="display: none;">
+        {{ section.settings.message_after_end }}
+      </div>
+    {% endif %}
   </div>
 </div>
 
+<style>
+  .countdown-container {
+    width: 100%;
+    padding: 1.5rem 0;
+    text-align: center;
+    border-radius: {{ section.settings.border_radius }}px;
+    box-shadow: {% if section.settings.enable_shadow %}0 4px 15px rgba(0, 0, 0, 0.1){% else %}none{% endif %};
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .countdown-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: {% if section.settings.enable_gradient %}linear-gradient(45deg, {{ section.settings.gradient_color_1 }}, {{ section.settings.gradient_color_2 }}){% else %}none{% endif %};
+    opacity: 0.7;
+    z-index: 0;
+  }
+
+  .countdown-container .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .countdown-title {
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-transform: {% if section.settings.title_uppercase %}uppercase{% else %}none{% endif %};
+    letter-spacing: {{ section.settings.title_letter_spacing | default: 0 }}px;
+    opacity: 0;
+    animation: fadeInDown 0.5s ease forwards;
+  }
+
+  .countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: {{ section.settings.timer_spacing }}px;
+    margin-bottom: 1rem;
+  }
+
+  .timer-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: calc(var(--index) * 0.1s);
+    opacity: 0;
+  }
+
+  .timer-value {
+    background: {{ section.settings.timer_background_color }};
+    color: {{ section.settings.timer_text_color }};
+    border-radius: {{ section.settings.timer_border_radius }}px;
+    min-width: {{ section.settings.timer_size }}px;
+    min-height: {{ section.settings.timer_size }}px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: calc({{ section.settings.timer_size }}px * 0.5);
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    box-shadow: {{ section.settings.timer_shadow | default: false | json }}
+      ? '0 4px 8px rgba(0, 0, 0, 0.2)'
+      : 'none';
+    border: {{ section.settings.timer_border_width }}px solid {{ section.settings.timer_border_color }};
+  }
+
+  .timer-value::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .timer-label {
+    margin-top: 0.5rem;
+    font-size: {{ section.settings.label_size }}px;
+    font-weight: {% if section.settings.label_bold %}bold{% else %}normal{% endif %};
+  }
+
+  .post-countdown-message {
+    margin-top: 1.5rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+  }
+
+  .dark-mode {
+    color: #f0f0f0;
+  }
+
+  .dark-mode .timer-value {
+    background: rgba(30, 30, 30, 0.8);
+  }
+
+  /* Animations */
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes glowing {
+    0% {
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  /* Media Queries */
+  @media (max-width: 768px) {
+    .countdown-timer {
+      flex-wrap: {% if section.settings.enable_wrap_mobile %}wrap{% else %}nowrap{% endif %};
+    }
+
+    .timer-value {
+      min-width: calc({{ section.settings.timer_size | default: 60 }}px * 0.8);
+      min-height: calc({{ section.settings.timer_size | default: 60 }}px * 0.8);
+      font-size: calc({{ section.settings.timer_size | default: 60 }}px * 0.4);
+    }
+
+    .timer-label {
+      font-size: calc({{ section.settings.label_size }}px * 0.9);
+    }
+
+    .countdown-title {
+      font-size: calc({{ section.settings.title_size }}px * 0.8) !important;
+    }
+  }
+
+  {% if section.settings.enable_glow_effect %}
+  .timer-value {
+    animation: glowing 2s infinite;
+  }
+  {% endif %}
+</style>
+
 <script>
-  // Configuración del contador regresivo
   document.addEventListener('DOMContentLoaded', function() {
-    // Configurar la fecha objetivo - 24 horas a partir de la carga
-    var countDownDate = new Date();
-    countDownDate.setHours(countDownDate.getHours() + 24);
-    
-    // Actualizar cada segundo
-    var x = setInterval(function() {
-      var now = new Date().getTime();
-      var distance = countDownDate - now;
-      
-      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      
+    // Set animation delay for timer items
+    const timerItems = document.querySelectorAll('.timer-item');
+    timerItems.forEach((item, index) => {
+      item.style.setProperty('--index', index);
+    });
+
+    // Parse date or duration settings
+    let countDownDate;
+
+    {% if section.settings.date_type == 'specific_date' %}
+      // Use specific date and time from settings
+      countDownDate = new Date("{{ section.settings.end_date }}").getTime();
+    {% elsif section.settings.date_type == 'duration' %}
+      // Set duration based on settings (hours from now)
+      countDownDate = new Date();
+      countDownDate.setHours(countDownDate.getHours() + {{ section.settings.duration_hours }});
+      countDownDate.setMinutes(countDownDate.getMinutes() + {{ section.settings.duration_minutes }});
+      countDownDate = countDownDate.getTime();
+    {% else %}
+      // Default: 24 hours from now
+      countDownDate = new Date();
+      countDownDate.setHours(countDownDate.getHours() + 24);
+      countDownDate = countDownDate.getTime();
+    {% endif %}
+
+    // Check if we should use browser's local storage to remember the countdown
+    {% if section.settings.persistent_timer %}
+      const storedEndTime = localStorage.getItem('countdownEndTime');
+      if (storedEndTime) {
+        countDownDate = parseInt(storedEndTime);
+      } else {
+        localStorage.setItem('countdownEndTime', countDownDate);
+      }
+    {% endif %}
+
+    // Update the countdown every second
+    const x = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+
+      // Time calculations
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Add leading zeros and display
+      if (document.getElementById("days")) {
+        document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
+      }
       document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
       document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
       document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
-      
+
+      // If the countdown is over
       if (distance < 0) {
         clearInterval(x);
+
+        // Set all displays to 00
+        if (document.getElementById("days")) {
+          document.getElementById("days").innerHTML = "00";
+        }
         document.getElementById("hours").innerHTML = "00";
         document.getElementById("minutes").innerHTML = "00";
         document.getElementById("seconds").innerHTML = "00";
+
+        // Show message after countdown if enabled
+        const postMessage = document.getElementById("post-countdown-message");
+        if (postMessage) {
+          postMessage.style.display = "block";
+        }
+
+        {% if section.settings.redirect_after_end and section.settings.redirect_url != blank %}
+        // Redirect after countdown if enabled
+        setTimeout(function() {
+          window.location.href = "{{ section.settings.redirect_url }}";
+        }, {{ section.settings.redirect_delay | default: 0 }} * 1000);
+        {% endif %}
+
+        {% if section.settings.hide_after_end %}
+        // Hide the counter after it's complete if enabled
+        setTimeout(function() {
+          document.querySelector('.countdown-container').style.display = 'none';
+        }, 3000);
+        {% endif %}
+
+        // Clear stored end time if needed
+        {% if section.settings.persistent_timer %}
+        localStorage.removeItem('countdownEndTime');
+        {% endif %}
       }
     }, 1000);
+
+    // Apply any additional visual effects based on settings
+    {% if section.settings.enable_bounce_effect %}
+    const timerValues = document.querySelectorAll('.timer-value');
+    setInterval(function() {
+      timerValues.forEach(value => {
+        value.classList.add('bounce');
+        setTimeout(function() {
+          value.classList.remove('bounce');
+        }, 300);
+      });
+    }, 60000); // Bounce effect every minute
+    {% endif %}
   });
 </script>
 
 {% schema %}
 {
-  "name": "Contador Regresivo",
-  "settings": [],
+  "name": "Contador Regresivo Tech",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuración General"
+    },
+    {
+      "type": "checkbox",
+      "id": "dark_mode",
+      "label": "Modo oscuro",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Color de fondo",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "label": "Radio de borde (px)",
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shadow",
+      "label": "Habilitar sombra",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Configuración de Gradiente"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gradient",
+      "label": "Habilitar fondo con gradiente",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_1",
+      "label": "Color 1 del gradiente",
+      "default": "#4a90e2"
+    },
+    {
+      "type": "color",
+      "id": "gradient_color_2",
+      "label": "Color 2 del gradiente",
+      "default": "#50e3c2"
+    },
+    {
+      "type": "header",
+      "content": "Configuración del Título"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Mostrar título",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title_text",
+      "label": "Texto del título",
+      "default": "FALTA POCO TIEMPO PARA QUE ESTA OFERTA TERMINE"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "label": "Tamaño de título (px)",
+      "default": 18
+    },
+    {
+      "type": "checkbox",
+      "id": "title_uppercase",
+      "label": "Texto en mayúsculas",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "title_letter_spacing",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "label": "Espaciado entre letras (px)",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "Configuración del Temporizador"
+    },
+    {
+      "type": "select",
+      "id": "date_type",
+      "label": "Tipo de cuenta regresiva",
+      "options": [
+        {
+          "value": "duration",
+          "label": "Duración desde ahora"
+        },
+        {
+          "value": "specific_date",
+          "label": "Fecha específica"
+        }
+      ],
+      "default": "duration"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "Fecha de finalización (YYYY-MM-DD)",
+      "info": "Formato: AAAA-MM-DD. Solo se usará si seleccionó 'Fecha específica'",
+      "default": "2025-12-31"
+    },
+    {
+      "type": "number",
+      "id": "duration_hours",
+      "label": "Duración (horas)",
+      "default": 24,
+      "info": "Solo se usará si seleccionó 'Duración desde ahora'"
+    },
+    {
+      "type": "number",
+      "id": "duration_minutes",
+      "label": "Duración adicional (minutos)",
+      "default": 0,
+      "info": "Solo se usará si seleccionó 'Duración desde ahora'"
+    },
+    {
+      "type": "checkbox",
+      "id": "persistent_timer",
+      "label": "Persistir el temporizador entre visitas",
+      "default": true,
+      "info": "La cuenta regresiva continuará desde donde se detuvo en la última visita"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_days",
+      "label": "Mostrar días",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "days_label",
+      "label": "Etiqueta para días",
+      "default": "Días"
+    },
+    {
+      "type": "text",
+      "id": "hours_label",
+      "label": "Etiqueta para horas",
+      "default": "Horas"
+    },
+    {
+      "type": "text",
+      "id": "minutes_label",
+      "label": "Etiqueta para minutos",
+      "default": "Minutos"
+    },
+    {
+      "type": "text",
+      "id": "seconds_label",
+      "label": "Etiqueta para segundos",
+      "default": "Segundos"
+    },
+    {
+      "type": "range",
+      "id": "timer_size",
+      "min": 40,
+      "max": 120,
+      "step": 5,
+      "label": "Tamaño del temporizador (px)",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "timer_spacing",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "label": "Espaciado entre elementos (px)",
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "timer_background_color",
+      "label": "Color de fondo del temporizador",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "timer_text_color",
+      "label": "Color de texto del temporizador",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "timer_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "label": "Radio de borde del temporizador (px)",
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "timer_shadow",
+      "label": "Añadir sombra al temporizador",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "timer_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Ancho del borde del temporizador (px)",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "timer_border_color",
+      "label": "Color del borde del temporizador",
+      "default": "#cccccc"
+    },
+    {
+      "type": "header",
+      "content": "Configuración de Etiquetas"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "label": "Tamaño de etiquetas (px)",
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "label_bold",
+      "label": "Etiquetas en negrita",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Efectos Visuales"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_glow_effect",
+      "label": "Habilitar efecto de brillo",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_bounce_effect",
+      "label": "Habilitar efecto de rebote cada minuto",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_wrap_mobile",
+      "label": "Permitir ajuste de elementos en móvil",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Configuración de Finalización"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_message_after",
+      "label": "Mostrar mensaje al finalizar",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "message_after_end",
+      "label": "Mensaje al finalizar",
+      "default": "¡La oferta ha terminado!"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_after_end",
+      "label": "Ocultar contador después de finalizar",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "redirect_after_end",
+      "label": "Redirigir después de finalizar",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "redirect_url",
+      "label": "URL de redirección"
+    },
+    {
+      "type": "number",
+      "id": "redirect_delay",
+      "label": "Retraso antes de redirigir (segundos)",
+      "default": 0
+    }
+  ],
   "presets": [
     {
-      "name": "Contador Regresivo",
-      "category": "Sorteos"
+      "name": "Contador Regresivo Tech",
+      "category": "Promoción"
     }
   ]
 }
