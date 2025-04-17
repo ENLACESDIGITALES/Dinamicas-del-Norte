@@ -1,5 +1,5 @@
 {% comment %}
-  Contador Regresivo con Estilo Flip
+  Contador Regresivo con Efecto Flip
 {% endcomment %}
 
 <div class="countdown-banner" style="background-color: {{ section.settings.background_color }};">
@@ -9,22 +9,53 @@
     </div>
     <div class="countdown-timer">
       <div class="timer-group">
-        <div class="timer-box">
-          <span id="hours">00</span>
+        <div class="flip-card" id="hours-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span id="hours">00</span>
+            </div>
+            <div class="flip-card-back">
+              <span id="hours-next">00</span>
+            </div>
+          </div>
         </div>
         <div class="timer-label">{{ section.settings.hours_label }}</div>
       </div>
-      <div class="timer-separator">•</div>
+
+      <div class="timer-separator">
+        <div class="separator-dot top"></div>
+        <div class="separator-dot bottom"></div>
+      </div>
+
       <div class="timer-group">
-        <div class="timer-box">
-          <span id="minutes">00</span>
+        <div class="flip-card" id="minutes-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span id="minutes">00</span>
+            </div>
+            <div class="flip-card-back">
+              <span id="minutes-next">00</span>
+            </div>
+          </div>
         </div>
         <div class="timer-label">{{ section.settings.minutes_label }}</div>
       </div>
-      <div class="timer-separator">•</div>
+
+      <div class="timer-separator">
+        <div class="separator-dot top"></div>
+        <div class="separator-dot bottom"></div>
+      </div>
+
       <div class="timer-group">
-        <div class="timer-box">
-          <span id="seconds">00</span>
+        <div class="flip-card" id="seconds-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <span id="seconds">00</span>
+            </div>
+            <div class="flip-card-back">
+              <span id="seconds-next">00</span>
+            </div>
+          </div>
         </div>
         <div class="timer-label">{{ section.settings.seconds_label }}</div>
       </div>
@@ -75,18 +106,62 @@
     align-items: center;
   }
 
-  .timer-box {
+  .flip-card {
     background-color: #FFFFFF;
-    color: #000000;
     width: {{ section.settings.timer_size }}px;
     height: {{ section.settings.timer_size }}px;
+    perspective: 1000px;
+    margin: 0 5px;
+    border-radius: {{ section.settings.timer_border_radius }}px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.3s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card.flip .flip-card-inner {
+    transform: rotateX(180deg);
+  }
+
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #FFFFFF;
+    color: #000000;
     font-size: calc({{ section.settings.timer_size }}px * 0.65);
     font-weight: bold;
-    margin: 0 5px;
-    border-radius: {{ section.settings.timer_border_radius }}px;
+  }
+
+  .flip-card-front {
+    transform: rotateX(0deg);
+  }
+
+  .flip-card-back {
+    transform: rotateX(180deg);
+  }
+
+  .flip-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 10;
   }
 
   .timer-label {
@@ -97,10 +172,20 @@
   }
 
   .timer-separator {
-    color: #FFFFFF;
-    font-size: calc({{ section.settings.timer_size }}px * 0.5);
-    margin: 0 5px;
-    padding-bottom: {{ section.settings.timer_size }}px;
+    height: {{ section.settings.timer_size }}px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 10px;
+    padding-bottom: 12px;
+  }
+
+  .separator-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    margin: 10px 0;
   }
 
   @media screen and (max-width: 768px) {
@@ -121,15 +206,24 @@
       font-size: calc({{ section.settings.title_size }}px * 0.7);
     }
 
-    .timer-box {
+    .flip-card {
       width: calc({{ section.settings.timer_size }}px * 0.8);
       height: calc({{ section.settings.timer_size }}px * 0.8);
+    }
+
+    .flip-card-front, .flip-card-back {
       font-size: calc({{ section.settings.timer_size }}px * 0.5);
     }
 
     .timer-separator {
-      font-size: calc({{ section.settings.timer_size }}px * 0.4);
-      padding-bottom: calc({{ section.settings.timer_size }}px * 0.8);
+      height: calc({{ section.settings.timer_size }}px * 0.8);
+      margin: 0 5px;
+    }
+
+    .separator-dot {
+      width: 6px;
+      height: 6px;
+      margin: 8px 0;
     }
   }
 
@@ -138,11 +232,13 @@
       font-size: calc({{ section.settings.title_size }}px * 0.5);
     }
 
-    .timer-box {
+    .flip-card {
       width: calc({{ section.settings.timer_size }}px * 0.6);
       height: calc({{ section.settings.timer_size }}px * 0.6);
+    }
+
+    .flip-card-front, .flip-card-back {
       font-size: calc({{ section.settings.timer_size }}px * 0.4);
-      margin: 0 2px;
     }
 
     .timer-label {
@@ -150,15 +246,35 @@
     }
 
     .timer-separator {
-      font-size: calc({{ section.settings.timer_size }}px * 0.3);
-      padding-bottom: calc({{ section.settings.timer_size }}px * 0.6);
-      margin: 0 2px;
+      height: calc({{ section.settings.timer_size }}px * 0.6);
+      margin: 0 3px;
     }
+
+    .separator-dot {
+      width: 4px;
+      height: 4px;
+      margin: 6px 0;
+    }
+  }
+
+  @keyframes flipTop {
+    0% { transform: rotateX(0deg); }
+    50%, 100% { transform: rotateX(-90deg); }
+  }
+
+  @keyframes flipBottom {
+    0%, 50% { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Variables para seguimiento de tiempo
+    let currentHours = -1;
+    let currentMinutes = -1;
+    let currentSeconds = -1;
+
     // Establecer tiempo de finalización
     let countDownDate;
 
@@ -183,6 +299,33 @@
       }
     {% endif %}
 
+    // Función para animar el cambio de un número
+    function animateFlip(elementId, newValue) {
+      const card = document.getElementById(elementId + '-card');
+      const current = document.getElementById(elementId);
+      const next = document.getElementById(elementId + '-next');
+
+      if (!card || !current || !next) return;
+
+      // Formatear el valor con ceros a la izquierda
+      newValue = (newValue < 10) ? "0" + newValue : newValue;
+
+      // Si el valor ya está actualizado, no hacer nada
+      if (current.textContent === newValue) return;
+
+      // Establecer el nuevo valor en la parte posterior
+      next.textContent = newValue;
+
+      // Iniciar la animación
+      card.classList.add('flip');
+
+      // Después de la animación, actualizar el valor frontal y restablecer
+      setTimeout(function() {
+        current.textContent = newValue;
+        card.classList.remove('flip');
+      }, 300);
+    }
+
     // Actualizar contador cada segundo
     const countdown = setInterval(function() {
       const now = new Date().getTime();
@@ -193,18 +336,29 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Mostrar el contador
-      document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
-      document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
-      document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+      // Animar cambios solo cuando los valores cambian
+      if (hours !== currentHours) {
+        animateFlip('hours', hours);
+        currentHours = hours;
+      }
+
+      if (minutes !== currentMinutes) {
+        animateFlip('minutes', minutes);
+        currentMinutes = minutes;
+      }
+
+      if (seconds !== currentSeconds) {
+        animateFlip('seconds', seconds);
+        currentSeconds = seconds;
+      }
 
       // Si el contador llega a cero
       if (distance < 0) {
         clearInterval(countdown);
 
-        document.getElementById("hours").innerHTML = "00";
-        document.getElementById("minutes").innerHTML = "00";
-        document.getElementById("seconds").innerHTML = "00";
+        document.getElementById("hours").textContent = "00";
+        document.getElementById("minutes").textContent = "00";
+        document.getElementById("seconds").textContent = "00";
 
         {% if section.settings.hide_after_end %}
         setTimeout(function() {
@@ -223,6 +377,31 @@
         {% endif %}
       }
     }, 1000);
+
+    // Inicialización de valores
+    const initialUpdate = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+
+      // Cálculo de tiempo
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Establecer valores iniciales sin animación
+      document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+      document.getElementById("hours-next").textContent = hours < 10 ? "0" + hours : hours;
+      document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+      document.getElementById("minutes-next").textContent = minutes < 10 ? "0" + minutes : minutes;
+      document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+      document.getElementById("seconds-next").textContent = seconds < 10 ? "0" + seconds : seconds;
+
+      currentHours = hours;
+      currentMinutes = minutes;
+      currentSeconds = seconds;
+
+      clearInterval(initialUpdate);
+    }, 10);
   });
 </script>
 
