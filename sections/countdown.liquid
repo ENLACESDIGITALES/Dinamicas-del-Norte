@@ -1,5 +1,5 @@
 {% comment %}
-  Contador Regresivo Simple
+  Contador Regresivo Profesional
 {% endcomment %}
 
 <div class="countdown-banner" style="background-color: {{ section.settings.background_color }};">
@@ -8,32 +8,37 @@
       <h2 style="color: {{ section.settings.text_color }};">{{ section.settings.title_text }}</h2>
     </div>
     <div class="countdown-timer">
+      <!-- HORAS -->
       <div class="timer-group">
-        <div class="timer-box">
+        <div class="timer-card">
           <span id="hours">00</span>
         </div>
         <div class="timer-label">{{ section.settings.hours_label }}</div>
       </div>
 
+      <!-- SEPARADOR -->
       <div class="timer-separator">
         <div class="separator-dot"></div>
         <div class="separator-dot"></div>
       </div>
 
+      <!-- MINUTOS -->
       <div class="timer-group">
-        <div class="timer-box">
+        <div class="timer-card">
           <span id="minutes">00</span>
         </div>
         <div class="timer-label">{{ section.settings.minutes_label }}</div>
       </div>
 
+      <!-- SEPARADOR -->
       <div class="timer-separator">
         <div class="separator-dot"></div>
         <div class="separator-dot"></div>
       </div>
 
+      <!-- SEGUNDOS -->
       <div class="timer-group">
-        <div class="timer-box">
+        <div class="timer-card">
           <span id="seconds">00</span>
         </div>
         <div class="timer-label">{{ section.settings.seconds_label }}</div>
@@ -43,6 +48,7 @@
 </div>
 
 <style>
+  /* Estilos básicos */
   .countdown-banner {
     width: 100%;
     padding: 15px 0;
@@ -58,6 +64,7 @@
     padding: 0 20px;
   }
 
+  /* Estilos del texto */
   .countdown-text {
     width: 50%;
   }
@@ -72,6 +79,7 @@
     text-transform: uppercase;
   }
 
+  /* Estilos del temporizador */
   .countdown-timer {
     width: 50%;
     display: flex;
@@ -83,34 +91,33 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 2px;
   }
 
-  .timer-box {
-    background-color: #FFFFFF;
-    color: #000000;
+  /* Estilos de las tarjetas */
+  .timer-card {
+    background-color: white;
+    color: black;
     width: {{ section.settings.timer_size }}px;
     height: {{ section.settings.timer_size }}px;
+    border-radius: {{ section.settings.timer_border_radius }}px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: {{ section.settings.timer_border_radius }}px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin: 0 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
   }
 
-  .timer-box span {
-    font-size: calc({{ section.settings.timer_size }}px * 0.55);
+  .timer-card span {
+    font-size: calc({{ section.settings.timer_size }}px * 0.6);
     font-weight: bold;
     text-align: center;
+    display: block;
+    position: relative;
   }
 
-  .timer-label {
-    color: #FFFFFF;
-    font-size: {{ section.settings.label_size }}px;
-    margin-top: 5px;
-    text-align: center;
-  }
-
+  /* Estilos de los separadores */
   .timer-separator {
     display: flex;
     flex-direction: column;
@@ -122,11 +129,37 @@
   .separator-dot {
     width: 8px;
     height: 8px;
-    background-color: #FFFFFF;
+    background-color: white;
     border-radius: 50%;
     margin: 5px 0;
   }
 
+  /* Estilos de las etiquetas */
+  .timer-label {
+    color: white;
+    font-size: {{ section.settings.label_size }}px;
+    margin-top: 5px;
+    text-align: center;
+  }
+
+  /* Animación para el cambio de números */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .pulse {
+    animation: pulse 0.3s ease-in-out;
+  }
+
+  /* Media Queries */
   @media screen and (max-width: 768px) {
     .countdown-container {
       flex-direction: column;
@@ -145,22 +178,22 @@
       font-size: calc({{ section.settings.title_size }}px * 0.7);
     }
 
-    .timer-box {
+    .timer-card {
       width: calc({{ section.settings.timer_size }}px * 0.8);
       height: calc({{ section.settings.timer_size }}px * 0.8);
     }
 
-    .timer-box span {
+    .timer-card span {
       font-size: calc({{ section.settings.timer_size }}px * 0.45);
-    }
-
-    .timer-separator {
-      height: calc({{ section.settings.timer_size }}px * 0.8);
     }
 
     .separator-dot {
       width: 6px;
       height: 6px;
+    }
+
+    .timer-label {
+      font-size: calc({{ section.settings.label_size }}px * 0.9);
     }
   }
 
@@ -169,49 +202,28 @@
       font-size: calc({{ section.settings.title_size }}px * 0.5);
     }
 
-    .timer-box {
-      width: calc({{ section.settings.timer_size }}px * 0.6);
-      height: calc({{ section.settings.timer_size }}px * 0.6);
+    .timer-card {
+      width: calc({{ section.settings.timer_size }}px * 0.7);
+      height: calc({{ section.settings.timer_size }}px * 0.7);
     }
 
-    .timer-box span {
-      font-size: calc({{ section.settings.timer_size }}px * 0.35);
+    .timer-card span {
+      font-size: calc({{ section.settings.timer_size }}px * 0.4);
+    }
+
+    .timer-separator {
+      padding: 0 3px;
+    }
+
+    .separator-dot {
+      width: 5px;
+      height: 5px;
+      margin: 4px 0;
     }
 
     .timer-label {
       font-size: calc({{ section.settings.label_size }}px * 0.8);
     }
-
-    .timer-separator {
-      height: calc({{ section.settings.timer_size }}px * 0.6);
-      padding: 0 3px;
-    }
-
-    .separator-dot {
-      width: 4px;
-      height: 4px;
-      margin: 3px 0;
-    }
-  }
-
-  /* Animación para el cambio de dígitos */
-  @keyframes numberChange {
-    0% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    50% {
-      transform: translateY(-10px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  .number-change {
-    animation: numberChange 0.3s ease-in-out;
   }
 </style>
 
@@ -251,25 +263,23 @@
       }
     {% endif %}
 
-    // Función para aplicar animación cuando cambia un dígito
+    // Función para actualizar con animación
     function updateWithAnimation(element, newValue) {
-      // Formatear el valor con ceros a la izquierda
+      // Formatear con ceros a la izquierda
       newValue = (newValue < 10) ? "0" + newValue : newValue;
 
-      // Si el valor ya está actualizado, no hacer nada
+      // Si el valor no ha cambiado, no hacer nada
       if (element.textContent === newValue) return;
 
+      // Actualizar el valor
+      element.textContent = newValue;
+
       // Aplicar la animación
-      element.classList.add('number-change');
+      element.classList.add('pulse');
 
-      // Actualizar el valor a mitad de la animación
+      // Quitar la clase de animación después
       setTimeout(function() {
-        element.textContent = newValue;
-      }, 150);
-
-      // Quitar la clase de animación después de que termine
-      setTimeout(function() {
-        element.classList.remove('number-change');
+        element.classList.remove('pulse');
       }, 300);
     }
 
@@ -278,7 +288,7 @@
       const now = new Date().getTime();
       const distance = countDownDate - now;
 
-      // Si el contador llega a cero
+      // Si el contador llegó a cero
       if (distance <= 0) {
         clearInterval(countdown);
 
@@ -310,7 +320,7 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Verificar si el último dígito cambió para aplicar animación
+      // Verificar cambios para aplicar animación
       if (hours !== currentHours) {
         const lastDigitChanged = (hours % 10) !== (currentHours % 10);
         if (currentHours === -1 || lastDigitChanged) {
