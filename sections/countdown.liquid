@@ -1,55 +1,87 @@
 {% comment %}
-  Contador Regresivo Tecnológico
-  - Diseño moderno y personalizable
+  Contador Regresivo Tecnológico Mejorado
+  - Diseño moderno y completamente responsivo
+  - Colores controlados correctamente por el schema
   - Efectos visuales avanzados
-  - Opciones configurables desde el personalizador de Shopify
 {% endcomment %}
 
 <div
-  class="countdown-container {% if section.settings.dark_mode %}dark-mode{% endif %}"
-  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+  class="countdown-section"
+  style="{% if section.settings.enable_gradient %}background: linear-gradient(45deg, {{ section.settings.gradient_color_1 }}, {{ section.settings.gradient_color_2 }});{% else %}background-color: {{ section.settings.background_color }};{% endif %}"
 >
-  <div class="container">
+  <div class="countdown-container {% if section.settings.dark_mode %}dark-mode{% endif %}">
     {% if section.settings.show_title %}
-      <div class="countdown-title" style="font-size: {{ section.settings.title_size }}px;">
+      <h2
+        class="countdown-title"
+        style="color: {{ section.settings.text_color }}; font-size: {{ section.settings.title_size }}px;"
+      >
         {{ section.settings.title_text }}
-      </div>
+      </h2>
     {% endif %}
 
-    <div class="countdown-timer">
-      {% if section.settings.show_days %}
-        <div class="timer-item">
-          <div class="timer-value">
-            <span id="days">00</span>
+    <div class="countdown-timer-wrapper">
+      <div class="countdown-timer">
+        {% if section.settings.show_days %}
+          <div class="timer-item">
+            <div
+              class="timer-value"
+              style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
+            >
+              <span id="days">00</span>
+            </div>
+            <div class="timer-label" style="color: {{ section.settings.text_color }};">
+              {{ section.settings.days_label }}
+            </div>
           </div>
-          <div class="timer-label">{{ section.settings.days_label }}</div>
-        </div>
-      {% endif %}
+          <div class="timer-separator">:</div>
+        {% endif %}
 
-      <div class="timer-item">
-        <div class="timer-value">
-          <span id="hours">00</span>
+        <div class="timer-item">
+          <div
+            class="timer-value"
+            style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
+          >
+            <span id="hours">00</span>
+          </div>
+          <div class="timer-label" style="color: {{ section.settings.text_color }};">
+            {{ section.settings.hours_label }}
+          </div>
         </div>
-        <div class="timer-label">{{ section.settings.hours_label }}</div>
-      </div>
+        <div class="timer-separator">:</div>
 
-      <div class="timer-item">
-        <div class="timer-value">
-          <span id="minutes">00</span>
+        <div class="timer-item">
+          <div
+            class="timer-value"
+            style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
+          >
+            <span id="minutes">00</span>
+          </div>
+          <div class="timer-label" style="color: {{ section.settings.text_color }};">
+            {{ section.settings.minutes_label }}
+          </div>
         </div>
-        <div class="timer-label">{{ section.settings.minutes_label }}</div>
-      </div>
+        <div class="timer-separator">:</div>
 
-      <div class="timer-item">
-        <div class="timer-value">
-          <span id="seconds">00</span>
+        <div class="timer-item">
+          <div
+            class="timer-value"
+            style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
+          >
+            <span id="seconds">00</span>
+          </div>
+          <div class="timer-label" style="color: {{ section.settings.text_color }};">
+            {{ section.settings.seconds_label }}
+          </div>
         </div>
-        <div class="timer-label">{{ section.settings.seconds_label }}</div>
       </div>
     </div>
 
     {% if section.settings.show_message_after and section.settings.message_after_end != blank %}
-      <div class="post-countdown-message" id="post-countdown-message" style="display: none;">
+      <div
+        class="post-countdown-message"
+        id="post-countdown-message"
+        style="display: none; color: {{ section.settings.text_color }};"
+      >
         {{ section.settings.message_after_end }}
       </div>
     {% endif %}
@@ -57,79 +89,77 @@
 </div>
 
 <style>
-  .countdown-container {
+  .countdown-section {
     width: 100%;
-    padding: 1.5rem 0;
-    text-align: center;
-    border-radius: {{ section.settings.border_radius }}px;
-    box-shadow: {% if section.settings.enable_shadow %}0 4px 15px rgba(0, 0, 0, 0.1){% else %}none{% endif %};
-    transition: all 0.3s ease;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+    position: relative;
     overflow: hidden;
-    position: relative;
+    border-radius: {{ section.settings.border_radius }}px;
+    {% if section.settings.enable_shadow %}
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    {% endif %}
   }
 
-  .countdown-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: {% if section.settings.enable_gradient %}linear-gradient(45deg, {{ section.settings.gradient_color_1 }}, {{ section.settings.gradient_color_2 }}){% else %}none{% endif %};
-    opacity: 0.7;
-    z-index: 0;
-  }
-
-  .countdown-container .container {
-    position: relative;
-    z-index: 1;
+  .countdown-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
   }
 
   .countdown-title {
-    margin-bottom: 1.5rem;
-    font-weight: bold;
-    text-transform: {% if section.settings.title_uppercase %}uppercase{% else %}none{% endif %};
-    letter-spacing: {{ section.settings.title_letter_spacing | default: 0 }}px;
-    opacity: 0;
-    animation: fadeInDown 0.5s ease forwards;
+    margin: 0 0 1.5rem 0;
+    padding: 0;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: {{ section.settings.title_letter_spacing }}px;
+    {% if section.settings.title_uppercase %}
+    text-transform: uppercase;
+    {% endif %}
+    animation: fadeInDown 0.7s ease forwards;
+  }
+
+  .countdown-timer-wrapper {
+    margin: 0 auto;
+    max-width: 600px;
   }
 
   .countdown-timer {
     display: flex;
     justify-content: center;
-    gap: {{ section.settings.timer_spacing }}px;
-    margin-bottom: 1rem;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-bottom: 1.5rem;
   }
 
   .timer-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    animation: fadeInUp 0.5s ease forwards;
+    position: relative;
+    animation: fadeInUp 0.7s ease forwards;
     animation-delay: calc(var(--index) * 0.1s);
     opacity: 0;
+    margin: 0 {{ section.settings.timer_spacing }}px;
   }
 
   .timer-value {
-    background: {{ section.settings.timer_background_color }};
-    color: {{ section.settings.timer_text_color }};
+    width: {{ section.settings.timer_size }}px;
+    height: {{ section.settings.timer_size }}px;
     border-radius: {{ section.settings.timer_border_radius }}px;
-    min-width: {{ section.settings.timer_size }}px;
-    min-height: {{ section.settings.timer_size }}px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: calc({{ section.settings.timer_size }}px * 0.5);
-    font-weight: bold;
+    font-size: calc({{ section.settings.timer_size }}px * 0.45);
+    font-weight: 700;
     position: relative;
     overflow: hidden;
-    box-shadow: {{ section.settings.timer_shadow | default: false | json }}
-      ? '0 4px 8px rgba(0, 0, 0, 0.2)'
-      : 'none';
     border: {{ section.settings.timer_border_width }}px solid {{ section.settings.timer_border_color }};
+    {% if section.settings.timer_shadow %}
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    {% endif %}
   }
 
   .timer-value::before {
@@ -142,24 +172,33 @@
     background: rgba(255, 255, 255, 0.2);
   }
 
+  .timer-separator {
+    font-size: calc({{ section.settings.timer_size }}px * 0.45);
+    font-weight: 700;
+    margin-top: -{{ section.settings.label_size }}px;
+    opacity: 0.7;
+  }
+
   .timer-label {
     margin-top: 0.5rem;
     font-size: {{ section.settings.label_size }}px;
-    font-weight: {% if section.settings.label_bold %}bold{% else %}normal{% endif %};
+    {% if section.settings.label_bold %}
+    font-weight: 700;
+    {% else %}
+    font-weight: 400;
+    {% endif %}
   }
 
   .post-countdown-message {
     margin-top: 1.5rem;
-    font-weight: bold;
+    font-weight: 700;
+    font-size: 1.2rem;
     animation: pulse 2s infinite;
   }
 
-  .dark-mode {
-    color: #f0f0f0;
-  }
-
-  .dark-mode .timer-value {
-    background: rgba(30, 30, 30, 0.8);
+  .dark-mode .timer-label,
+  .dark-mode .countdown-title {
+    color: #f0f0f0 !important;
   }
 
   /* Animations */
@@ -209,16 +248,56 @@
     }
   }
 
+  {% if section.settings.enable_glow_effect %}
+  .timer-value {
+    animation: glowing 2s infinite;
+  }
+  {% endif %}
+
+  {% if section.settings.enable_bounce_effect %}
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .bounce {
+    animation: bounce 0.3s ease;
+  }
+  {% endif %}
+
   /* Media Queries */
   @media (max-width: 768px) {
     .countdown-timer {
-      flex-wrap: {% if section.settings.enable_wrap_mobile %}wrap{% else %}nowrap{% endif %};
+      {% if section.settings.enable_wrap_mobile %}
+      flex-wrap: wrap;
+      {% endif %}
+    }
+
+    .timer-item {
+      margin: 0 {{ section.settings.timer_spacing | divided_by: 2 }}px;
+      {% if section.settings.enable_wrap_mobile %}
+      margin-bottom: 1rem;
+      {% endif %}
     }
 
     .timer-value {
-      min-width: calc({{ section.settings.timer_size | default: 60 }}px * 0.8);
-      min-height: calc({{ section.settings.timer_size | default: 60 }}px * 0.8);
-      font-size: calc({{ section.settings.timer_size | default: 60 }}px * 0.4);
+      width: calc({{ section.settings.timer_size }}px * 0.8);
+      height: calc({{ section.settings.timer_size }}px * 0.8);
+      font-size: calc({{ section.settings.timer_size }}px * 0.4);
+    }
+
+    .timer-separator {
+      font-size: calc({{ section.settings.timer_size }}px * 0.4);
+      {% if section.settings.enable_wrap_mobile %}
+      display: none;
+      {% endif %}
     }
 
     .timer-label {
@@ -227,14 +306,29 @@
 
     .countdown-title {
       font-size: calc({{ section.settings.title_size }}px * 0.8) !important;
+      margin-bottom: 1rem;
+    }
+
+    .countdown-section {
+      padding: 1.5rem 0.5rem;
     }
   }
 
-  {% if section.settings.enable_glow_effect %}
-  .timer-value {
-    animation: glowing 2s infinite;
+  @media (max-width: 480px) {
+    .timer-value {
+      width: calc({{ section.settings.timer_size }}px * 0.7);
+      height: calc({{ section.settings.timer_size }}px * 0.7);
+      font-size: calc({{ section.settings.timer_size }}px * 0.35);
+    }
+
+    .timer-separator {
+      font-size: calc({{ section.settings.timer_size }}px * 0.35);
+    }
+
+    .timer-item {
+      margin: 0 {{ section.settings.timer_spacing | divided_by: 3 }}px;
+    }
   }
-  {% endif %}
 </style>
 
 <script>
@@ -321,7 +415,7 @@
         {% if section.settings.hide_after_end %}
         // Hide the counter after it's complete if enabled
         setTimeout(function() {
-          document.querySelector('.countdown-container').style.display = 'none';
+          document.querySelector('.countdown-section').style.display = 'none';
         }, 3000);
         {% endif %}
 
