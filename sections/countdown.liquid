@@ -178,28 +178,27 @@
   .digit-top,
   .flip-top {
     top: 0;
-    align-items: flex-end;
+    align-items: center;
     border-top-left-radius: {{ section.settings.timer_border_radius }}px;
     border-top-right-radius: {{ section.settings.timer_border_radius }}px;
   }
 
   .digit-top span,
   .flip-top span {
-    top: 0;
-    margin-bottom: -{{ section.settings.timer_size | divided_by: 5 }}px;
+    top: 25%;
   }
 
   .digit-bottom,
   .flip-bottom {
     bottom: 0;
-    align-items: flex-start;
+    align-items: center;
     border-bottom-left-radius: {{ section.settings.timer_border_radius }}px;
     border-bottom-right-radius: {{ section.settings.timer_border_radius }}px;
   }
 
   .digit-bottom span,
   .flip-bottom span {
-    margin-top: -{{ section.settings.timer_size | divided_by: 5 }}px;
+    bottom: 25%;
   }
 
   .digit-bottom span,
@@ -504,8 +503,10 @@
 
       // Actualizar sólo si cambian los valores
       if (hours !== currentHours) {
-        // Solo activar el efecto flip cada 10 números contados o al inicio
-        if (currentHours === -1 || hours % 10 === 0) {
+        // Activar el efecto flip cuando cambia el último dígito
+        const lastDigitChanged = (hours % 10) !== (currentHours % 10);
+
+        if (currentHours === -1 || lastDigitChanged) {
           updateDigit(hoursTop, hoursFlipTop, hours);
           updateDigit(hoursBottom, hoursFlipBottom, hours);
         } else {
@@ -519,8 +520,10 @@
       }
 
       if (minutes !== currentMinutes) {
-        // Solo activar el efecto flip cada 10 números contados o al inicio
-        if (currentMinutes === -1 || minutes % 10 === 0) {
+        // Activar el efecto flip cuando cambia el último dígito
+        const lastDigitChanged = (minutes % 10) !== (currentMinutes % 10);
+
+        if (currentMinutes === -1 || lastDigitChanged) {
           updateDigit(minutesTop, minutesFlipTop, minutes);
           updateDigit(minutesBottom, minutesFlipBottom, minutes);
         } else {
@@ -534,8 +537,10 @@
       }
 
       if (seconds !== currentSeconds) {
-        // Solo activar el efecto flip cada 10 números contados o al inicio
-        if (currentSeconds === -1 || seconds % 10 === 0) {
+        // Activar el efecto flip cuando cambia el último dígito
+        const lastDigitChanged = (seconds % 10) !== (currentSeconds % 10);
+
+        if (currentSeconds === -1 || lastDigitChanged) {
           updateDigit(secondsTop, secondsFlipTop, seconds);
           updateDigit(secondsBottom, secondsFlipBottom, seconds);
         } else {
