@@ -1,0 +1,95 @@
+<section class="testimonios">
+  <div class="container">
+    <div class="section-title">
+      <h2>{{ section.settings.testimonios_title }}</h2>
+    </div>
+    
+    <div class="testimonios-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'testimonio' %}
+          <div class="testimonio-card">
+            <div class="testimonio-header">
+              <div class="testimonio-logo">J&C</div>
+            </div>
+            <div class="testimonio-content">
+              <p class="testimonio-text">"{{ block.settings.testimonio }}"</p>
+              <p class="testimonio-author">- {{ block.settings.autor }}</p>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="text-center" style="margin-top: 40px;">
+      <a href="{{ section.settings.button_link }}" class="button">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+          <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
+        </svg>
+        {{ section.settings.button_text }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonios",
+  "settings": [
+    {
+      "type": "text",
+      "id": "testimonios_title",
+      "label": "Título de la sección",
+      "default": "TESTIMONIOS"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón",
+      "default": "QUIERO ACCEDER AL GRUPO DE WHATSAPP"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del botón",
+      "default": "https://wa.me/573000000000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonio",
+      "name": "Testimonio",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "testimonio",
+          "label": "Testimonio",
+          "default": "No lo podía creer, con solo $10,000 participé y en menos de una semana ya tenía $700,000 en mis manos. Nunca había ganado nada antes, pero esta dinámica es real. Ahora uso ese dinero para pagar varias deudas de mi casa, recomiendo participar sin pensarlo dos veces."
+        },
+        {
+          "type": "text",
+          "id": "autor",
+          "label": "Autor",
+          "default": "Ana María López"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonios Sorteo",
+      "category": "Sorteos",
+      "blocks": [
+        {
+          "type": "testimonio"
+        },
+        {
+          "type": "testimonio"
+        },
+        {
+          "type": "testimonio"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

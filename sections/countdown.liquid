@@ -1,0 +1,62 @@
+<div class="countdown-container">
+  <div class="container">
+    <div class="countdown-title">FALTA POCO TIEMPO PARA QUE ESTA OFERTA TERMINE</div>
+    <div class="countdown-timer">
+      <div class="timer-item">
+        <span id="hours">00</span>
+        <div class="timer-label">Horas</div>
+      </div>
+      <div class="timer-item">
+        <span id="minutes">15</span>
+        <div class="timer-label">Minutos</div>
+      </div>
+      <div class="timer-item">
+        <span id="seconds">06</span>
+        <div class="timer-label">Segundos</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Configuración del contador regresivo
+  document.addEventListener('DOMContentLoaded', function() {
+    // Configurar la fecha objetivo - 24 horas a partir de la carga
+    var countDownDate = new Date();
+    countDownDate.setHours(countDownDate.getHours() + 24);
+    
+    // Actualizar cada segundo
+    var x = setInterval(function() {
+      var now = new Date().getTime();
+      var distance = countDownDate - now;
+      
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+      document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+      document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+      
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("hours").innerHTML = "00";
+        document.getElementById("minutes").innerHTML = "00";
+        document.getElementById("seconds").innerHTML = "00";
+      }
+    }, 1000);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Contador Regresivo",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Contador Regresivo",
+      "category": "Sorteos"
+    }
+  ]
+}
+{% endschema %}

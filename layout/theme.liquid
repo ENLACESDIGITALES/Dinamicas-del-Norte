@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="{{ shop.locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ff0022">
+  <link rel="canonical" href="{{ canonical_url }}">
+  
+  <title>{{ page_title }} - Dinámicas del Norte</title>
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+  
+  {{ content_for_header }}
+  
+  <!-- CSS principal -->
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <!-- Script principal -->
+  {{ 'theme.js' | asset_url | script_tag }}
+</head>
+
+<body class="template-{{ template.name | handle }}">
+  <main role="main" id="MainContent">
+    {{ content_for_layout }}
+  </main>
+</body>
+</html>

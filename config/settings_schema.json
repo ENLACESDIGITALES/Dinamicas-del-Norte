@@ -1,0 +1,122 @@
+[
+    {
+      "name": "theme_info",
+      "theme_name": "Dinámicas del Norte",
+      "theme_author": "Enlaces Digitales",
+      "theme_version": "1.0.0",
+      "theme_documentation_url": "",
+      "theme_support_url": ""
+    },
+    {
+      "name": "Colores",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Colores principales"
+        },
+        {
+          "type": "color",
+          "id": "primary_color",
+          "label": "Color primario",
+          "default": "#ff0022"
+        },
+        {
+          "type": "color",
+          "id": "secondary_color",
+          "label": "Color secundario",
+          "default": "#001E64"
+        },
+        {
+          "type": "color",
+          "id": "gold_color",
+          "label": "Color dorado",
+          "default": "#daa520"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Color de texto",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "light_bg",
+          "label": "Fondo claro",
+          "default": "#f8f9fa"
+        },
+        {
+          "type": "color",
+          "id": "dark_bg",
+          "label": "Fondo oscuro",
+          "default": "#001E64"
+        }
+      ]
+    },
+    {
+      "name": "Tipografía",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Fuentes"
+        },
+        {
+          "type": "font_picker",
+          "id": "heading_font",
+          "label": "Fuente para títulos",
+          "default": "helvetica_n7"
+        },
+        {
+          "type": "font_picker",
+          "id": "body_font",
+          "label": "Fuente para texto",
+          "default": "helvetica_n4"
+        }
+      ]
+    },
+    {
+      "name": "Social Media",
+      "settings": [
+        {
+          "type": "text",
+          "id": "social_instagram",
+          "label": "Instagram",
+          "default": "dinamicadelnorte.24"
+        },
+        {
+          "type": "text",
+          "id": "social_facebook",
+          "label": "Facebook",
+          "default": "loteriadelnorte"
+        },
+        {
+          "type": "text",
+          "id": "social_whatsapp",
+          "label": "WhatsApp",
+          "default": "+573000000000"
+        }
+      ]
+    },
+    {
+      "name": "Información de contacto",
+      "settings": [
+        {
+          "type": "text",
+          "id": "contact_address",
+          "label": "Dirección",
+          "default": "Cúcuta, Norte de Santander, Colombia"
+        },
+        {
+          "type": "text",
+          "id": "contact_phone",
+          "label": "Teléfono",
+          "default": "+57 300 000 0000"
+        },
+        {
+          "type": "text",
+          "id": "contact_email",
+          "label": "Email",
+          "default": "contacto@dinamicasdelnorte.com"
+        }
+      ]
+    }
+  ]

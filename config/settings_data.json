@@ -1,0 +1,33 @@
+{
+    "current": {
+      "primary_color": "#ff0022",
+      "secondary_color": "#001E64",
+      "gold_color": "#daa520",
+      "text_color": "#333333",
+      "light_bg": "#f8f9fa",
+      "dark_bg": "#001E64",
+      "heading_font": "helvetica_n7",
+      "body_font": "helvetica_n4",
+      "social_instagram": "dinamicadelnorte.24",
+      "social_facebook": "loteriadelnorte",
+      "social_whatsapp": "+573000000000",
+      "contact_address": "Cúcuta, Norte de Santander, Colombia",
+      "contact_phone": "+57 300 000 0000",
+      "contact_email": "contacto@dinamicasdelnorte.com",
+      "sections": {
+        "header": {
+          "type": "header",
+          "settings": {
+          }
+        },
+        "footer": {
+          "type": "footer-sorteo",
+          "settings": {
+            "footer_descripcion": "Somos una empresa de Norte de Santander Cúcuta dedicada a rifas y sorteos diarios, buscando la manera de ayudar a muchas personas a ganar dinero extra."
+          }
+        }
+      },
+      "content_for_index": [
+      ]
+    }
+  }

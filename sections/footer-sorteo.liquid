@@ -1,0 +1,113 @@
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>Dinámicas del Norte</h3>
+        <p>{{ section.settings.footer_descripcion }}</p>
+        <div class="social-icons">
+          <a href="{{ section.settings.instagram_link }}" class="social-icon">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="{{ section.settings.facebook_link }}" class="social-icon">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="{{ section.settings.whatsapp_link }}" class="social-icon">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contacto</h3>
+        <p><i class="fas fa-map-marker-alt"></i> {{ section.settings.direccion }}</p>
+        <p><i class="fas fa-phone"></i> {{ section.settings.telefono }}</p>
+        <p><i class="fas fa-envelope"></i> {{ section.settings.email }}</p>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Enlaces Rápidos</h3>
+        <a href="{{ section.settings.enlace_terminos }}">Términos y Condiciones</a>
+        <a href="{{ section.settings.enlace_privacidad }}">Política de Privacidad</a>
+        <a href="{{ section.settings.enlace_preguntas }}">Preguntas Frecuentes</a>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>© {{ 'now' | date: "%Y" }} Dinámicas del Norte. Desarrollado por <a href="https://enlacesdigitales.com" target="_blank" rel="noopener">Enlaces Digitales</a>. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "footer_descripcion",
+      "label": "Descripción",
+      "default": "Somos una empresa de Norte de Santander Cúcuta dedicada a rifas y sorteos diarios, buscando la manera de ayudar a muchas personas a ganar dinero extra."
+    },
+    {
+      "type": "text",
+      "id": "direccion",
+      "label": "Dirección",
+      "default": "Cúcuta, Norte de Santander, Colombia"
+    },
+    {
+      "type": "text",
+      "id": "telefono",
+      "label": "Teléfono",
+      "default": "+57 300 000 0000"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "contacto@dinamicasdelnorte.com"
+    },
+    {
+      "type": "url",
+      "id": "instagram_link",
+      "label": "Enlace a Instagram",
+      "default": "https://www.instagram.com/dinamicadelnorte.24/"
+    },
+    {
+      "type": "url",
+      "id": "facebook_link",
+      "label": "Enlace a Facebook",
+      "default": "https://www.facebook.com/loteriadelnorte"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_link",
+      "label": "Enlace a WhatsApp",
+      "default": "https://wa.me/573000000000"
+    },
+    {
+      "type": "url",
+      "id": "enlace_terminos",
+      "label": "Enlace a Términos y Condiciones",
+      "default": "/pages/terminos"
+    },
+    {
+      "type": "url",
+      "id": "enlace_privacidad",
+      "label": "Enlace a Política de Privacidad",
+      "default": "/pages/privacidad"
+    },
+    {
+      "type": "url",
+      "id": "enlace_preguntas",
+      "label": "Enlace a Preguntas Frecuentes",
+      "default": "/pages/preguntas-frecuentes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Sorteo",
+      "category": "Sorteos"
+    }
+  ]
+}
+{% endschema %}
