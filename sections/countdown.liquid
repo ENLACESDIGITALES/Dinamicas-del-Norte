@@ -144,17 +144,7 @@
     width: 100%;
     height: 100%;
     position: relative;
-  }
-
-  .digit-container::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-    background-color: rgba(0,0,0,0.05);
-    z-index: 3;
+    /* Eliminamos cualquier línea divisoria */
   }
 
   .digit-top,
@@ -514,20 +504,47 @@
 
       // Actualizar sólo si cambian los valores
       if (hours !== currentHours) {
-        updateDigit(hoursTop, hoursFlipTop, hours);
-        updateDigit(hoursBottom, hoursFlipBottom, hours);
+        // Solo activar el efecto flip cada 10 números contados o al inicio
+        if (currentHours === -1 || hours % 10 === 0) {
+          updateDigit(hoursTop, hoursFlipTop, hours);
+          updateDigit(hoursBottom, hoursFlipBottom, hours);
+        } else {
+          // Actualizar sin animación
+          hoursTop.querySelector('span').textContent = hours < 10 ? "0" + hours : hours;
+          hoursBottom.querySelector('span').textContent = hours < 10 ? "0" + hours : hours;
+          hoursFlipTop.querySelector('span').textContent = hours < 10 ? "0" + hours : hours;
+          hoursFlipBottom.querySelector('span').textContent = hours < 10 ? "0" + hours : hours;
+        }
         currentHours = hours;
       }
 
       if (minutes !== currentMinutes) {
-        updateDigit(minutesTop, minutesFlipTop, minutes);
-        updateDigit(minutesBottom, minutesFlipBottom, minutes);
+        // Solo activar el efecto flip cada 10 números contados o al inicio
+        if (currentMinutes === -1 || minutes % 10 === 0) {
+          updateDigit(minutesTop, minutesFlipTop, minutes);
+          updateDigit(minutesBottom, minutesFlipBottom, minutes);
+        } else {
+          // Actualizar sin animación
+          minutesTop.querySelector('span').textContent = minutes < 10 ? "0" + minutes : minutes;
+          minutesBottom.querySelector('span').textContent = minutes < 10 ? "0" + minutes : minutes;
+          minutesFlipTop.querySelector('span').textContent = minutes < 10 ? "0" + minutes : minutes;
+          minutesFlipBottom.querySelector('span').textContent = minutes < 10 ? "0" + minutes : minutes;
+        }
         currentMinutes = minutes;
       }
 
       if (seconds !== currentSeconds) {
-        updateDigit(secondsTop, secondsFlipTop, seconds);
-        updateDigit(secondsBottom, secondsFlipBottom, seconds);
+        // Solo activar el efecto flip cada 10 números contados o al inicio
+        if (currentSeconds === -1 || seconds % 10 === 0) {
+          updateDigit(secondsTop, secondsFlipTop, seconds);
+          updateDigit(secondsBottom, secondsFlipBottom, seconds);
+        } else {
+          // Actualizar sin animación
+          secondsTop.querySelector('span').textContent = seconds < 10 ? "0" + seconds : seconds;
+          secondsBottom.querySelector('span').textContent = seconds < 10 ? "0" + seconds : seconds;
+          secondsFlipTop.querySelector('span').textContent = seconds < 10 ? "0" + seconds : seconds;
+          secondsFlipBottom.querySelector('span').textContent = seconds < 10 ? "0" + seconds : seconds;
+        }
         currentSeconds = seconds;
       }
     }, 1000);
