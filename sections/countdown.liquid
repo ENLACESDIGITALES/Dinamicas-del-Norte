@@ -1,235 +1,223 @@
 {% comment %}
-  Contador Regresivo Simple y Efectivo para Shopify
+  Contador Regresivo con Estilo Flip
 {% endcomment %}
 
-<div class="countdown-timer-section" style="background-color: {{ section.settings.background_color }};">
-  <div class="countdown-timer-container">
-    {% if section.settings.show_title %}
-      <h2 class="countdown-title" style="color: {{ section.settings.text_color }};">
-        {{ section.settings.title_text }}
-      </h2>
-    {% endif %}
-
-    <div class="timer-display">
-      {% if section.settings.show_days %}
-        <div class="timer-block">
-          <div
-            class="timer-number"
-            style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
-          >
-            <span id="days">00</span>
-          </div>
-          <div class="timer-label" style="color: {{ section.settings.text_color }};">
-            {{ section.settings.days_label }}
-          </div>
-        </div>
-      {% endif %}
-
-      <div class="timer-block">
-        <div
-          class="timer-number"
-          style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
-        >
+<div class="countdown-banner" style="background-color: {{ section.settings.background_color }};">
+  <div class="countdown-container">
+    <div class="countdown-text">
+      <h2 style="color: {{ section.settings.text_color }};">{{ section.settings.title_text }}</h2>
+    </div>
+    <div class="countdown-timer">
+      <div class="timer-group">
+        <div class="timer-box">
           <span id="hours">00</span>
         </div>
-        <div class="timer-label" style="color: {{ section.settings.text_color }};">
-          {{ section.settings.hours_label }}
-        </div>
+        <div class="timer-label">{{ section.settings.hours_label }}</div>
       </div>
-
-      <div class="timer-block">
-        <div
-          class="timer-number"
-          style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
-        >
+      <div class="timer-separator">•</div>
+      <div class="timer-group">
+        <div class="timer-box">
           <span id="minutes">00</span>
         </div>
-        <div class="timer-label" style="color: {{ section.settings.text_color }};">
-          {{ section.settings.minutes_label }}
-        </div>
+        <div class="timer-label">{{ section.settings.minutes_label }}</div>
       </div>
-
-      <div class="timer-block">
-        <div
-          class="timer-number"
-          style="background-color: {{ section.settings.timer_background_color }}; color: {{ section.settings.timer_text_color }};"
-        >
+      <div class="timer-separator">•</div>
+      <div class="timer-group">
+        <div class="timer-box">
           <span id="seconds">00</span>
         </div>
-        <div class="timer-label" style="color: {{ section.settings.text_color }};">
-          {{ section.settings.seconds_label }}
-        </div>
+        <div class="timer-label">{{ section.settings.seconds_label }}</div>
       </div>
     </div>
-
-    {% if section.settings.show_message_after and section.settings.message_after_end != blank %}
-      <div id="end-message" style="display: none; color: {{ section.settings.text_color }};">
-        {{ section.settings.message_after_end }}
-      </div>
-    {% endif %}
   </div>
 </div>
 
 <style>
-  .countdown-timer-section {
-    padding: 20px 10px;
-    text-align: center;
+  .countdown-banner {
+    width: 100%;
+    padding: 15px 0;
+    background-color: #FF001D;
   }
 
-  .countdown-timer-container {
-    max-width: 600px;
+  .countdown-container {
+    max-width: 1200px;
     margin: 0 auto;
-  }
-
-  .countdown-title {
-    margin-bottom: 20px;
-    font-size: {{ section.settings.title_size }}px;
-    font-weight: bold;
-    {% if section.settings.title_uppercase %}
-      text-transform: uppercase;
-    {% endif %}
-  }
-
-  .timer-display {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
   }
 
-  .timer-block {
-    margin: 0 5px;
+  .countdown-text {
+    width: 50%;
   }
 
-  .timer-number {
-    width: {{ section.settings.timer_size }}px;
-    height: {{ section.settings.timer_size }}px;
-    border-radius: {{ section.settings.timer_border_radius }}px;
+  .countdown-text h2 {
+    color: #FFFFFF;
+    font-family: 'Montserrat', sans-serif;
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .countdown-timer {
+    width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: calc({{ section.settings.timer_size }}px * 0.5);
+  }
+
+  .timer-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .timer-box {
+    background-color: #FFFFFF;
+    color: #000000;
+    width: {{ section.settings.timer_size }}px;
+    height: {{ section.settings.timer_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc({{ section.settings.timer_size }}px * 0.65);
     font-weight: bold;
-    margin-bottom: 5px;
+    margin: 0 5px;
+    border-radius: {{ section.settings.timer_border_radius }}px;
   }
 
   .timer-label {
+    color: #FFFFFF;
     font-size: {{ section.settings.label_size }}px;
-    {% if section.settings.label_bold %}
-      font-weight: bold;
-    {% endif %}
+    margin-top: 5px;
+    text-align: center;
   }
 
-  #end-message {
-    margin-top: 20px;
-    font-weight: bold;
+  .timer-separator {
+    color: #FFFFFF;
+    font-size: calc({{ section.settings.timer_size }}px * 0.5);
+    margin: 0 5px;
+    padding-bottom: {{ section.settings.timer_size }}px;
   }
 
-  @media (max-width: 768px) {
-    .countdown-title {
-      font-size: calc({{ section.settings.title_size }}px * 0.8);
+  @media screen and (max-width: 768px) {
+    .countdown-container {
+      flex-direction: column;
     }
 
-    .timer-number {
+    .countdown-text, .countdown-timer {
+      width: 100%;
+    }
+
+    .countdown-text {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .countdown-text h2 {
+      font-size: calc({{ section.settings.title_size }}px * 0.7);
+    }
+
+    .timer-box {
       width: calc({{ section.settings.timer_size }}px * 0.8);
       height: calc({{ section.settings.timer_size }}px * 0.8);
+      font-size: calc({{ section.settings.timer_size }}px * 0.5);
+    }
+
+    .timer-separator {
       font-size: calc({{ section.settings.timer_size }}px * 0.4);
+      padding-bottom: calc({{ section.settings.timer_size }}px * 0.8);
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .countdown-text h2 {
+      font-size: calc({{ section.settings.title_size }}px * 0.5);
+    }
+
+    .timer-box {
+      width: calc({{ section.settings.timer_size }}px * 0.6);
+      height: calc({{ section.settings.timer_size }}px * 0.6);
+      font-size: calc({{ section.settings.timer_size }}px * 0.4);
+      margin: 0 2px;
     }
 
     .timer-label {
-      font-size: calc({{ section.settings.label_size }}px * 0.9);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .timer-display {
-      gap: 10px;
+      font-size: calc({{ section.settings.label_size }}px * 0.8);
     }
 
-    .timer-number {
-      width: calc({{ section.settings.timer_size }}px * 0.7);
-      height: calc({{ section.settings.timer_size }}px * 0.7);
-      font-size: calc({{ section.settings.timer_size }}px * 0.35);
+    .timer-separator {
+      font-size: calc({{ section.settings.timer_size }}px * 0.3);
+      padding-bottom: calc({{ section.settings.timer_size }}px * 0.6);
+      margin: 0 2px;
     }
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Determinar la fecha final
-    let targetDate;
+    // Establecer tiempo de finalización
+    let countDownDate;
 
     {% if section.settings.date_type == 'specific_date' %}
-      targetDate = new Date("{{ section.settings.end_date }}").getTime();
+      // Usar fecha específica
+      countDownDate = new Date("{{ section.settings.end_date }}").getTime();
     {% else %}
-      targetDate = new Date();
-      targetDate.setHours(targetDate.getHours() + {{ section.settings.duration_hours }});
-      targetDate.setMinutes(targetDate.getMinutes() + {{ section.settings.duration_minutes }});
-      targetDate = targetDate.getTime();
+      // Usar duración desde ahora
+      countDownDate = new Date();
+      countDownDate.setHours(countDownDate.getHours() + {{ section.settings.duration_hours }});
+      countDownDate.setMinutes(countDownDate.getMinutes() + {{ section.settings.duration_minutes }});
+      countDownDate = countDownDate.getTime();
     {% endif %}
 
-    // Si el temporizador es persistente, usar localStorage
+    // Si el timer es persistente, guardar en localStorage
     {% if section.settings.persistent_timer %}
-      const storedDate = localStorage.getItem('countdownEndTime');
-      if (storedDate) {
-        targetDate = parseInt(storedDate);
+      const storedEndTime = localStorage.getItem('countdownEndTime');
+      if (storedEndTime) {
+        countDownDate = parseInt(storedEndTime);
       } else {
-        localStorage.setItem('countdownEndTime', targetDate);
+        localStorage.setItem('countdownEndTime', countDownDate);
       }
     {% endif %}
 
     // Actualizar contador cada segundo
     const countdown = setInterval(function() {
       const now = new Date().getTime();
-      const timeLeft = targetDate - now;
+      const distance = countDownDate - now;
 
-      // Calcular tiempo
-      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      // Cálculo de tiempo
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Actualizar elementos
-      if (document.getElementById("days")) {
-        document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
-      }
+      // Mostrar el contador
       document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
       document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
       document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
 
-      // Si el tiempo terminó
-      if (timeLeft < 0) {
+      // Si el contador llega a cero
+      if (distance < 0) {
         clearInterval(countdown);
 
-        // Mostrar ceros
-        if (document.getElementById("days")) {
-          document.getElementById("days").innerHTML = "00";
-        }
         document.getElementById("hours").innerHTML = "00";
         document.getElementById("minutes").innerHTML = "00";
         document.getElementById("seconds").innerHTML = "00";
 
-        // Mostrar mensaje final
-        const endMessage = document.getElementById("end-message");
-        if (endMessage) {
-          endMessage.style.display = "block";
-        }
+        {% if section.settings.hide_after_end %}
+        setTimeout(function() {
+          document.querySelector('.countdown-banner').style.display = 'none';
+        }, 3000);
+        {% endif %}
 
-        // Redireccionar si está configurado
         {% if section.settings.redirect_after_end and section.settings.redirect_url != blank %}
         setTimeout(function() {
           window.location.href = "{{ section.settings.redirect_url }}";
         }, {{ section.settings.redirect_delay }} * 1000);
         {% endif %}
 
-        // Ocultar contador si está configurado
-        {% if section.settings.hide_after_end %}
-        setTimeout(function() {
-          document.querySelector('.countdown-timer-section').style.display = 'none';
-        }, 3000);
-        {% endif %}
-
-        // Limpiar localStorage si es necesario
         {% if section.settings.persistent_timer %}
         localStorage.removeItem('countdownEndTime');
         {% endif %}
@@ -246,19 +234,13 @@
       "type": "color",
       "id": "background_color",
       "label": "Color de fondo",
-      "default": "#f8f8f8"
+      "default": "#FF001D"
     },
     {
       "type": "color",
       "id": "text_color",
       "label": "Color de texto",
-      "default": "#333333"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_title",
-      "label": "Mostrar título",
-      "default": true
+      "default": "#FFFFFF"
     },
     {
       "type": "text",
@@ -269,17 +251,11 @@
     {
       "type": "range",
       "id": "title_size",
-      "min": 12,
-      "max": 36,
+      "min": 16,
+      "max": 60,
       "step": 1,
       "label": "Tamaño del título (px)",
-      "default": 18
-    },
-    {
-      "type": "checkbox",
-      "id": "title_uppercase",
-      "label": "Título en mayúsculas",
-      "default": true
+      "default": 32
     },
     {
       "type": "select",
@@ -318,20 +294,8 @@
     {
       "type": "checkbox",
       "id": "persistent_timer",
-      "label": "Persistir el temporizador entre visitas",
+      "label": "Persistir temporizador entre visitas",
       "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_days",
-      "label": "Mostrar días",
-      "default": false
-    },
-    {
-      "type": "text",
-      "id": "days_label",
-      "label": "Etiqueta para días",
-      "default": "Días"
     },
     {
       "type": "text",
@@ -358,19 +322,7 @@
       "max": 120,
       "step": 5,
       "label": "Tamaño del temporizador (px)",
-      "default": 70
-    },
-    {
-      "type": "color",
-      "id": "timer_background_color",
-      "label": "Color de fondo del temporizador",
-      "default": "#333333"
-    },
-    {
-      "type": "color",
-      "id": "timer_text_color",
-      "label": "Color de texto del temporizador",
-      "default": "#ffffff"
+      "default": 75
     },
     {
       "type": "range",
@@ -378,8 +330,8 @@
       "min": 0,
       "max": 20,
       "step": 1,
-      "label": "Radio de borde del temporizador",
-      "default": 8
+      "label": "Radio de borde",
+      "default": 0
     },
     {
       "type": "range",
@@ -392,32 +344,14 @@
     },
     {
       "type": "checkbox",
-      "id": "label_bold",
-      "label": "Etiquetas en negrita",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "show_message_after",
-      "label": "Mostrar mensaje al finalizar",
-      "default": false
-    },
-    {
-      "type": "text",
-      "id": "message_after_end",
-      "label": "Mensaje al finalizar",
-      "default": "¡La oferta ha terminado!"
-    },
-    {
-      "type": "checkbox",
       "id": "hide_after_end",
-      "label": "Ocultar contador después de finalizar",
+      "label": "Ocultar al finalizar",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "redirect_after_end",
-      "label": "Redirigir después de finalizar",
+      "label": "Redirigir al finalizar",
       "default": false
     },
     {
