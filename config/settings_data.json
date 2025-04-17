@@ -1,33 +1,113 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "current": {
-      "primary_color": "#ff0022",
-      "secondary_color": "#001E64",
-      "gold_color": "#daa520",
-      "text_color": "#333333",
-      "light_bg": "#f8f9fa",
-      "dark_bg": "#001E64",
-      "heading_font": "helvetica_n7",
-      "body_font": "helvetica_n4",
-      "social_instagram": "dinamicadelnorte.24",
-      "social_facebook": "loteriadelnorte",
-      "social_whatsapp": "+573000000000",
-      "contact_address": "Cúcuta, Norte de Santander, Colombia",
-      "contact_phone": "+57 300 000 0000",
-      "contact_email": "contacto@dinamicasdelnorte.com",
-      "sections": {
-        "header": {
-          "type": "header",
-          "settings": {
-          }
-        },
-        "footer": {
-          "type": "footer-sorteo",
-          "settings": {
-            "footer_descripcion": "Somos una empresa de Norte de Santander Cúcuta dedicada a rifas y sorteos diarios, buscando la manera de ayudar a muchas personas a ganar dinero extra."
-          }
+  "current": {
+    "primary_color": "#ff0022",
+    "secondary_color": "#001E64",
+    "gold_color": "#daa520",
+    "text_color": "#333333",
+    "light_bg": "#f8f9fa",
+    "dark_bg": "#001E64",
+    "heading_font": "helvetica_n7",
+    "body_font": "helvetica_n4",
+    "social_instagram": "dinamicadelnorte.24",
+    "social_facebook": "loteriadelnorte",
+    "social_whatsapp": "+573000000000",
+    "contact_address": "Cúcuta, Norte de Santander, Colombia",
+    "contact_phone": "+57 300 000 0000",
+    "contact_email": "contacto@dinamicasdelnorte.com",
+    "sections": {
+      "countdown": {
+        "type": "countdown",
+        "settings": {
+          "background_color": "#FF001D",
+          "text_color": "#FFFFFF",
+          "title_text": "FALTA POCO TIEMPO PARA QUE ESTA OFERTA TERMINE",
+          "title_size": 35,
+          "date_type": "duration",
+          "end_date": "2025-12-31",
+          "duration_hours": 24,
+          "duration_minutes": 0,
+          "persistent_timer": true,
+          "hours_label": "Horas",
+          "minutes_label": "Minutos",
+          "seconds_label": "Segundos",
+          "timer_size": 75,
+          "timer_border_radius": 17,
+          "label_size": 14,
+          "hide_after_end": false,
+          "redirect_after_end": false,
+          "redirect_url": "",
+          "redirect_delay": 0
         }
       },
-      "content_for_index": [
-      ]
-    }
+      "hero-sorteo": {
+        "type": "hero-sorteo",
+        "settings": {
+          "hero_title": "SORTEO",
+          "hero_subtitle": "3 GANADORES DIARIOS",
+          "hero_description": "Participar en nuestros sorteos te dará una experiencia emocionante, con la posibilidad real de ser uno de los tres ganadores diarios.",
+          "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
+          "button_link": "https://wa.me/573000000000"
+        }
+      },
+      "beneficios-sorteo": {
+        "type": "beneficios-sorteo",
+        "settings": {
+          "beneficios_title": "Con J&C tienes 3 oportunidades de ganar",
+          "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
+          "button_link": "https://wa.me/573000000000"
+        }
+      },
+      "tabla-puestos": {
+        "type": "tabla-puestos",
+        "settings": {
+          "tabla_title": "Tabla de puestos",
+          "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
+          "button_link": "https://wa.me/573000000000"
+        }
+      },
+      "testimonios-sorteo": {
+        "type": "testimonios-sorteo",
+        "settings": {
+          "testimonios_title": "TESTIMONIOS",
+          "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
+          "button_link": "https://wa.me/573000000000"
+        }
+      },
+      "sobre-nosotros": {
+        "type": "sobre-nosotros",
+        "settings": {
+          "nosotros_title": "Quién es Cesar & Jonathan",
+          "nosotros_subtitle": "Cesar & Jonathan",
+          "nosotros_descripcion": "Son los creadores de la marca SORTEOS J&C un proyecto de padre e hijo quienes buscan la manera de poder ayudar a muchas personas de Colombia a ganar un dinero extra con sus dinámicas diarias.",
+          "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
+          "button_link": "https://wa.me/573000000000"
+        }
+      },
+      "footer-sorteo": {
+        "type": "footer-sorteo",
+        "settings": {
+          "footer_descripcion": "Somos una empresa de Norte de Santander Cúcuta dedicada a rifas y sorteos diarios, buscando la manera de ayudar a muchas personas a ganar dinero extra.",
+          "direccion": "Cúcuta, Norte de Santander, Colombia",
+          "telefono": "+57 300 000 0000",
+          "email": "contacto@dinamicasdelnorte.com",
+          "instagram_link": "https://www.instagram.com/dinamicadelnorte.24/",
+          "facebook_link": "https://www.facebook.com/loteriadelnorte",
+          "whatsapp_link": "https://wa.me/573000000000",
+          "enlace_terminos": "/pages/terminos",
+          "enlace_privacidad": "/pages/privacidad",
+          "enlace_preguntas": "/pages/preguntas-frecuentes"
+        }
+      }
+    },
+    "content_for_index": []
   }
+}
