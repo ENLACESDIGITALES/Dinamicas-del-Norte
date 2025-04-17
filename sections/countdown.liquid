@@ -165,40 +165,50 @@
   .digit-bottom span,
   .flip-top span,
   .flip-bottom span {
-    position: absolute;
-    left: 0;
+    position: static;
+    display: block;
     width: 100%;
     text-align: center;
     color: black;
-    font-size: calc({{ section.settings.timer_size }}px * 0.6);
+    font-size: calc({{ section.settings.timer_size }}px * 0.55);
     font-weight: bold;
-    line-height: {{ section.settings.timer_size }}px;
+    line-height: calc({{ section.settings.timer_size }}px * 0.5);
   }
 
   .digit-top,
   .flip-top {
     top: 0;
     align-items: center;
+    justify-content: center;
     border-top-left-radius: {{ section.settings.timer_border_radius }}px;
     border-top-right-radius: {{ section.settings.timer_border_radius }}px;
   }
 
   .digit-top span,
   .flip-top span {
-    top: 25%;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    line-height: normal;
   }
 
   .digit-bottom,
   .flip-bottom {
     bottom: 0;
     align-items: center;
+    justify-content: center;
     border-bottom-left-radius: {{ section.settings.timer_border_radius }}px;
     border-bottom-right-radius: {{ section.settings.timer_border_radius }}px;
   }
 
   .digit-bottom span,
   .flip-bottom span {
-    bottom: 25%;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    width: auto;
+    line-height: normal;
   }
 
   .digit-bottom span,
