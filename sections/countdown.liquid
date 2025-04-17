@@ -146,6 +146,17 @@
     position: relative;
   }
 
+  .digit-container::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background-color: rgba(0,0,0,0.05);
+    z-index: 3;
+  }
+
   .digit-top,
   .digit-bottom,
   .flip-top,
@@ -178,7 +189,6 @@
   .flip-top {
     top: 0;
     align-items: flex-end;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
     border-top-left-radius: {{ section.settings.timer_border_radius }}px;
     border-top-right-radius: {{ section.settings.timer_border_radius }}px;
   }
@@ -186,15 +196,20 @@
   .digit-top span,
   .flip-top span {
     top: 0;
+    margin-bottom: -{{ section.settings.timer_size | divided_by: 5 }}px;
   }
 
   .digit-bottom,
   .flip-bottom {
     bottom: 0;
     align-items: flex-start;
-    border-top: 1px solid rgba(0,0,0,0.1);
     border-bottom-left-radius: {{ section.settings.timer_border_radius }}px;
     border-bottom-right-radius: {{ section.settings.timer_border_radius }}px;
+  }
+
+  .digit-bottom span,
+  .flip-bottom span {
+    margin-top: -{{ section.settings.timer_size | divided_by: 5 }}px;
   }
 
   .digit-bottom span,
