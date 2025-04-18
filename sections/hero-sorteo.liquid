@@ -41,9 +41,12 @@
   .hero-sorteo {
     position: relative;
     width: 100%;
-    background: linear-gradient(90deg, #000000 0%, #000000 40%, rgba(255, 204, 0, 0.9) 100%);
-    color: white;
-    padding: 80px 0 120px;
+    background: linear-gradient({{ section.settings.gradient_angle_desktop }}deg,
+                 {{ section.settings.background_color_start }} 0%,
+                 {{ section.settings.background_color_start }} {{ section.settings.gradient_position }}%,
+                 {{ section.settings.background_color_end | color_modify: 'alpha', section.settings.gradient_opacity | divided_by: 100.0 }} 100%);
+    color: {{ section.settings.text_color }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
     overflow: hidden;
   }
 
@@ -79,6 +82,8 @@
     height: auto;
     display: block;
     margin-left: auto;
+    object-position: {{ section.settings.image_position_x }}% {{ section.settings.image_position_y }}%;
+    object-fit: cover;
   }
 
   .hero-sorteo h1 {
@@ -93,7 +98,7 @@
     font-size: 32px;
     font-weight: 700;
     margin: 0 0 20px 0;
-    color: {{ section.settings.accent_color | default: '#FFCC00' }};
+    color: {{ section.settings.accent_color }};
   }
 
   .hero-sorteo p {
@@ -108,6 +113,7 @@
     width: 100%;
     height: 40px;
     margin-bottom: 20px;
+    display: {% if section.settings.show_arrow %}block{% else %}none{% endif %};
   }
 
   .arrow-down {
@@ -117,6 +123,10 @@
     transform: translateX(-50%);
     animation: bounce 2s infinite;
     z-index: 1;
+  }
+
+  .arrow-down svg path {
+    fill: {{ section.settings.arrow_color | color_modify: 'alpha', 0.5 }};
   }
 
   .button-container {
@@ -140,7 +150,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #25D366;
+    background-color: {{ section.settings.button_color }};
     color: white;
     text-decoration: none;
     font-weight: bold;
@@ -152,7 +162,7 @@
   }
 
   .whatsapp-button:hover {
-    background-color: #128C7E;
+    background-color: {{ section.settings.button_color | color_darken: 15 }};
   }
 
   .whatsapp-button svg {
@@ -161,8 +171,10 @@
 
   @media screen and (max-width: 768px) {
     .hero-sorteo {
-      padding: 60px 0 100px;
-      background: #000000;
+      padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
+      background: linear-gradient({{ section.settings.gradient_angle_mobile }}deg,
+                   {{ section.settings.background_color_start }} 0%,
+                   {{ section.settings.background_color_end | color_modify: 'alpha', section.settings.gradient_opacity | divided_by: 100.0 }} 100%);
       position: relative;
     }
 
@@ -198,6 +210,7 @@
       margin: 0;
       position: absolute;
       top: 0;
+      object-position: {{ section.settings.image_position_x }}% {{ section.settings.image_position_y }}%;
     }
 
     .hero-sorteo h1 {
@@ -228,7 +241,7 @@
     }
 
     .arrow-down svg path {
-      fill: rgba(255, 204, 0, 0.8);
+      fill: {{ section.settings.arrow_color | color_modify: 'alpha', 0.8 }};
     }
 
     .whatsapp-button {
@@ -244,6 +257,10 @@
 {
   "name": "Hero Sorteo",
   "settings": [
+    {
+      "type": "header",
+      "content": "Contenido de texto"
+    },
     {
       "type": "text",
       "id": "hero_title",
@@ -263,15 +280,105 @@
       "default": "Participar en nuestros sorteos te dará una experiencia emocionante, con la posibilidad real de ser uno de los tres ganadores diarios."
     },
     {
+      "type": "header",
+      "content": "Imagen"
+    },
+    {
       "type": "image_picker",
       "id": "hero_image",
       "label": "Imagen de ganadores"
     },
     {
+      "type": "range",
+      "id": "image_position_x",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Posición horizontal de imagen",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "image_position_y",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Posición vertical de imagen",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Fondo y Colores"
+    },
+    {
+      "type": "color",
+      "id": "background_color_start",
+      "label": "Color de fondo inicial",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color_end",
+      "label": "Color de fondo final",
+      "default": "#FFCC00"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle_desktop",
+      "min": 0,
+      "max": 360,
+      "step": 5,
+      "unit": "°",
+      "label": "Ángulo del degradado (escritorio)",
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle_mobile",
+      "min": 0,
+      "max": 360,
+      "step": 5,
+      "unit": "°",
+      "label": "Ángulo del degradado (móvil)",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "gradient_position",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Posición del degradado",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "gradient_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacidad del degradado final",
+      "default": 90
+    },
+    {
       "type": "color",
       "id": "accent_color",
-      "label": "Color de acento",
+      "label": "Color de acento para subtítulo",
       "default": "#FFCC00"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto principal",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Botón de WhatsApp"
     },
     {
       "type": "text",
@@ -283,6 +390,68 @@
       "type": "url",
       "id": "button_link",
       "label": "Enlace del botón (grupo de WhatsApp)"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Color del botón",
+      "default": "#25D366"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Mostrar flecha hacia abajo",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Color de la flecha",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Espaciado superior",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Espaciado inferior",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Espaciado superior (móvil)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Espaciado inferior (móvil)",
+      "default": 100
     }
   ],
   "presets": [
