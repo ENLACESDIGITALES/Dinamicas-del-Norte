@@ -169,7 +169,6 @@
     .hero-content {
       flex-direction: column;
       text-align: center;
-      min-height: 400px; /* Aumentamos la altura mínima para evitar recortes */
     }
 
     .hero-text {
@@ -216,68 +215,75 @@
   @media screen and (max-width: 768px) {
     {% if section.settings.mobile_overlay_mode %}
     .hero-content {
-      position: relative;
-      min-height: 500px; /* Altura mínima para asegurar que haya espacio suficiente */
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      position: relative;
+      overflow: visible;
     }
 
-    .hero-image {
-      position: absolute;
-      top: 0;
-      left: 0;
+    /* El texto va primero */
+    .hero-text {
       width: 100%;
-      height: 100%;
+      position: relative;
       z-index: 1;
-      overflow: hidden; /* Contenemos la imagen dentro del contenedor */
+      padding: 20px 10px;
+    }
+
+    /* La imagen va después del texto en el DOM, pero visualmente se ajusta para solapar */
+    .hero-image {
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      margin-top: -120px; /* Ajuste para que se solape con el texto */
+      margin-top: calc(-120px + {{ section.settings.mobile_image_position_y }}px); /* Posición ajustable */
     }
 
     .hero-image img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center calc(50% + {{ section.settings.mobile_image_position_y }}px); /* Permitimos ajustar la posición vertical */
-      min-height: 100%;
+      display: block;
+      max-width: 100%;
+      margin: 0 auto;
     }
 
-    .hero-text {
-      position: relative;
-      z-index: 3;
-      padding: 30px 15px;
-    }
-
+    /* Sin texto sombreado o fondos semitransparentes */
     .hero-sorteo h1,
     .hero-sorteo h2,
     .hero-sorteo p {
-      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      text-shadow: none;
     }
 
     .hero-sorteo p {
-      background-color: rgba(0,0,0,0.4);
-      padding: 15px;
-      border-radius: 5px;
-      margin-left: auto;
-      margin-right: auto;
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
     }
     {% endif %}
   }
 
-  /* Estilos adicionales para mejorar la visualización en móvil */
+  /* Ajustes adicionales para la estructura de imagen sobre texto */
   @media screen and (max-width: 768px) {
     {% if section.settings.mobile_overlay_mode %}
-    /* Mantenemos altura adecuada independientemente de la posición de la imagen */
-    .hero-sorteo {
-      min-height: 500px;
+    /* Reordenamos el DOM para mostrar texto primero e imagen después */
+    .hero-content {
+      display: flex;
+      flex-direction: column-reverse;
     }
 
-    /* Facilitamos la lectura del texto cuando está superpuesto */
+    /* Ahora ponemos la imagen arriba */
+    .hero-image {
+      order: 1;
+      width: 100%;
+      margin-bottom: -140px; /* Valor negativo para que el texto se superponga */
+      margin-bottom: calc(-140px + {{ section.settings.mobile_image_position_y }}px); /* Ajustable con el control */
+      z-index: 1;
+    }
+
+    /* Y el texto debajo, superpuesto con la imagen */
     .hero-text {
-      background-color: rgba(0,0,0,0.3);
-      border-radius: 10px;
-      margin: 0 auto;
-      max-width: 90%;
-      backdrop-filter: blur(2px);
+      order: 2;
+      position: relative;
+      z-index: 2;
+      padding-top: 120px; /* Espacio para que el texto no quede muy arriba en la imagen */
     }
     {% endif %}
   }
@@ -375,13 +381,13 @@
     {
       "type": "range",
       "id": "mobile_image_position_y",
-      "min": -250,
-      "max": 250,
+      "min": -200,
+      "max": 200,
       "step": 10,
       "unit": "px",
-      "label": "Posición vertical (móvil)",
+      "label": "Ajuste superposición imagen-texto",
       "default": 0,
-      "info": "Valores positivos mueven la imagen hacia abajo, valores negativos hacia arriba"
+      "info": "Ajusta cuánto se superpone la imagen con el texto"
     },
     {
       "type": "checkbox",
