@@ -162,56 +162,80 @@
   @media screen and (max-width: 768px) {
     .hero-sorteo {
       padding: 60px 0 100px;
-      background: linear-gradient(180deg, #000000 0%, rgba(255, 204, 0, 0.9) 100%);
+      background: #000000;
+      position: relative;
     }
 
     .hero-content {
       flex-direction: column;
       text-align: center;
+      position: relative;
     }
 
     .hero-text {
       width: 100%;
       padding-right: 0;
       position: relative;
-      z-index: 2;
+      z-index: 5;
     }
 
     .hero-image {
       width: 100%;
-      margin-top: -30px;
-      margin-bottom: -40px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 1;
+      margin: 0;
     }
 
     .hero-image img {
-      margin: 0 auto;
-      transform: scale(1.1);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin: 0;
+      position: absolute;
+      top: 0;
     }
 
     .hero-sorteo h1 {
       font-size: 50px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      position: relative;
+      z-index: 2;
     }
 
     .hero-sorteo h2 {
       font-size: 28px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
 
     .hero-sorteo p {
       font-size: 16px;
       position: relative;
       z-index: 2;
-      background: rgba(0,0,0,0.5);
-      padding: 15px;
-      border-radius: 8px;
-      margin: 0 auto 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+      padding: 10px;
+      margin: 15px auto 30px;
+      max-width: 90%;
+    }
+
+    .arrow-container {
+      position: relative;
+      z-index: 5;
+    }
+
+    .arrow-down svg path {
+      fill: rgba(255, 204, 0, 0.8);
     }
 
     .whatsapp-button {
       padding: 12px 20px;
       font-size: 14px;
       position: relative;
-      z-index: 3;
+      z-index: 5;
     }
   }
 </style>
