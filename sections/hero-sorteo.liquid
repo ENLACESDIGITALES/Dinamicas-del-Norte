@@ -1,21 +1,21 @@
 {% comment %}
-  Hero Sorteo - Solución Final
+  Hero Sorteo - Solución Exacta
 {% endcomment %}
 
 <div class="hero-sorteo">
   <div class="hero-container">
     <div class="hero-content">
-      {% if section.settings.hero_image != blank %}
-        <div class="hero-image">
-          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
-        </div>
-      {% endif %}
-
       <div class="hero-text">
         <h1>{{ section.settings.hero_title }}</h1>
         <h2>{{ section.settings.hero_subtitle }}</h2>
         <p>{{ section.settings.hero_description }}</p>
       </div>
+
+      {% if section.settings.hero_image != blank %}
+        <div class="hero-image">
+          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+        </div>
+      {% endif %}
     </div>
 
     {% if section.settings.show_arrow %}
@@ -59,32 +59,36 @@
     position: relative;
   }
 
-  /* Estructura móvil (por defecto) */
+  /* VISTA MÓVIL (por defecto) */
   .hero-content {
     position: relative;
-    text-align: center;
   }
 
   .hero-image {
+    width: 100%;
     position: relative;
   }
 
   .hero-image img {
     width: 100%;
+    display: block;
     border-radius: {{ section.settings.image_border_radius }}px;
     transform: translateY({{ section.settings.mobile_image_position_y }}px);
   }
 
   .hero-text {
     position: absolute;
-    bottom: 0;
     left: 0;
+    bottom: 0;
     width: 100%;
+    text-align: center;
     padding: 20px;
     z-index: 2;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    padding-top: 60px;
   }
 
-  .hero-sorteo h1 {
+  .hero-text h1 {
     font-size: 50px;
     font-weight: 700;
     margin: 0 0 10px 0;
@@ -93,7 +97,7 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
-  .hero-sorteo h2 {
+  .hero-text h2 {
     font-size: 28px;
     font-weight: 700;
     margin: 0 0 20px 0;
@@ -101,10 +105,10 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
-  .hero-sorteo p {
+  .hero-text p {
     font-size: 16px;
     line-height: 1.5;
-    margin: 0 auto 20px;
+    margin: 0 auto;
     max-width: 90%;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
@@ -151,11 +155,11 @@
   /* Botón de WhatsApp */
   .button-container {
     width: 100%;
+    text-align: center;
     padding: 0 20px;
     margin-top: {{ section.settings.button_vertical_position }}px;
     position: relative;
     z-index: 3;
-    text-align: center;
   }
 
   .whatsapp-button {
@@ -186,48 +190,53 @@
     height: 28px;
   }
 
-  /* Ajustes para pantallas grandes */
+  /* VISTA DESKTOP */
   @media screen and (min-width: 769px) {
     .hero-content {
       display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: space-between;
+    }
+
+    .hero-text {
+      position: static;
+      width: 50%;
       text-align: left;
+      padding: 0 30px 0 0;
+      background: none;
+    }
+
+    .hero-text h1 {
+      font-size: 70px;
+      text-shadow: none;
+    }
+
+    .hero-text h2 {
+      font-size: 32px;
+      text-shadow: none;
+    }
+
+    .hero-text p {
+      font-size: 18px;
+      margin: 0 0 30px 0;
+      max-width: 600px;
+      text-shadow: none;
     }
 
     .hero-image {
       width: 50%;
-      position: static;
+      order: 2;
     }
 
     .hero-image img {
       transform: translateX({{ section.settings.desktop_image_position_x }}px)
                  translateY({{ section.settings.desktop_image_position_y }}px);
-      width: 100%;
     }
 
-    .hero-text {
-      width: 50%;
-      position: static;
-      padding-right: 30px;
-      padding-left: 0;
-    }
-
-    .hero-sorteo h1 {
-      font-size: 70px;
-      text-shadow: none;
-    }
-
-    .hero-sorteo h2 {
-      font-size: 32px;
-      text-shadow: none;
-    }
-
-    .hero-sorteo p {
-      font-size: 18px;
-      margin: 0 0 30px 0;
-      max-width: 600px;
-      text-shadow: none;
+    .whatsapp-button {
+      width: auto;
+      max-width: 480px;
     }
   }
 </style>
