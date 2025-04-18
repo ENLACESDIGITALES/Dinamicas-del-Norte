@@ -22,7 +22,7 @@
       <div class="arrow-container">
         <div class="arrow-down">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 40 30">
-            <path d="M20 30L0 0h40z"/>
+            <path d="M20 30C18 28 0 10 0 0h40C40 10 22 28 20 30z" />
           </svg>
         </div>
       </div>
@@ -106,12 +106,12 @@
     max-width: 600px;
   }
 
-  /* Estilos de la flecha */
+  /* Estilos de la flecha - mejorados para coincidir con la referencia */
   .arrow-container {
     position: relative;
     width: 100%;
     height: 50px;
-    margin: 20px 0;
+    margin: 30px 0;
     text-align: center;
   }
 
@@ -139,10 +139,10 @@
       transform: translateY(0) translateX(-50%);
     }
     40% {
-      transform: translateY(-20px) translateX(-50%);
+      transform: translateY(-15px) translateX(-50%);
     }
     60% {
-      transform: translateY(-10px) translateX(-50%);
+      transform: translateY(-8px) translateX(-50%);
     }
   }
 
@@ -166,7 +166,7 @@
     max-width: 480px;
     transition: all 0.3s ease;
     {% if section.settings.button_shadow %}
-    box-shadow: 0 4px 8px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
     {% endif %}
     text-transform: uppercase;
   }
@@ -174,7 +174,7 @@
   .whatsapp-button:hover {
     transform: translateY(-2px);
     {% if section.settings.button_shadow %}
-    box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
     {% endif %}
   }
 
@@ -183,8 +183,7 @@
   }
 
   .whatsapp-button svg {
-    margin-right: 10px;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+    margin-right: 15px;
     width: 28px;
     height: 28px;
   }
@@ -243,7 +242,6 @@
 
     /* Configuración específica para el modo de superposición */
     {% if section.settings.mobile_overlay_mode %}
-    /* Crear una versión especial para móvil con imagen arriba y texto abajo */
     .hero-content {
       display: flex;
       flex-direction: column;
@@ -269,8 +267,8 @@
       width: 100%;
       order: 2; /* Asegura que aparezca después */
       margin-top: -120px; /* Crea superposición con la imagen */
-      z-index: 2; /* Asegura que esté encima */
       position: relative;
+      z-index: 2; /* Asegura que esté encima */
       padding: 0 15px;
     }
 
