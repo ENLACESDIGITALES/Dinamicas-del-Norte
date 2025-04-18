@@ -1,5 +1,5 @@
 {% comment %}
-  Hero Sorteo - Versión simplificada
+  Hero Sorteo - Solución Final
 {% endcomment %}
 
 <div class="hero-sorteo">
@@ -49,6 +49,7 @@
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
     color: {{ section.settings.text_color }};
+    overflow: hidden;
   }
 
   .hero-container {
@@ -58,35 +59,32 @@
     position: relative;
   }
 
-  /* Estructura para móvil con imagen arriba */
+  /* Estructura móvil (por defecto) */
   .hero-content {
-    display: flex;
-    flex-direction: column;
     position: relative;
+    text-align: center;
   }
 
   .hero-image {
-    width: 100%;
-    margin-bottom: 0;
-    text-align: center;
+    position: relative;
   }
 
   .hero-image img {
-    max-width: 100%;
-    border-radius: {{ section.settings.image_border_radius }}px;
-  }
-
-  .hero-text {
     width: 100%;
-    text-align: center;
-    margin-top: -150px;
-    position: relative;
-    z-index: 2;
-    padding: 0 15px;
+    border-radius: {{ section.settings.image_border_radius }}px;
     transform: translateY({{ section.settings.mobile_image_position_y }}px);
   }
 
-  h1 {
+  .hero-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    z-index: 2;
+  }
+
+  .hero-sorteo h1 {
     font-size: 50px;
     font-weight: 700;
     margin: 0 0 10px 0;
@@ -95,7 +93,7 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
-  h2 {
+  .hero-sorteo h2 {
     font-size: 28px;
     font-weight: 700;
     margin: 0 0 20px 0;
@@ -103,13 +101,11 @@
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
-  p {
+  .hero-sorteo p {
     font-size: 16px;
     line-height: 1.5;
-    margin: 0 0 30px;
+    margin: 0 auto 20px;
     max-width: 90%;
-    margin-left: auto;
-    margin-right: auto;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
@@ -118,11 +114,9 @@
     position: relative;
     width: 100%;
     height: 40px;
-    margin-top: 20px;
-    text-align: center;
-    position: relative;
-    z-index: 3;
     margin-top: {{ section.settings.arrow_vertical_position }}px;
+    text-align: center;
+    z-index: 3;
   }
 
   .arrow-down {
@@ -157,11 +151,11 @@
   /* Botón de WhatsApp */
   .button-container {
     width: 100%;
-    text-align: center;
     padding: 0 20px;
     margin-top: {{ section.settings.button_vertical_position }}px;
     position: relative;
     z-index: 3;
+    text-align: center;
   }
 
   .whatsapp-button {
@@ -177,9 +171,8 @@
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
     text-transform: uppercase;
-    max-width: 90%;
-    width: 100%;
-    margin: 0 auto;
+    width: 90%;
+    max-width: 480px;
   }
 
   .whatsapp-button:hover {
@@ -193,55 +186,48 @@
     height: 28px;
   }
 
-  /* Ajustes para pantallas más grandes */
+  /* Ajustes para pantallas grandes */
   @media screen and (min-width: 769px) {
     .hero-content {
-      flex-direction: row;
+      display: flex;
       align-items: center;
       justify-content: space-between;
+      text-align: left;
     }
 
     .hero-image {
       width: 50%;
-      text-align: right;
-      margin-bottom: 0;
+      position: static;
     }
 
     .hero-image img {
-      max-width: 100%;
-      margin-left: auto;
       transform: translateX({{ section.settings.desktop_image_position_x }}px)
                  translateY({{ section.settings.desktop_image_position_y }}px);
+      width: 100%;
     }
 
     .hero-text {
       width: 50%;
-      text-align: left;
+      position: static;
       padding-right: 30px;
-      margin-top: 0;
-      transform: none;
+      padding-left: 0;
     }
 
-    h1 {
+    .hero-sorteo h1 {
       font-size: 70px;
       text-shadow: none;
     }
 
-    h2 {
+    .hero-sorteo h2 {
       font-size: 32px;
       text-shadow: none;
     }
 
-    p {
+    .hero-sorteo p {
       font-size: 18px;
       margin: 0 0 30px 0;
       max-width: 600px;
       text-shadow: none;
-    }
-
-    .whatsapp-button {
-      width: auto;
-      max-width: 480px;
     }
   }
 </style>
@@ -279,7 +265,7 @@
     {
       "type": "image_picker",
       "id": "hero_image",
-      "label": "Imagen de ganadores"
+      "label": "Imagen principal"
     },
     {
       "type": "range",
@@ -288,7 +274,7 @@
       "max": 50,
       "step": 1,
       "unit": "px",
-      "label": "Esquinas redondeadas de la imagen",
+      "label": "Esquinas redondeadas",
       "default": 0
     },
     {
@@ -315,12 +301,12 @@
       "type": "range",
       "id": "mobile_image_position_y",
       "min": -200,
-      "max": 0,
+      "max": 200,
       "step": 10,
       "unit": "px",
       "label": "Posición vertical (móvil)",
-      "default": -100,
-      "info": "Valores más negativos aumentan la superposición"
+      "default": 0,
+      "info": "Mueve la imagen hacia arriba (valores negativos) o abajo (valores positivos)"
     },
     {
       "type": "header",
@@ -362,17 +348,19 @@
     },
     {
       "type": "header",
-      "content": "Elementos"
+      "content": "Flecha"
     },
     {
-      "type": "range",
-      "id": "button_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del botón",
-      "default": 0
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Mostrar flecha",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Color de flecha",
+      "default": "#FFCC00"
     },
     {
       "type": "range",
@@ -381,20 +369,8 @@
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición vertical de la flecha",
+      "label": "Posición vertical de flecha",
       "default": 20
-    },
-    {
-      "type": "checkbox",
-      "id": "show_arrow",
-      "label": "Mostrar flecha indicadora",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "arrow_color",
-      "label": "Color de la flecha",
-      "default": "#FFCC00"
     },
     {
       "type": "header",
@@ -425,8 +401,18 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "label": "Redondeo de esquinas del botón",
+      "label": "Redondeo del botón",
       "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_vertical_position",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical del botón",
+      "default": 0
     },
     {
       "type": "header",
