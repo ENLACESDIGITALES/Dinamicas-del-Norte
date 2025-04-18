@@ -4,19 +4,37 @@
 
 <div class="hero-sorteo">
   <div class="hero-container">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1>{{ section.settings.hero_title }}</h1>
-        <h2>{{ section.settings.hero_subtitle }}</h2>
-        <p>{{ section.settings.hero_description }}</p>
-      </div>
+    {% if section.settings.mobile_overlay_mode %}
+      <!-- Estructura móvil con imagen-texto (modo móvil) -->
+      <div class="hero-content-mobile">
+        {% if section.settings.hero_image != blank %}
+          <div class="hero-image-mobile">
+            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+          </div>
+        {% endif %}
 
-      {% if section.settings.hero_image != blank %}
-        <div class="hero-image">
-          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+        <div class="hero-text-mobile">
+          <h1>{{ section.settings.hero_title }}</h1>
+          <h2>{{ section.settings.hero_subtitle }}</h2>
+          <p>{{ section.settings.hero_description }}</p>
         </div>
-      {% endif %}
-    </div>
+      </div>
+    {% else %}
+      <!-- Estructura original para desktop y móvil sin modo overlay -->
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>{{ section.settings.hero_title }}</h1>
+          <h2>{{ section.settings.hero_subtitle }}</h2>
+          <p>{{ section.settings.hero_description }}</p>
+        </div>
+
+        {% if section.settings.hero_image != blank %}
+          <div class="hero-image">
+            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
 
     {% if section.settings.show_arrow %}
       <div class="arrow-container">
@@ -216,26 +234,26 @@
     {% if section.settings.mobile_overlay_mode %}
     .hero-content {
       display: flex;
-      flex-direction: column;
+      flex-direction: column; /* Mostramos primero el texto y luego la imagen */
       position: relative;
       overflow: visible;
     }
 
-    /* El texto va primero */
+    /* El texto va primero (arriba) */
     .hero-text {
       width: 100%;
       position: relative;
-      z-index: 1;
+      z-index: 2; /* Mayor z-index para estar encima */
       padding: 20px 10px;
+      margin-bottom: -100px; /* Solapamiento con la imagen */
+      margin-bottom: calc(-100px + {{ section.settings.mobile_image_position_y }}px); /* Ajustable */
     }
 
-    /* La imagen va después del texto en el DOM, pero visualmente se ajusta para solapar */
+    /* La imagen va después (abajo) */
     .hero-image {
       width: 100%;
       position: relative;
-      z-index: 2;
-      margin-top: -120px; /* Ajuste para que se solape con el texto */
-      margin-top: calc(-120px + {{ section.settings.mobile_image_position_y }}px); /* Posición ajustable */
+      z-index: 1; /* Menor z-index para estar debajo */
     }
 
     .hero-image img {
@@ -245,7 +263,7 @@
       margin: 0 auto;
     }
 
-    /* Sin texto sombreado o fondos semitransparentes */
+    /* Nos aseguramos que no haya efectos adicionales */
     .hero-sorteo h1,
     .hero-sorteo h2,
     .hero-sorteo p {
@@ -260,30 +278,44 @@
     {% endif %}
   }
 
-  /* Ajustes adicionales para la estructura de imagen sobre texto */
+  /* Estilos de la estructura especial para móvil */
+  /* Solo visible en móvil y cuando mobile_overlay_mode está activo */
+  .hero-content-mobile {
+    display: none; /* Por defecto oculto */
+  }
+
   @media screen and (max-width: 768px) {
     {% if section.settings.mobile_overlay_mode %}
-    /* Reordenamos el DOM para mostrar texto primero e imagen después */
+    /* Ocultamos la estructura normal en móvil cuando overlay está activo */
     .hero-content {
-      display: flex;
-      flex-direction: column-reverse;
+      display: none;
     }
 
-    /* Ahora ponemos la imagen arriba */
-    .hero-image {
-      order: 1;
-      width: 100%;
-      margin-bottom: -140px; /* Valor negativo para que el texto se superponga */
-      margin-bottom: calc(-140px + {{ section.settings.mobile_image_position_y }}px); /* Ajustable con el control */
-      z-index: 1;
-    }
-
-    /* Y el texto debajo, superpuesto con la imagen */
-    .hero-text {
-      order: 2;
+    /* Mostramos la nueva estructura */
+    .hero-content-mobile {
+      display: block;
       position: relative;
-      z-index: 2;
-      padding-top: 120px; /* Espacio para que el texto no quede muy arriba en la imagen */
+      overflow: visible;
+    }
+
+    /* Imagen primero (arriba) */
+    .hero-image-mobile {
+      width: 100%;
+      text-align: center;
+      margin-bottom: {{ section.settings.mobile_image_position_y }}px; /* Ajustable - cuánto espacio hay entre imagen y texto */
+    }
+
+    .hero-image-mobile img {
+      width: 100%;
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Texto después (abajo) */
+    .hero-text-mobile {
+      padding: 0 15px;
+      text-align: center;
+      margin-top: -100px; /* Hace que el texto se superponga con la imagen */
     }
     {% endif %}
   }
@@ -382,12 +414,12 @@
       "type": "range",
       "id": "mobile_image_position_y",
       "min": -200,
-      "max": 200,
+      "max": 0,
       "step": 10,
       "unit": "px",
-      "label": "Ajuste superposición imagen-texto",
-      "default": 0,
-      "info": "Ajusta cuánto se superpone la imagen con el texto"
+      "label": "Espacio entre imagen y texto",
+      "default": -100,
+      "info": "Valores negativos aumentan la superposición del texto sobre la imagen"
     },
     {
       "type": "checkbox",
