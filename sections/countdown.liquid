@@ -1,5 +1,5 @@
 {% comment %}
-  Contador Regresivo Simplificado
+  Contador Regresivo Simple
 {% endcomment %}
 
 <div class="countdown-banner" style="background-color: {{ section.settings.background_color }};">
@@ -8,7 +8,6 @@
       <h2 style="color: {{ section.settings.text_color }};">{{ section.settings.title_text }}</h2>
     </div>
     <div class="countdown-timer">
-      <!-- HORAS -->
       <div class="timer-group">
         <div class="timer-box">
           <span id="hours">00</span>
@@ -16,13 +15,11 @@
         <div class="timer-label">{{ section.settings.hours_label }}</div>
       </div>
 
-      <!-- SEPARADOR -->
       <div class="timer-separator">
         <div class="separator-dot"></div>
         <div class="separator-dot"></div>
       </div>
 
-      <!-- MINUTOS -->
       <div class="timer-group">
         <div class="timer-box">
           <span id="minutes">00</span>
@@ -30,13 +27,11 @@
         <div class="timer-label">{{ section.settings.minutes_label }}</div>
       </div>
 
-      <!-- SEPARADOR -->
       <div class="timer-separator">
         <div class="separator-dot"></div>
         <div class="separator-dot"></div>
       </div>
 
-      <!-- SEGUNDOS -->
       <div class="timer-group">
         <div class="timer-box">
           <span id="seconds">00</span>
@@ -88,46 +83,48 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 5px;
   }
 
   .timer-box {
+    background-color: #FFFFFF;
+    color: #000000;
     width: {{ section.settings.timer_size }}px;
     height: {{ section.settings.timer_size }}px;
-    background-color: white;
-    border-radius: {{ section.settings.timer_border_radius }}px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: {{ section.settings.timer_border_radius }}px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 0 5px;
   }
 
   .timer-box span {
-    font-size: calc({{ section.settings.timer_size }}px * 0.5);
+    font-size: calc({{ section.settings.timer_size }}px * 0.55);
     font-weight: bold;
-    color: black;
+    text-align: center;
   }
 
   .timer-label {
-    color: white;
+    color: #FFFFFF;
     font-size: {{ section.settings.label_size }}px;
     margin-top: 5px;
     text-align: center;
   }
 
   .timer-separator {
-    height: {{ section.settings.timer_size }}px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    margin: 0 8px;
+    height: {{ section.settings.timer_size }}px;
+    padding: 0 5px;
   }
 
   .separator-dot {
     width: 8px;
     height: 8px;
-    background-color: white;
+    background-color: #FFFFFF;
     border-radius: 50%;
+    margin: 5px 0;
   }
 
   @media screen and (max-width: 768px) {
@@ -154,12 +151,11 @@
     }
 
     .timer-box span {
-      font-size: calc({{ section.settings.timer_size }}px * 0.4);
+      font-size: calc({{ section.settings.timer_size }}px * 0.45);
     }
 
     .timer-separator {
       height: calc({{ section.settings.timer_size }}px * 0.8);
-      margin: 0 5px;
     }
 
     .separator-dot {
@@ -179,27 +175,57 @@
     }
 
     .timer-box span {
-      font-size: calc({{ section.settings.timer_size }}px * 0.3);
+      font-size: calc({{ section.settings.timer_size }}px * 0.35);
+    }
+
+    .timer-label {
+      font-size: calc({{ section.settings.label_size }}px * 0.8);
     }
 
     .timer-separator {
       height: calc({{ section.settings.timer_size }}px * 0.6);
-      margin: 0 3px;
+      padding: 0 3px;
     }
 
     .separator-dot {
       width: 4px;
       height: 4px;
+      margin: 3px 0;
     }
+  }
+
+  /* Animación para el cambio de dígitos */
+  @keyframes numberChange {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .number-change {
+    animation: numberChange 0.3s ease-in-out;
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Referencias a los elementos
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
+
+    // Variables para seguimiento
+    let currentHours = -1;
+    let currentMinutes = -1;
+    let currentSeconds = -1;
 
     // Establecer tiempo de finalización
     let countDownDate;
@@ -225,9 +251,26 @@
       }
     {% endif %}
 
-    // Función para formatear números
-    function formatNumber(num) {
-      return num < 10 ? "0" + num : num.toString();
+    // Función para aplicar animación cuando cambia un dígito
+    function updateWithAnimation(element, newValue) {
+      // Formatear el valor con ceros a la izquierda
+      newValue = (newValue < 10) ? "0" + newValue : newValue;
+
+      // Si el valor ya está actualizado, no hacer nada
+      if (element.textContent === newValue) return;
+
+      // Aplicar la animación
+      element.classList.add('number-change');
+
+      // Actualizar el valor a mitad de la animación
+      setTimeout(function() {
+        element.textContent = newValue;
+      }, 150);
+
+      // Quitar la clase de animación después de que termine
+      setTimeout(function() {
+        element.classList.remove('number-change');
+      }, 300);
     }
 
     // Actualizar contador cada segundo
@@ -235,13 +278,13 @@
       const now = new Date().getTime();
       const distance = countDownDate - now;
 
-      // Si el contador llegó a cero
+      // Si el contador llega a cero
       if (distance <= 0) {
         clearInterval(countdown);
 
-        hoursEl.textContent = "00";
-        minutesEl.textContent = "00";
-        secondsEl.textContent = "00";
+        hoursElement.textContent = "00";
+        minutesElement.textContent = "00";
+        secondsElement.textContent = "00";
 
         {% if section.settings.hide_after_end %}
         setTimeout(function() {
@@ -267,12 +310,57 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Actualizar valores
-      hoursEl.textContent = formatNumber(hours);
-      minutesEl.textContent = formatNumber(minutes);
-      secondsEl.textContent = formatNumber(seconds);
+      // Verificar si el último dígito cambió para aplicar animación
+      if (hours !== currentHours) {
+        const lastDigitChanged = (hours % 10) !== (currentHours % 10);
+        if (currentHours === -1 || lastDigitChanged) {
+          updateWithAnimation(hoursElement, hours);
+        } else {
+          hoursElement.textContent = hours < 10 ? "0" + hours : hours;
+        }
+        currentHours = hours;
+      }
 
+      if (minutes !== currentMinutes) {
+        const lastDigitChanged = (minutes % 10) !== (currentMinutes % 10);
+        if (currentMinutes === -1 || lastDigitChanged) {
+          updateWithAnimation(minutesElement, minutes);
+        } else {
+          minutesElement.textContent = minutes < 10 ? "0" + minutes : minutes;
+        }
+        currentMinutes = minutes;
+      }
+
+      if (seconds !== currentSeconds) {
+        const lastDigitChanged = (seconds % 10) !== (currentSeconds % 10);
+        if (currentSeconds === -1 || lastDigitChanged) {
+          updateWithAnimation(secondsElement, seconds);
+        } else {
+          secondsElement.textContent = seconds < 10 ? "0" + seconds : seconds;
+        }
+        currentSeconds = seconds;
+      }
     }, 1000);
+
+    // Inicializar valores
+    setTimeout(function() {
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+
+      if (distance > 0) {
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        hoursElement.textContent = hours < 10 ? "0" + hours : hours;
+        minutesElement.textContent = minutes < 10 ? "0" + minutes : minutes;
+        secondsElement.textContent = seconds < 10 ? "0" + seconds : seconds;
+
+        currentHours = hours;
+        currentMinutes = minutes;
+        currentSeconds = seconds;
+      }
+    }, 100);
   });
 </script>
 
