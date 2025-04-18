@@ -1,5 +1,5 @@
 {% comment %}
-  Contador Regresivo con Efecto Flip Clock
+  Contador Regresivo Simplificado
 {% endcomment %}
 
 <div class="countdown-banner" style="background-color: {{ section.settings.background_color }};">
@@ -10,13 +10,8 @@
     <div class="countdown-timer">
       <!-- HORAS -->
       <div class="timer-group">
-        <div class="flip-clock">
-          <div class="flip-card">
-            <div class="top" id="hours-top">00</div>
-            <div class="bottom" id="hours-bottom">00</div>
-            <div class="flip-top" id="hours-flip-top">00</div>
-            <div class="flip-bottom" id="hours-flip-bottom">00</div>
-          </div>
+        <div class="timer-box">
+          <span id="hours">00</span>
         </div>
         <div class="timer-label">{{ section.settings.hours_label }}</div>
       </div>
@@ -29,13 +24,8 @@
 
       <!-- MINUTOS -->
       <div class="timer-group">
-        <div class="flip-clock">
-          <div class="flip-card">
-            <div class="top" id="minutes-top">00</div>
-            <div class="bottom" id="minutes-bottom">00</div>
-            <div class="flip-top" id="minutes-flip-top">00</div>
-            <div class="flip-bottom" id="minutes-flip-bottom">00</div>
-          </div>
+        <div class="timer-box">
+          <span id="minutes">00</span>
         </div>
         <div class="timer-label">{{ section.settings.minutes_label }}</div>
       </div>
@@ -48,13 +38,8 @@
 
       <!-- SEGUNDOS -->
       <div class="timer-group">
-        <div class="flip-clock">
-          <div class="flip-card">
-            <div class="top" id="seconds-top">00</div>
-            <div class="bottom" id="seconds-bottom">00</div>
-            <div class="flip-top" id="seconds-flip-top">00</div>
-            <div class="flip-bottom" id="seconds-flip-bottom">00</div>
-          </div>
+        <div class="timer-box">
+          <span id="seconds">00</span>
         </div>
         <div class="timer-label">{{ section.settings.seconds_label }}</div>
       </div>
@@ -63,7 +48,6 @@
 </div>
 
 <style>
-  /* Estilos básicos */
   .countdown-banner {
     width: 100%;
     padding: 15px 0;
@@ -107,94 +91,21 @@
     margin: 0 5px;
   }
 
-  /* Flip Clock Styles */
-  .flip-clock {
+  .timer-box {
     width: {{ section.settings.timer_size }}px;
     height: {{ section.settings.timer_size }}px;
-    position: relative;
+    background-color: white;
     border-radius: {{ section.settings.timer_border_radius }}px;
-    overflow: hidden;
-  }
-
-  .flip-card {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    border-radius: {{ section.settings.timer_border_radius }}px;
-  }
-
-  .top, .bottom, .flip-top, .flip-bottom {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: white;
-    color: black;
-    font-size: calc({{ section.settings.timer_size }}px * 0.6);
-    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
-  .top, .flip-top {
-    top: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    border-top-left-radius: {{ section.settings.timer_border_radius }}px;
-    border-top-right-radius: {{ section.settings.timer_border_radius }}px;
-  }
-
-  .bottom, .flip-bottom {
-    bottom: 0;
-    border-top: 1px solid rgba(0,0,0,0.1);
-    border-bottom-left-radius: {{ section.settings.timer_border_radius }}px;
-    border-bottom-right-radius: {{ section.settings.timer_border_radius }}px;
-  }
-
-  /* Contenido centrado */
-  .top, .flip-top {
-    line-height: {{ section.settings.timer_size }}px;
-    /* Ajustar para centrar verticalmente */
-    padding-bottom: calc({{ section.settings.timer_size }}px * 0.25);
-  }
-
-  .bottom, .flip-bottom {
-    line-height: 0;
-    /* Ajustar para centrar verticalmente */
-    padding-top: calc({{ section.settings.timer_size }}px * 0.25);
-  }
-
-  /* Elementos de animación */
-  .flip-top {
-    z-index: 3;
-    transform-origin: bottom;
-    transform: rotateX(0deg);
-    backface-visibility: hidden;
-  }
-
-  .flip-bottom {
-    z-index: 2;
-    transform-origin: top;
-    transform: rotateX(90deg);
-    backface-visibility: hidden;
-  }
-
-  /* Separadores y etiquetas */
-  .timer-separator {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: {{ section.settings.timer_size }}px;
-    padding: 0 5px;
-  }
-
-  .separator-dot {
-    width: 8px;
-    height: 8px;
-    background-color: white;
-    border-radius: 50%;
-    margin: 5px 0;
+  .timer-box span {
+    font-size: calc({{ section.settings.timer_size }}px * 0.5);
+    font-weight: bold;
+    color: black;
   }
 
   .timer-label {
@@ -204,38 +115,21 @@
     text-align: center;
   }
 
-  /* Animaciones */
-  @keyframes flipTop {
-    0% {
-      transform: rotateX(0deg);
-      z-index: 3;
-    }
-    100% {
-      transform: rotateX(-90deg);
-      z-index: 0;
-    }
+  .timer-separator {
+    height: {{ section.settings.timer_size }}px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 0 8px;
   }
 
-  @keyframes flipBottom {
-    0% {
-      transform: rotateX(90deg);
-      z-index: 2;
-    }
-    100% {
-      transform: rotateX(0deg);
-      z-index: 3;
-    }
+  .separator-dot {
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
   }
 
-  .animate-top {
-    animation: flipTop 0.5s ease-in both;
-  }
-
-  .animate-bottom {
-    animation: flipBottom 0.5s 0.5s ease-out both;
-  }
-
-  /* Media Queries */
   @media screen and (max-width: 768px) {
     .countdown-container {
       flex-direction: column;
@@ -254,32 +148,23 @@
       font-size: calc({{ section.settings.title_size }}px * 0.7);
     }
 
-    .flip-clock {
+    .timer-box {
       width: calc({{ section.settings.timer_size }}px * 0.8);
       height: calc({{ section.settings.timer_size }}px * 0.8);
     }
 
-    .top, .bottom, .flip-top, .flip-bottom {
-      font-size: calc({{ section.settings.timer_size }}px * 0.5);
+    .timer-box span {
+      font-size: calc({{ section.settings.timer_size }}px * 0.4);
     }
 
-    .top, .flip-top {
-      line-height: calc({{ section.settings.timer_size }}px * 0.8);
-      padding-bottom: calc({{ section.settings.timer_size }}px * 0.2);
-    }
-
-    .bottom, .flip-bottom {
-      padding-top: calc({{ section.settings.timer_size }}px * 0.2);
+    .timer-separator {
+      height: calc({{ section.settings.timer_size }}px * 0.8);
+      margin: 0 5px;
     }
 
     .separator-dot {
       width: 6px;
       height: 6px;
-      margin: 4px 0;
-    }
-
-    .timer-label {
-      font-size: calc({{ section.settings.label_size }}px * 0.9);
     }
   }
 
@@ -288,65 +173,33 @@
       font-size: calc({{ section.settings.title_size }}px * 0.5);
     }
 
-    .flip-clock {
-      width: calc({{ section.settings.timer_size }}px * 0.7);
-      height: calc({{ section.settings.timer_size }}px * 0.7);
+    .timer-box {
+      width: calc({{ section.settings.timer_size }}px * 0.6);
+      height: calc({{ section.settings.timer_size }}px * 0.6);
     }
 
-    .top, .bottom, .flip-top, .flip-bottom {
-      font-size: calc({{ section.settings.timer_size }}px * 0.4);
+    .timer-box span {
+      font-size: calc({{ section.settings.timer_size }}px * 0.3);
     }
 
-    .top, .flip-top {
-      line-height: calc({{ section.settings.timer_size }}px * 0.7);
-      padding-bottom: calc({{ section.settings.timer_size }}px * 0.175);
-    }
-
-    .bottom, .flip-bottom {
-      padding-top: calc({{ section.settings.timer_size }}px * 0.175);
+    .timer-separator {
+      height: calc({{ section.settings.timer_size }}px * 0.6);
+      margin: 0 3px;
     }
 
     .separator-dot {
-      width: 5px;
-      height: 5px;
-      margin: 3px 0;
-    }
-
-    .timer-label {
-      font-size: calc({{ section.settings.label_size }}px * 0.8);
+      width: 4px;
+      height: 4px;
     }
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Referencias a los elementos estáticos
-    const hoursTop = document.getElementById('hours-top');
-    const hoursBottom = document.getElementById('hours-bottom');
-    const minutesTop = document.getElementById('minutes-top');
-    const minutesBottom = document.getElementById('minutes-bottom');
-    const secondsTop = document.getElementById('seconds-top');
-    const secondsBottom = document.getElementById('seconds-bottom');
-
-    // Referencias a los elementos de animación
-    const hoursFlipTop = document.getElementById('hours-flip-top');
-    const hoursFlipBottom = document.getElementById('hours-flip-bottom');
-    const minutesFlipTop = document.getElementById('minutes-flip-top');
-    const minutesFlipBottom = document.getElementById('minutes-flip-bottom');
-    const secondsFlipTop = document.getElementById('seconds-flip-top');
-    const secondsFlipBottom = document.getElementById('seconds-flip-bottom');
-
-    // Variables para seguimiento
-    let currentHours = -1;
-    let currentMinutes = -1;
-    let currentSeconds = -1;
-
-    // Estado de animación
-    let isAnimating = {
-      hours: false,
-      minutes: false,
-      seconds: false
-    };
+    // Referencias a los elementos
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
 
     // Establecer tiempo de finalización
     let countDownDate;
@@ -377,67 +230,6 @@
       return num < 10 ? "0" + num : num.toString();
     }
 
-    // Función para animar el cambio
-    function animateFlip(unit, newValue) {
-      // Si ya está animando, no hacer nada
-      if (isAnimating[unit]) return;
-
-      // Formatear el valor
-      newValue = formatNumber(newValue);
-
-      // Obtener referencias a los elementos según la unidad
-      let staticTop, staticBottom, flipTop, flipBottom;
-
-      if (unit === 'hours') {
-        staticTop = hoursTop;
-        staticBottom = hoursBottom;
-        flipTop = hoursFlipTop;
-        flipBottom = hoursFlipBottom;
-      } else if (unit === 'minutes') {
-        staticTop = minutesTop;
-        staticBottom = minutesBottom;
-        flipTop = minutesFlipTop;
-        flipBottom = minutesFlipBottom;
-      } else if (unit === 'seconds') {
-        staticTop = secondsTop;
-        staticBottom = secondsBottom;
-        flipTop = secondsFlipTop;
-        flipBottom = secondsFlipBottom;
-      }
-
-      // Si los valores ya están actualizados, no animar
-      if (staticTop.textContent === newValue) return;
-
-      // Marcar como animando
-      isAnimating[unit] = true;
-
-      // Preparar para la animación
-      flipTop.textContent = staticTop.textContent;
-      flipBottom.textContent = newValue;
-
-      // Iniciar animaciones
-      flipTop.classList.add('animate-top');
-      flipBottom.classList.add('animate-bottom');
-
-      // A mitad de la animación, actualizar el valor estático superior
-      setTimeout(function() {
-        staticTop.textContent = newValue;
-      }, 500);
-
-      // Al final de la animación, actualizar el valor estático inferior
-      // y restaurar elementos de animación
-      setTimeout(function() {
-        staticBottom.textContent = newValue;
-
-        // Quitar clases de animación
-        flipTop.classList.remove('animate-top');
-        flipBottom.classList.remove('animate-bottom');
-
-        // Ya no está animando
-        isAnimating[unit] = false;
-      }, 1000);
-    }
-
     // Actualizar contador cada segundo
     const countdown = setInterval(function() {
       const now = new Date().getTime();
@@ -447,13 +239,9 @@
       if (distance <= 0) {
         clearInterval(countdown);
 
-        // Mostrar todos en cero
-        hoursTop.textContent = "00";
-        hoursBottom.textContent = "00";
-        minutesTop.textContent = "00";
-        minutesBottom.textContent = "00";
-        secondsTop.textContent = "00";
-        secondsBottom.textContent = "00";
+        hoursEl.textContent = "00";
+        minutesEl.textContent = "00";
+        secondsEl.textContent = "00";
 
         {% if section.settings.hide_after_end %}
         setTimeout(function() {
@@ -479,66 +267,11 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Si es la primera actualización, establecer valores iniciales sin animación
-      if (currentHours === -1) {
-        hoursTop.textContent = formatNumber(hours);
-        hoursBottom.textContent = formatNumber(hours);
-        minutesTop.textContent = formatNumber(minutes);
-        minutesBottom.textContent = formatNumber(minutes);
-        secondsTop.textContent = formatNumber(seconds);
-        secondsBottom.textContent = formatNumber(seconds);
+      // Actualizar valores
+      hoursEl.textContent = formatNumber(hours);
+      minutesEl.textContent = formatNumber(minutes);
+      secondsEl.textContent = formatNumber(seconds);
 
-        currentHours = hours;
-        currentMinutes = minutes;
-        currentSeconds = seconds;
-        return;
-      }
-
-      // Verificar cambios para aplicar animación
-      if (hours !== currentHours) {
-        // Verificar si cambió el último dígito
-        const lastDigitHours = hours % 10;
-        const lastDigitCurrentHours = currentHours % 10;
-
-        if (lastDigitHours !== lastDigitCurrentHours) {
-          animateFlip('hours', hours);
-        } else {
-          // Actualizar sin animación
-          hoursTop.textContent = formatNumber(hours);
-          hoursBottom.textContent = formatNumber(hours);
-        }
-        currentHours = hours;
-      }
-
-      if (minutes !== currentMinutes) {
-        // Verificar si cambió el último dígito
-        const lastDigitMinutes = minutes % 10;
-        const lastDigitCurrentMinutes = currentMinutes % 10;
-
-        if (lastDigitMinutes !== lastDigitCurrentMinutes) {
-          animateFlip('minutes', minutes);
-        } else {
-          // Actualizar sin animación
-          minutesTop.textContent = formatNumber(minutes);
-          minutesBottom.textContent = formatNumber(minutes);
-        }
-        currentMinutes = minutes;
-      }
-
-      if (seconds !== currentSeconds) {
-        // Verificar si cambió el último dígito
-        const lastDigitSeconds = seconds % 10;
-        const lastDigitCurrentSeconds = currentSeconds % 10;
-
-        if (lastDigitSeconds !== lastDigitCurrentSeconds) {
-          animateFlip('seconds', seconds);
-        } else {
-          // Actualizar sin animación
-          secondsTop.textContent = formatNumber(seconds);
-          secondsBottom.textContent = formatNumber(seconds);
-        }
-        currentSeconds = seconds;
-      }
     }, 1000);
   });
 </script>
