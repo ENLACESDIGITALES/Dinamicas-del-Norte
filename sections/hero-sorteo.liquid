@@ -1,56 +1,22 @@
-.hero-sorteo h1 { font-size: 70px; font-weight: 700; margin: 0 0 10px 0; line-height: 1; text-transform: uppercase; }
-
-.hero-sorteo h2 { font-size: 32px; font-weight: 700; margin: 0 0 20px 0; color: {{ section.settings.accent_color }}; }
-
-.hero-sorteo p { font-size: 18px; line-height: 1.5; margin: 0 0 30px 0; max-width: 600px; }
-
-.hero-content { display: flex; align-items: center; justify-content: space-between; position: relative; }
-
-.hero-text { width: 50%; padding-right: 30px; }
-
-.hero-image { width: 50%; text-align: right; }
-
-.hero-image img { display: block; max-width: {{ section.settings.desktop_image_scale }}%; margin-left: auto; transform:
-translateX({{ section.settings.desktop_image_position_x }}px) translateY(
-{{- section.settings.desktop_image_position_y -}}
-px); }
 {% comment %}
   Hero Sorteo Responsive con Controles Independientes
 {% endcomment %}
 
 <div class="hero-sorteo">
   <div class="hero-container">
-    {% if section.settings.mobile_overlay_mode %}
-      <!-- Estructura móvil con imagen-texto (modo móvil) -->
-      <div class="hero-content-mobile">
-        {% if section.settings.hero_image != blank %}
-          <div class="hero-image-mobile">
-            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
-          </div>
-        {% endif %}
-
-        <div class="hero-text-mobile">
-          <h1>{{ section.settings.hero_title }}</h1>
-          <h2>{{ section.settings.hero_subtitle }}</h2>
-          <p>{{ section.settings.hero_description }}</p>
-        </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>{{ section.settings.hero_title }}</h1>
+        <h2>{{ section.settings.hero_subtitle }}</h2>
+        <p>{{ section.settings.hero_description }}</p>
       </div>
-    {% else %}
-      <!-- Estructura original para desktop y móvil sin modo overlay -->
-      <div class="hero-content">
-        <div class="hero-text">
-          <h1>{{ section.settings.hero_title }}</h1>
-          <h2>{{ section.settings.hero_subtitle }}</h2>
-          <p>{{ section.settings.hero_description }}</p>
-        </div>
 
-        {% if section.settings.hero_image != blank %}
-          <div class="hero-image">
-            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
-          </div>
-        {% endif %}
-      </div>
-    {% endif %}
+      {% if section.settings.hero_image != blank %}
+        <div class="hero-image">
+          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+        </div>
+      {% endif %}
+    </div>
 
     {% if section.settings.show_arrow %}
       <div class="arrow-container">
@@ -74,6 +40,7 @@ px); }
 </div>
 
 <style>
+  /* ======= ESTILOS BASE PARA TODAS LAS VISTAS ======= */
   .hero-sorteo {
     position: relative;
     width: 100%;
@@ -82,10 +49,109 @@ px); }
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
     color: {{ section.settings.text_color }};
-    overflow: hidden; /* Asegura que ningún elemento se salga del contenedor */
+    overflow: hidden;
   }
 
-  /* Mejora en el botón de WhatsApp */
+  .hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+  }
+
+  .hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .hero-text {
+    width: 50%;
+    padding-right: 30px;
+  }
+
+  .hero-image {
+    width: 50%;
+    text-align: right;
+  }
+
+  .hero-image img {
+    display: block;
+    max-width: {{ section.settings.desktop_image_scale }}%;
+    margin-left: auto;
+    transform: translateX({{ section.settings.desktop_image_position_x }}px)
+               translateY({{ section.settings.desktop_image_position_y }}px);
+  }
+
+  .hero-sorteo h1 {
+    font-size: 70px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .hero-sorteo h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: {{ section.settings.accent_color }};
+  }
+
+  .hero-sorteo p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 0 0 30px 0;
+    max-width: 600px;
+  }
+
+  /* Estilos de la flecha */
+  .arrow-container {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .arrow-down {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    width: 40px;
+    height: 30px;
+  }
+
+  .arrow-down svg {
+    fill: {{ section.settings.arrow_color }};
+    {% if section.settings.arrow_shadow %}
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    {% endif %}
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0) translateX(-50%);
+    }
+    40% {
+      transform: translateY(-20px) translateX(-50%);
+    }
+    60% {
+      transform: translateY(-10px) translateX(-50%);
+    }
+  }
+
+  /* Estilos del botón de WhatsApp */
+  .button-container {
+    width: 100%;
+    padding: 10px 20px 20px;
+  }
+
   .whatsapp-button {
     display: flex;
     align-items: center;
@@ -106,58 +172,24 @@ px); }
   }
 
   .whatsapp-button:hover {
-    transform: translateY(-2px); /* Efecto de elevación */
-    box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4); /* Sombra más pronunciada */
+    transform: translateY(-2px);
+    {% if section.settings.button_shadow %}
+    box-shadow: 0 6px 12px rgba(37, 211, 102, 0.4);
+    {% endif %}
   }
 
   .whatsapp-button:active {
-    transform: translateY(1px); /* Efecto de presión */
+    transform: translateY(1px);
   }
 
   .whatsapp-button svg {
     margin-right: 10px;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2)); /* Sombra suave al icono */
-    width: 28px; /* Icono ligeramente más grande */
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+    width: 28px;
     height: 28px;
   }
 
-  /* Mejora de la flecha */
-  .arrow-container {
-    position: relative;
-    width: 100%;
-    height: 40px;
-    margin: 30px 0;
-    text-align: center;
-  }
-
-  .arrow-down {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-  }
-
-  /* Actualiza la flecha para que se vea más como en la imagen */
-  .arrow-down svg {
-    fill: {{ section.settings.arrow_color }};
-    {% if section.settings.arrow_shadow %}
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-    {% endif %}
-    width: 40px;
-    height: 30px;
-  }
-
-  /* Estilos para la flecha personalizada más parecida a la mostrada */
-  .arrow-down {
-    width: 50px;
-    height: 30px;
-  }
-
-  .hero-sorteo .arrow-container {
-    margin: 20px auto 30px;
-  }
-
+  /* ======= ESTILOS PARA MÓVIL ======= */
   @media screen and (max-width: 768px) {
     .hero-sorteo {
       padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
@@ -175,8 +207,6 @@ px); }
       width: 100%;
       padding-right: 0;
       margin-bottom: 30px;
-      position: relative;
-      z-index: 2;
     }
 
     .hero-image {
@@ -206,98 +236,49 @@ px); }
     }
 
     .whatsapp-button {
-      padding: 12px 20px;
+      padding: 14px 24px;
       font-size: 14px;
+      width: 90%;
     }
-  }
 
-  /* Modo de superposición para móvil */
-  @media screen and (max-width: 768px) {
+    /* Configuración específica para el modo de superposición */
     {% if section.settings.mobile_overlay_mode %}
+    /* Crear una versión especial para móvil con imagen arriba y texto abajo */
     .hero-content {
       display: flex;
-      flex-direction: column; /* Mostramos primero el texto y luego la imagen */
+      flex-direction: column;
       position: relative;
-      overflow: visible;
     }
 
-    /* El texto va primero (arriba) */
-    .hero-text {
-      width: 100%;
-      position: relative;
-      z-index: 2; /* Mayor z-index para estar encima */
-      padding: 20px 10px;
-      margin-bottom: -100px; /* Solapamiento con la imagen */
-      margin-bottom: calc(-100px + {{ section.settings.mobile_image_position_y }}px); /* Ajustable */
-    }
-
-    /* La imagen va después (abajo) */
+    /* Imagen arriba */
     .hero-image {
       width: 100%;
-      position: relative;
-      z-index: 1; /* Menor z-index para estar debajo */
+      margin-bottom: {{ section.settings.mobile_image_position_y }}px;
+      order: 1; /* Asegura que aparezca primero */
     }
 
     .hero-image img {
       width: 100%;
-      display: block;
       max-width: 100%;
       margin: 0 auto;
+      transform: none; /* Eliminamos la transformación para control directo */
     }
 
-    /* Nos aseguramos que no haya efectos adicionales */
+    /* Texto abajo con superposición */
+    .hero-text {
+      width: 100%;
+      order: 2; /* Asegura que aparezca después */
+      margin-top: -120px; /* Crea superposición con la imagen */
+      z-index: 2; /* Asegura que esté encima */
+      position: relative;
+      padding: 0 15px;
+    }
+
+    /* Mejora la legibilidad del texto */
     .hero-sorteo h1,
     .hero-sorteo h2,
     .hero-sorteo p {
-      text-shadow: none;
-    }
-
-    .hero-sorteo p {
-      background-color: transparent;
-      padding: 0;
-      border-radius: 0;
-    }
-    {% endif %}
-  }
-
-  /* Estilos de la estructura especial para móvil */
-  /* Solo visible en móvil y cuando mobile_overlay_mode está activo */
-  .hero-content-mobile {
-    display: none; /* Por defecto oculto */
-  }
-
-  @media screen and (max-width: 768px) {
-    {% if section.settings.mobile_overlay_mode %}
-    /* Ocultamos la estructura normal en móvil cuando overlay está activo */
-    .hero-content {
-      display: none;
-    }
-
-    /* Mostramos la nueva estructura */
-    .hero-content-mobile {
-      display: block;
-      position: relative;
-      overflow: visible;
-    }
-
-    /* Imagen primero (arriba) */
-    .hero-image-mobile {
-      width: 100%;
-      text-align: center;
-      margin-bottom: {{ section.settings.mobile_image_position_y }}px; /* Ajustable - cuánto espacio hay entre imagen y texto */
-    }
-
-    .hero-image-mobile img {
-      width: 100%;
-      max-width: 100%;
-      display: block;
-    }
-
-    /* Texto después (abajo) */
-    .hero-text-mobile {
-      padding: 0 15px;
-      text-align: center;
-      margin-top: -100px; /* Hace que el texto se superponga con la imagen */
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     }
     {% endif %}
   }
@@ -399,9 +380,9 @@ px); }
       "max": 0,
       "step": 10,
       "unit": "px",
-      "label": "Espacio entre imagen y texto",
+      "label": "Superposición imagen-texto",
       "default": -100,
-      "info": "Valores negativos aumentan la superposición del texto sobre la imagen"
+      "info": "Valores más negativos aumentan la superposición"
     },
     {
       "type": "checkbox",
@@ -450,7 +431,7 @@ px); }
       "type": "color",
       "id": "background_color_end_mobile",
       "label": "Color de fondo final (móvil)",
-      "default": "#FFCC00"
+      "default": "#7a6900"
     },
     {
       "type": "range",
@@ -460,7 +441,7 @@ px); }
       "step": 5,
       "unit": "°",
       "label": "Ángulo del degradado (móvil)",
-      "default": 180
+      "default": 125
     },
     {
       "type": "header",
@@ -565,7 +546,7 @@ px); }
       "step": 10,
       "unit": "px",
       "label": "Espaciado superior (móvil)",
-      "default": 60
+      "default": 40
     },
     {
       "type": "range",
@@ -575,7 +556,7 @@ px); }
       "step": 10,
       "unit": "px",
       "label": "Espaciado inferior (móvil)",
-      "default": 100
+      "default": 80
     }
   ],
   "presets": [
