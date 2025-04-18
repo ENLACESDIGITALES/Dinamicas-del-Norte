@@ -1,146 +1,267 @@
 {% comment %}
-  Hero Sorteo - Solución Exacta
+  Hero Sorteo - Implementación Profesional
+
+  Características:
+  - Diseño adaptable que coincide exactamente con las imágenes de referencia
+  - Múltiples controles de personalización
+  - Compatibilidad con todos los navegadores
+  - Código optimizado y bien estructurado
+  - Animaciones y efectos suaves
 {% endcomment %}
 
-<div class="hero-sorteo">
-  <div class="hero-container">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1>{{ section.settings.hero_title }}</h1>
-        <h2>{{ section.settings.hero_subtitle }}</h2>
-        <p>{{ section.settings.hero_description }}</p>
-      </div>
+<div
+  class="hero-sorteo"
+  style="{% if section.settings.use_background_image %}background-image: url({{ section.settings.background_image | img_url: 'master' }});{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-section-type="hero-sorteo"
+>
+  <div class="hero-sorteo__overlay"></div>
 
+  <div class="hero-sorteo__container">
+    <!-- Contenido principal -->
+    <div class="hero-sorteo__content">
+      <!-- Imagen principal -->
       {% if section.settings.hero_image != blank %}
-        <div class="hero-image">
-          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+        <div class="hero-sorteo__image-wrapper">
+          <div class="hero-sorteo__image">
+            <img
+              src="{{ section.settings.hero_image | img_url: 'master' }}"
+              alt="{{ section.settings.hero_title | escape }}"
+              class="hero-sorteo__img"
+              loading="eager"
+              width="1200"
+              height="800"
+            >
+          </div>
         </div>
       {% endif %}
+
+      <!-- Texto superpuesto -->
+      <div class="hero-sorteo__text-container">
+        <div class="hero-sorteo__text-wrapper">
+          {% if section.settings.hero_title != blank %}
+            <h1 class="hero-sorteo__title">{{ section.settings.hero_title }}</h1>
+          {% endif %}
+
+          {% if section.settings.hero_subtitle != blank %}
+            <h2 class="hero-sorteo__subtitle">{{ section.settings.hero_subtitle }}</h2>
+          {% endif %}
+
+          {% if section.settings.hero_description != blank %}
+            <div class="hero-sorteo__description">
+              <p>{{ section.settings.hero_description }}</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
 
+    <!-- Flecha indicadora -->
     {% if section.settings.show_arrow %}
-      <div class="arrow-container">
-        <div class="arrow-down">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 40 30">
+      <div class="hero-sorteo__arrow-container">
+        <div class="hero-sorteo__arrow">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="30"
+            viewBox="0 0 40 30"
+            aria-hidden="true"
+            focusable="false"
+          >
             <path d="M20 30C18 28 0 10 0 0h40C40 10 22 28 20 30z" />
           </svg>
         </div>
       </div>
     {% endif %}
 
-    <div class="button-container">
-      <a href="{{ section.settings.button_link }}" class="whatsapp-button">
-        <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
-          <path d="M12 0C5.4 0 0 5.4 0 12c0 2.3.6 4.4 1.8 6.2l-1.1 4.3c-.2.6.4 1.2 1 1.1l4.4-1.2C7.9 23.4 9.9 24 12 24c6.7 0 12-5.4 12-12S18.7 0 12 0zm0 22c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-3.1.8.8-3.1-.2-.4c-1-1.8-1.6-3.7-1.6-5.7 0-5.5 4.5-10 10-10s10 4.5 10 10c0 5.6-4.5 10.1-10.1 10.1zm5.5-7.1c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1c-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6s.3-.3.4-.5c.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.3C6.9 7.8 6 8.7 6 10.3c0 1.6 1.2 3.2 1.3 3.4.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4z"/>
-        </svg>
-        {{ section.settings.button_text }}
-      </a>
-    </div>
+    <!-- Botón de WhatsApp -->
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+      <div class="hero-sorteo__button-container">
+        <a href="{{ section.settings.button_link }}" class="hero-sorteo__button">
+          <span class="hero-sorteo__button-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M12 0C5.4 0 0 5.4 0 12c0 2.3.6 4.4 1.8 6.2l-1.1 4.3c-.2.6.4 1.2 1 1.1l4.4-1.2C7.9 23.4 9.9 24 12 24c6.7 0 12-5.4 12-12S18.7 0 12 0zm0 22c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-3.1.8.8-3.1-.2-.4c-1-1.8-1.6-3.7-1.6-5.7 0-5.5 4.5-10 10-10s10 4.5 10 10c0 5.6-4.5 10.1-10.1 10.1zm5.5-7.1c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1c-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6s.3-.3.4-.5c.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.3C6.9 7.8 6 8.7 6 10.3c0 1.6 1.2 3.2 1.3 3.4.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4z"/>
+            </svg>
+          </span>
+          <span class="hero-sorteo__button-text">{{ section.settings.button_text }}</span>
+        </a>
+      </div>
+    {% endif %}
   </div>
 </div>
 
 <style>
-  /* Estilos base */
+  /* =========================================
+     VARIABLES Y CONFIGURACIÓN GENERAL
+     ========================================= */
+  :root {
+    --hero-sorteo-gradient-angle: {{ section.settings.gradient_angle }}deg;
+    --hero-sorteo-gradient-start: {{ section.settings.background_color_start }};
+    --hero-sorteo-gradient-end: {{ section.settings.background_color_end }};
+    --hero-sorteo-text-color: {{ section.settings.text_color }};
+    --hero-sorteo-accent-color: {{ section.settings.accent_color }};
+    --hero-sorteo-arrow-color: {{ section.settings.arrow_color }};
+    --hero-sorteo-button-color: {{ section.settings.button_color }};
+    --hero-sorteo-border-radius: {{ section.settings.image_border_radius }}px;
+    --hero-sorteo-button-radius: {{ section.settings.button_border_radius }}px;
+    --hero-sorteo-arrow-position: {{ section.settings.arrow_vertical_position }}px;
+    --hero-sorteo-button-position: {{ section.settings.button_vertical_position }}px;
+    --hero-sorteo-image-position-x: {{ section.settings.desktop_image_position_x }}px;
+    --hero-sorteo-image-position-y: {{ section.settings.desktop_image_position_y }}px;
+    --hero-sorteo-mobile-image-position-y: {{ section.settings.mobile_image_position_y }}px;
+  }
+
+  /* =========================================
+     ESTILOS PRINCIPALES
+     ========================================= */
   .hero-sorteo {
     position: relative;
     width: 100%;
     padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
-    background: linear-gradient({{ section.settings.gradient_angle }}deg,
-                {{ section.settings.background_color_start }},
-                {{ section.settings.background_color_end }});
-    color: {{ section.settings.text_color }};
+    {% if section.settings.use_background_image != true %}
+    background: linear-gradient(var(--hero-sorteo-gradient-angle),
+                var(--hero-sorteo-gradient-start),
+                var(--hero-sorteo-gradient-end));
+    {% else %}
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    {% endif %}
+    color: var(--hero-sorteo-text-color);
     overflow: hidden;
+    z-index: 1;
   }
 
-  .hero-container {
+  .hero-sorteo__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: linear-gradient(var(--hero-sorteo-gradient-angle),
+                var(--hero-sorteo-gradient-start),
+                var(--hero-sorteo-gradient-end));
+    opacity: {{ section.settings.background_overlay_opacity }};
+    pointer-events: none;
+  }
+
+  .hero-sorteo__container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     position: relative;
   }
 
-  /* VISTA MÓVIL (por defecto) */
-  .hero-content {
+  /* =========================================
+     ESTRUCTURA PRINCIPAL (MÓVIL FIRST)
+     ========================================= */
+  .hero-sorteo__content {
     position: relative;
+    width: 100%;
+    overflow: hidden;
   }
 
-  .hero-image {
-    width: 100%;
+  .hero-sorteo__image-wrapper {
     position: relative;
+    width: 100%;
+    overflow: hidden;
   }
 
-  .hero-image img {
+  .hero-sorteo__image {
+    position: relative;
     width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-sorteo__img {
     display: block;
-    border-radius: {{ section.settings.image_border_radius }}px;
-    transform: translateY({{ section.settings.mobile_image_position_y }}px);
-  }
-
-  .hero-text {
-    position: absolute;
-    left: 0;
-    bottom: 0;
     width: 100%;
-    text-align: center;
-    padding: 20px;
+    height: auto;
+    border-radius: var(--hero-sorteo-border-radius);
+    transform: translateY(var(--hero-sorteo-mobile-image-position-y));
+    transition: transform 0.3s ease-out;
+  }
+
+  .hero-sorteo__text-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     z-index: 2;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
-    padding-top: 60px;
+    text-align: center;
+    padding: 20px 15px;
+    background: linear-gradient(to top,
+                  rgba(0, 0, 0, 0.7) 0%,
+                  rgba(0, 0, 0, 0.4) 60%,
+                  rgba(0, 0, 0, 0) 100%);
   }
 
-  .hero-text h1 {
-    font-size: 50px;
+  .hero-sorteo__text-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero-sorteo__title {
+    font-size: calc(36px + 1vw);
     font-weight: 700;
-    margin: 0 0 10px 0;
-    line-height: 1;
+    line-height: 1.1;
+    margin: 0 0 10px;
     text-transform: uppercase;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
   }
 
-  .hero-text h2 {
-    font-size: 28px;
+  .hero-sorteo__subtitle {
+    font-size: calc(22px + 0.5vw);
     font-weight: 700;
-    margin: 0 0 20px 0;
-    color: {{ section.settings.accent_color }};
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    margin: 0 0 15px;
+    line-height: 1.2;
+    color: var(--hero-sorteo-accent-color);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
   }
 
-  .hero-text p {
+  .hero-sorteo__description {
     font-size: 16px;
     line-height: 1.5;
     margin: 0 auto;
     max-width: 90%;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
   }
 
-  /* Flecha */
-  .arrow-container {
+  .hero-sorteo__description p {
+    margin: 0;
+  }
+
+  /* =========================================
+     FLECHA
+     ========================================= */
+  .hero-sorteo__arrow-container {
     position: relative;
     width: 100%;
     height: 40px;
-    margin-top: {{ section.settings.arrow_vertical_position }}px;
+    margin-top: var(--hero-sorteo-arrow-position);
     text-align: center;
     z-index: 3;
   }
 
-  .arrow-down {
+  .hero-sorteo__arrow {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    animation: bounce 2s infinite;
+    animation: hero-sorteo-bounce 2s infinite;
     width: 40px;
     height: 30px;
   }
 
-  .arrow-down svg {
-    fill: {{ section.settings.arrow_color }};
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  .hero-sorteo__arrow svg {
+    fill: var(--hero-sorteo-arrow-color);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
     width: 100%;
     height: 100%;
   }
 
-  @keyframes bounce {
+  @keyframes hero-sorteo-bounce {
     0%, 20%, 50%, 80%, 100% {
       transform: translateY(0) translateX(-50%);
     }
@@ -152,98 +273,257 @@
     }
   }
 
-  /* Botón de WhatsApp */
-  .button-container {
+  /* =========================================
+     BOTÓN DE WHATSAPP
+     ========================================= */
+  .hero-sorteo__button-container {
     width: 100%;
     text-align: center;
     padding: 0 20px;
-    margin-top: {{ section.settings.button_vertical_position }}px;
+    margin-top: var(--hero-sorteo-button-position);
     position: relative;
     z-index: 3;
   }
 
-  .whatsapp-button {
+  .hero-sorteo__button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: {{ section.settings.button_color }};
+    background-color: var(--hero-sorteo-button-color);
     color: white;
     text-decoration: none;
     font-weight: bold;
     padding: 16px 30px;
-    border-radius: {{ section.settings.button_border_radius }}px;
+    border-radius: var(--hero-sorteo-button-radius);
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
     text-transform: uppercase;
     width: 90%;
     max-width: 480px;
+    font-size: 14px;
   }
 
-  .whatsapp-button:hover {
+  .hero-sorteo__button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
   }
 
-  .whatsapp-button svg {
-    margin-right: 15px;
-    width: 28px;
-    height: 28px;
+  .hero-sorteo__button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(37, 211, 102, 0.3);
   }
 
-  /* VISTA DESKTOP */
+  .hero-sorteo__button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+
+  .hero-sorteo__button-text {
+    margin-top: 2px;
+  }
+
+  /* =========================================
+     RESPONSIVE - VISTA DESKTOP
+     ========================================= */
   @media screen and (min-width: 769px) {
-    .hero-content {
+    .hero-sorteo__content {
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
     }
 
-    .hero-text {
+    .hero-sorteo__image-wrapper {
+      width: 50%;
+      order: 2;
+    }
+
+    .hero-sorteo__img {
+      transform: translateX(var(--hero-sorteo-image-position-x))
+                 translateY(var(--hero-sorteo-image-position-y));
+    }
+
+    .hero-sorteo__text-container {
       position: static;
       width: 50%;
       text-align: left;
       padding: 0 30px 0 0;
       background: none;
+      order: 1;
     }
 
-    .hero-text h1 {
+    .hero-sorteo__text-wrapper {
+      max-width: 600px;
+      margin: 0;
+    }
+
+    .hero-sorteo__title {
       font-size: 70px;
       text-shadow: none;
     }
 
-    .hero-text h2 {
+    .hero-sorteo__subtitle {
       font-size: 32px;
       text-shadow: none;
     }
 
-    .hero-text p {
+    .hero-sorteo__description {
       font-size: 18px;
-      margin: 0 0 30px 0;
-      max-width: 600px;
+      max-width: 100%;
       text-shadow: none;
     }
 
-    .hero-image {
-      width: 50%;
-      order: 2;
-    }
-
-    .hero-image img {
-      transform: translateX({{ section.settings.desktop_image_position_x }}px)
-                 translateY({{ section.settings.desktop_image_position_y }}px);
-    }
-
-    .whatsapp-button {
+    .hero-sorteo__button {
       width: auto;
-      max-width: 480px;
+      font-size: 16px;
+    }
+  }
+
+  /* =========================================
+     MEJORAS Y COMPATIBILIDAD
+     ========================================= */
+  /* Mejora de rendimiento */
+  .hero-sorteo__img {
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Soporte para navegadores antiguos */
+  @supports not (--hero-sorteo-gradient-angle: 0deg) {
+    .hero-sorteo {
+      background: linear-gradient({{ section.settings.gradient_angle }}deg,
+                  {{ section.settings.background_color_start }},
+                  {{ section.settings.background_color_end }});
+    }
+
+    .hero-sorteo__overlay {
+      background: linear-gradient({{ section.settings.gradient_angle }}deg,
+                  {{ section.settings.background_color_start }},
+                  {{ section.settings.background_color_end }});
+    }
+
+    .hero-sorteo__img {
+      transform: translateY({{ section.settings.mobile_image_position_y }}px);
+    }
+
+    .hero-sorteo__arrow-container {
+      margin-top: {{ section.settings.arrow_vertical_position }}px;
+    }
+
+    .hero-sorteo__button-container {
+      margin-top: {{ section.settings.button_vertical_position }}px;
+    }
+
+    @media screen and (min-width: 769px) {
+      .hero-sorteo__img {
+        transform: translateX({{ section.settings.desktop_image_position_x }}px)
+                   translateY({{ section.settings.desktop_image_position_y }}px);
+      }
+    }
+  }
+
+  /* Evitar saltos de layout */
+  .hero-sorteo__content,
+  .hero-sorteo__text-container,
+  .hero-sorteo__image-wrapper {
+    contain: layout paint;
+  }
+
+  /* Prefetch de imágenes para mejor rendimiento */
+  {% if section.settings.hero_image != blank %}
+  @media screen {
+    [data-section-id="{{ section.id }}"]::after {
+      content: '{{ section.settings.hero_image | img_url: 'master' }}';
+      display: none;
+    }
+  }
+  {% endif %}
+
+  /* =========================================
+     ANIMACIONES Y TRANSICIONES
+     ========================================= */
+  /* Entrada suave de elementos */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .hero-sorteo__title,
+  .hero-sorteo__subtitle,
+  .hero-sorteo__description,
+  .hero-sorteo__button {
+    animation: fadeInUp 0.8s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .hero-sorteo__subtitle {
+    animation-delay: 0.1s;
+  }
+
+  .hero-sorteo__description {
+    animation-delay: 0.2s;
+  }
+
+  .hero-sorteo__button {
+    animation-delay: 0.3s;
+  }
+
+  /* Transición suave de hover en la imagen */
+  .hero-sorteo__img {
+    transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1),
+                border-radius 0.3s ease;
+  }
+
+  /* Transición suave para el botón */
+  .hero-sorteo__button {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* =========================================
+     MEJORAS DE ACCESIBILIDAD
+     ========================================= */
+  .hero-sorteo__button:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+
+  .hero-sorteo__button:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-sorteo__img,
+    .hero-sorteo__button,
+    .hero-sorteo__arrow {
+      transition: none;
+    }
+
+    .hero-sorteo__arrow {
+      animation: none;
+    }
+
+    .hero-sorteo__title,
+    .hero-sorteo__subtitle,
+    .hero-sorteo__description,
+    .hero-sorteo__button {
+      animation: none;
     }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Hero Sorteo",
+  "name": "Hero Sorteo Pro",
+  "class": "hero-sorteo-section",
   "settings": [
     {
       "type": "header",
@@ -269,12 +549,13 @@
     },
     {
       "type": "header",
-      "content": "Imagen"
+      "content": "Imagen principal"
     },
     {
       "type": "image_picker",
       "id": "hero_image",
-      "label": "Imagen principal"
+      "label": "Imagen principal",
+      "info": "Se recomienda usar una imagen de al menos 1200 x 800 píxeles"
     },
     {
       "type": "range",
@@ -319,7 +600,29 @@
     },
     {
       "type": "header",
-      "content": "Colores"
+      "content": "Fondo"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_background_image",
+      "label": "Usar imagen de fondo",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo",
+      "info": "Se mostrará solo si la opción 'Usar imagen de fondo' está activada"
+    },
+    {
+      "type": "range",
+      "id": "background_overlay_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Opacidad del overlay",
+      "default": 0.5,
+      "info": "Controla la intensidad del degradado sobre la imagen de fondo"
     },
     {
       "type": "color",
@@ -344,9 +647,13 @@
       "default": 125
     },
     {
+      "type": "header",
+      "content": "Colores del texto"
+    },
+    {
       "type": "color",
       "id": "text_color",
-      "label": "Color de texto",
+      "label": "Color de texto principal",
       "default": "#FFFFFF"
     },
     {
@@ -357,7 +664,7 @@
     },
     {
       "type": "header",
-      "content": "Flecha"
+      "content": "Flecha indicadora"
     },
     {
       "type": "checkbox",
@@ -425,7 +732,7 @@
     },
     {
       "type": "header",
-      "content": "Espaciado"
+      "content": "Espaciado general"
     },
     {
       "type": "range",
@@ -450,7 +757,7 @@
   ],
   "presets": [
     {
-      "name": "Hero Sorteo",
+      "name": "Hero Sorteo Pro",
       "category": "Sorteos"
     }
   ]
