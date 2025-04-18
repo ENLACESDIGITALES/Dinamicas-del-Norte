@@ -1,39 +1,23 @@
 {% comment %}
-  Hero Sorteo Responsive - Versión simplificada y funcional
+  Hero Sorteo - Versión simplificada
 {% endcomment %}
 
 <div class="hero-sorteo">
   <div class="hero-container">
-    <!-- Estructura principal con imagen y texto -->
-    {% if section.settings.mobile_overlay_mode %}
-      <div class="hero-content-mobile">
+    <div class="hero-content">
+      {% if section.settings.hero_image != blank %}
         <div class="hero-image">
-          {% if section.settings.hero_image != blank %}
-            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
-          {% endif %}
+          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
         </div>
-        <div class="hero-text">
-          <h1>{{ section.settings.hero_title }}</h1>
-          <h2>{{ section.settings.hero_subtitle }}</h2>
-          <p>{{ section.settings.hero_description }}</p>
-        </div>
-      </div>
-    {% else %}
-      <div class="hero-content">
-        <div class="hero-text">
-          <h1>{{ section.settings.hero_title }}</h1>
-          <h2>{{ section.settings.hero_subtitle }}</h2>
-          <p>{{ section.settings.hero_description }}</p>
-        </div>
-        <div class="hero-image">
-          {% if section.settings.hero_image != blank %}
-            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
-          {% endif %}
-        </div>
-      </div>
-    {% endif %}
+      {% endif %}
 
-    <!-- Flecha indicadora -->
+      <div class="hero-text">
+        <h1>{{ section.settings.hero_title }}</h1>
+        <h2>{{ section.settings.hero_subtitle }}</h2>
+        <p>{{ section.settings.hero_description }}</p>
+      </div>
+    </div>
+
     {% if section.settings.show_arrow %}
       <div class="arrow-container">
         <div class="arrow-down">
@@ -44,7 +28,6 @@
       </div>
     {% endif %}
 
-    <!-- Botón de WhatsApp -->
     <div class="button-container">
       <a href="{{ section.settings.button_link }}" class="whatsapp-button">
         <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
@@ -57,23 +40,15 @@
 </div>
 
 <style>
-  /* Estilos principales */
+  /* Estilos base */
   .hero-sorteo {
     position: relative;
     width: 100%;
     padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
-    {% if section.settings.use_background_image and section.settings.background_image != blank %}
-    background-image: url({{ section.settings.background_image | img_url: 'master' }});
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    {% else %}
-    background: linear-gradient({{ section.settings.gradient_angle_desktop }}deg,
+    background: linear-gradient({{ section.settings.gradient_angle }}deg,
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
-    {% endif %}
     color: {{ section.settings.text_color }};
-    overflow: hidden;
   }
 
   .hero-container {
@@ -83,66 +58,71 @@
     position: relative;
   }
 
-  /* Contenido standard (escritorio) */
+  /* Estructura para móvil con imagen arriba */
   .hero-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    position: relative;
+  }
+
+  .hero-image {
+    width: 100%;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+    border-radius: {{ section.settings.image_border_radius }}px;
   }
 
   .hero-text {
-    width: 50%;
-    padding-right: 30px;
+    width: 100%;
+    text-align: center;
+    margin-top: -150px;
+    position: relative;
+    z-index: 2;
+    padding: 0 15px;
+    transform: translateY({{ section.settings.mobile_image_position_y }}px);
   }
 
-  .hero-text h1 {
-    font-size: 70px;
+  h1 {
+    font-size: 50px;
     font-weight: 700;
     margin: 0 0 10px 0;
     line-height: 1;
     text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
-  .hero-text h2 {
-    font-size: 32px;
+  h2 {
+    font-size: 28px;
     font-weight: 700;
     margin: 0 0 20px 0;
     color: {{ section.settings.accent_color }};
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
-  .hero-text p {
-    font-size: 18px;
+  p {
+    font-size: 16px;
     line-height: 1.5;
-    margin: 0 0 30px 0;
-    max-width: 600px;
-  }
-
-  .hero-image {
-    width: 50%;
-    text-align: right;
-  }
-
-  .hero-image img {
-    display: block;
-    max-width: {{ section.settings.desktop_image_scale }}%;
+    margin: 0 0 30px;
+    max-width: 90%;
     margin-left: auto;
-    transform: translateX({{ section.settings.desktop_image_position_x }}px)
-               translateY({{ section.settings.desktop_image_position_y }}px);
-    border-radius: {{ section.settings.image_border_radius }}px;
-  }
-
-  /* Estructura especial para móvil */
-  .hero-content-mobile {
-    display: none;
+    margin-right: auto;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
   /* Flecha */
   .arrow-container {
     position: relative;
     width: 100%;
-    height: 50px;
-    margin-top: {{ section.settings.arrow_vertical_position }}px;
+    height: 40px;
+    margin-top: 20px;
     text-align: center;
+    position: relative;
+    z-index: 3;
+    margin-top: {{ section.settings.arrow_vertical_position }}px;
   }
 
   .arrow-down {
@@ -177,12 +157,15 @@
   /* Botón de WhatsApp */
   .button-container {
     width: 100%;
-    margin-top: {{ section.settings.button_vertical_position }}px;
+    text-align: center;
     padding: 0 20px;
+    margin-top: {{ section.settings.button_vertical_position }}px;
+    position: relative;
+    z-index: 3;
   }
 
   .whatsapp-button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     background-color: {{ section.settings.button_color }};
@@ -191,11 +174,12 @@
     font-weight: bold;
     padding: 16px 30px;
     border-radius: {{ section.settings.button_border_radius }}px;
-    margin: 0 auto;
-    max-width: 480px;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
     text-transform: uppercase;
+    max-width: 90%;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .whatsapp-button:hover {
@@ -209,114 +193,55 @@
     height: 28px;
   }
 
-  /* MÓVIL */
-  @media screen and (max-width: 768px) {
-    .hero-sorteo {
-      padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
-      {% if section.settings.use_background_image and section.settings.background_image != blank %}
-      background-position: center {{ section.settings.mobile_bg_position_y }}%;
-      {% else %}
-      background: linear-gradient({{ section.settings.gradient_angle_mobile }}deg,
-                  {{ section.settings.background_color_start_mobile }},
-                  {{ section.settings.background_color_end_mobile }});
-      {% endif %}
-    }
-
-    /* Ocultar contenido normal y mostrar contenido móvil si móvil overlay está activo */
-    {% if section.settings.mobile_overlay_mode %}
+  /* Ajustes para pantallas más grandes */
+  @media screen and (min-width: 769px) {
     .hero-content {
-      display: none;
-    }
-
-    .hero-content-mobile {
-      display: block;
-      position: relative;
-    }
-
-    /* Imagen arriba */
-    .hero-content-mobile .hero-image {
-      width: 100%;
-      text-align: center;
-      margin-bottom: {{ section.settings.mobile_image_position_y }}px;
-    }
-
-    .hero-content-mobile .hero-image img {
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
-      transform: translateX({{ section.settings.mobile_image_position_x }}px)
-                 translateY(0);
-      border-radius: {{ section.settings.image_border_radius }}px;
-    }
-
-    /* Texto debajo */
-    .hero-content-mobile .hero-text {
-      width: 100%;
-      padding: 0;
-      text-align: center;
-      margin-top: -120px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-content-mobile .hero-text h1,
-    .hero-content-mobile .hero-text h2,
-    .hero-content-mobile .hero-text p {
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-    }
-    {% else %}
-    /* Si no hay overlay, solo ajustar el diseño original */
-    .hero-content {
-      flex-direction: column;
-      text-align: center;
-    }
-
-    .hero-text {
-      width: 100%;
-      padding-right: 0;
-      margin-bottom: 30px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .hero-image {
-      width: 100%;
-      text-align: center;
+      width: 50%;
+      text-align: right;
+      margin-bottom: 0;
     }
 
     .hero-image img {
-      margin: 0 auto;
-      transform: translateX({{ section.settings.mobile_image_position_x }}px)
-                 translateY({{ section.settings.mobile_image_position_y }}px);
-    }
-    {% endif %}
-
-    /* Ajustes de texto */
-    .hero-text h1 {
-      font-size: 50px;
+      max-width: 100%;
+      margin-left: auto;
+      transform: translateX({{ section.settings.desktop_image_position_x }}px)
+                 translateY({{ section.settings.desktop_image_position_y }}px);
     }
 
-    .hero-text h2 {
-      font-size: 28px;
+    .hero-text {
+      width: 50%;
+      text-align: left;
+      padding-right: 30px;
+      margin-top: 0;
+      transform: none;
     }
 
-    .hero-text p {
-      font-size: 16px;
-      margin: 0 auto 30px;
-      max-width: 90%;
+    h1 {
+      font-size: 70px;
+      text-shadow: none;
     }
 
-    /* Ajustes de flecha y botón */
-    .arrow-container {
-      margin-top: {{ section.settings.arrow_vertical_position_mobile }}px;
+    h2 {
+      font-size: 32px;
+      text-shadow: none;
     }
 
-    .button-container {
-      margin-top: {{ section.settings.button_vertical_position_mobile }}px;
+    p {
+      font-size: 18px;
+      margin: 0 0 30px 0;
+      max-width: 600px;
+      text-shadow: none;
     }
 
     .whatsapp-button {
-      padding: 14px 24px;
-      font-size: 14px;
-      width: 100%;
+      width: auto;
+      max-width: 480px;
     }
   }
 </style>
@@ -349,7 +274,7 @@
     },
     {
       "type": "header",
-      "content": "Imagen Principal"
+      "content": "Imagen"
     },
     {
       "type": "image_picker",
@@ -367,27 +292,13 @@
       "default": 0
     },
     {
-      "type": "header",
-      "content": "Imagen - Escritorio"
-    },
-    {
-      "type": "range",
-      "id": "desktop_image_scale",
-      "min": 50,
-      "max": 150,
-      "step": 5,
-      "unit": "%",
-      "label": "Escala de imagen",
-      "default": 100
-    },
-    {
       "type": "range",
       "id": "desktop_image_position_x",
       "min": -100,
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición horizontal",
+      "label": "Posición horizontal (escritorio)",
       "default": 0
     },
     {
@@ -397,28 +308,7 @@
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición vertical",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Imagen - Móvil"
-    },
-    {
-      "type": "checkbox",
-      "id": "mobile_overlay_mode",
-      "label": "Usar modo de superposición en móvil",
-      "default": true,
-      "info": "Coloca la imagen arriba con el texto superpuesto"
-    },
-    {
-      "type": "range",
-      "id": "mobile_image_position_x",
-      "min": -100,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición horizontal",
+      "label": "Posición vertical (escritorio)",
       "default": 0
     },
     {
@@ -428,134 +318,35 @@
       "max": 0,
       "step": 10,
       "unit": "px",
-      "label": "Superposición imagen-texto",
+      "label": "Posición vertical (móvil)",
       "default": -100,
       "info": "Valores más negativos aumentan la superposición"
     },
     {
       "type": "header",
-      "content": "Fondo"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_background_image",
-      "label": "Usar imagen de fondo",
-      "default": false
-    },
-    {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Imagen de fondo"
-    },
-    {
-      "type": "range",
-      "id": "mobile_bg_position_y",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Posición vertical de fondo (Móvil)",
-      "default": 50
-    },
-    {
-      "type": "header",
-      "content": "Fondo - Degradado Escritorio"
+      "content": "Colores"
     },
     {
       "type": "color",
       "id": "background_color_start",
-      "label": "Color inicial",
+      "label": "Color de fondo inicial",
       "default": "#000000"
     },
     {
       "type": "color",
       "id": "background_color_end",
-      "label": "Color final",
+      "label": "Color de fondo final",
       "default": "#7a6900"
     },
     {
       "type": "range",
-      "id": "gradient_angle_desktop",
+      "id": "gradient_angle",
       "min": 0,
       "max": 360,
       "step": 5,
       "unit": "°",
       "label": "Ángulo del degradado",
       "default": 125
-    },
-    {
-      "type": "header",
-      "content": "Fondo - Degradado Móvil"
-    },
-    {
-      "type": "color",
-      "id": "background_color_start_mobile",
-      "label": "Color inicial",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "background_color_end_mobile",
-      "label": "Color final",
-      "default": "#7a6900"
-    },
-    {
-      "type": "range",
-      "id": "gradient_angle_mobile",
-      "min": 0,
-      "max": 360,
-      "step": 5,
-      "unit": "°",
-      "label": "Ángulo del degradado",
-      "default": 125
-    },
-    {
-      "type": "header",
-      "content": "Posición de Elementos"
-    },
-    {
-      "type": "range",
-      "id": "button_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del botón (Escritorio)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "button_vertical_position_mobile",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del botón (Móvil)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "arrow_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical de la flecha (Escritorio)",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "arrow_vertical_position_mobile",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical de la flecha (Móvil)",
-      "default": 20
-    },
-    {
-      "type": "header",
-      "content": "Colores"
     },
     {
       "type": "color",
@@ -571,7 +362,27 @@
     },
     {
       "type": "header",
-      "content": "Flecha"
+      "content": "Elementos"
+    },
+    {
+      "type": "range",
+      "id": "button_vertical_position",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical del botón",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "arrow_vertical_position",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical de la flecha",
+      "default": 20
     },
     {
       "type": "checkbox",
@@ -640,26 +451,6 @@
       "unit": "px",
       "label": "Espaciado inferior",
       "default": 120
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "min": 0,
-      "max": 200,
-      "step": 10,
-      "unit": "px",
-      "label": "Espaciado superior (móvil)",
-      "default": 40
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "min": 0,
-      "max": 200,
-      "step": 10,
-      "unit": "px",
-      "label": "Espaciado inferior (móvil)",
-      "default": 80
     }
   ],
   "presets": [
