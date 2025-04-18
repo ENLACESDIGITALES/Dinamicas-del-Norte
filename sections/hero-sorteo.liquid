@@ -42,9 +42,8 @@
     position: relative;
     width: 100%;
     background: linear-gradient({{ section.settings.gradient_angle_desktop }}deg,
-                 {{ section.settings.background_color_start }} 0%,
-                 {{ section.settings.background_color_start }} {{ section.settings.gradient_position }}%,
-                 {{ section.settings.background_color_end | color_modify: 'alpha', section.settings.gradient_opacity | divided_by: 100.0 }} 100%);
+                 {{ section.settings.background_color_start }},
+                 {{ section.settings.background_color_end }});
     color: {{ section.settings.text_color }};
     padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
     overflow: hidden;
@@ -75,15 +74,15 @@
     text-align: right;
     position: relative;
     z-index: 1;
+    overflow: visible;
   }
 
   .hero-image img {
-    max-width: 100%;
-    height: auto;
+    max-width: none;
+    max-height: none;
     display: block;
     margin-left: auto;
-    object-position: {{ section.settings.image_position_x }}% {{ section.settings.image_position_y }}%;
-    object-fit: cover;
+    transform: translate({{ section.settings.image_position_x | minus: 50 }}%, {{ section.settings.image_position_y | minus: 50 }}%) scale({{ section.settings.image_scale | divided_by: 100.0 }});
   }
 
   .hero-sorteo h1 {
@@ -291,22 +290,34 @@
     {
       "type": "range",
       "id": "image_position_x",
-      "min": 0,
-      "max": 100,
+      "min": -50,
+      "max": 150,
       "step": 5,
       "unit": "%",
       "label": "Posición horizontal de imagen",
-      "default": 50
+      "default": 50,
+      "info": "0% = izquierda, 100% = derecha, 50% = centro"
     },
     {
       "type": "range",
       "id": "image_position_y",
-      "min": 0,
-      "max": 100,
+      "min": -50,
+      "max": 150,
       "step": 5,
       "unit": "%",
       "label": "Posición vertical de imagen",
-      "default": 50
+      "default": 50,
+      "info": "0% = arriba, 100% = abajo, 50% = centro"
+    },
+    {
+      "type": "range",
+      "id": "image_scale",
+      "min": 80,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "label": "Escala de la imagen",
+      "default": 100
     },
     {
       "type": "header",
