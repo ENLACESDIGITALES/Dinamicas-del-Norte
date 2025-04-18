@@ -1,34 +1,39 @@
-.arrow-down { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite;
-width: 40px; height: 30px; }
-
-.arrow-down svg { fill: {{ section.settings.arrow_color }};
-{% if section.settings.arrow_shadow %}
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-{% endif %}
-width: 100%; height: 100%; }
-
-@keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); } 40% { transform:
-translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translateX(-50%); } }
 {% comment %}
-  Hero Sorteo Responsive con Controles Independientes
+  Hero Sorteo Responsive - Versión simplificada y funcional
 {% endcomment %}
 
 <div class="hero-sorteo">
   <div class="hero-container">
-    <div class="hero-content">
-      <div class="hero-text">
-        <h1>{{ section.settings.hero_title }}</h1>
-        <h2>{{ section.settings.hero_subtitle }}</h2>
-        <p>{{ section.settings.hero_description }}</p>
-      </div>
-
-      {% if section.settings.hero_image != blank %}
+    <!-- Estructura principal con imagen y texto -->
+    {% if section.settings.mobile_overlay_mode %}
+      <div class="hero-content-mobile">
         <div class="hero-image">
-          <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+          {% if section.settings.hero_image != blank %}
+            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+          {% endif %}
         </div>
-      {% endif %}
-    </div>
+        <div class="hero-text">
+          <h1>{{ section.settings.hero_title }}</h1>
+          <h2>{{ section.settings.hero_subtitle }}</h2>
+          <p>{{ section.settings.hero_description }}</p>
+        </div>
+      </div>
+    {% else %}
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>{{ section.settings.hero_title }}</h1>
+          <h2>{{ section.settings.hero_subtitle }}</h2>
+          <p>{{ section.settings.hero_description }}</p>
+        </div>
+        <div class="hero-image">
+          {% if section.settings.hero_image != blank %}
+            <img src="{{ section.settings.hero_image | img_url: 'master' }}" alt="{{ section.settings.hero_title }}">
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
 
+    <!-- Flecha indicadora -->
     {% if section.settings.show_arrow %}
       <div class="arrow-container">
         <div class="arrow-down">
@@ -39,6 +44,7 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       </div>
     {% endif %}
 
+    <!-- Botón de WhatsApp -->
     <div class="button-container">
       <a href="{{ section.settings.button_link }}" class="whatsapp-button">
         <svg viewBox="0 0 24 24" width="28" height="28" fill="white">
@@ -51,7 +57,7 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
 </div>
 
 <style>
-  /* ======= ESTILOS BASE PARA TODAS LAS VISTAS ======= */
+  /* Estilos principales */
   .hero-sorteo {
     position: relative;
     width: 100%;
@@ -77,16 +83,38 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
     position: relative;
   }
 
+  /* Contenido standard (escritorio) */
   .hero-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
   }
 
   .hero-text {
     width: 50%;
     padding-right: 30px;
+  }
+
+  .hero-text h1 {
+    font-size: 70px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .hero-text h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: {{ section.settings.accent_color }};
+  }
+
+  .hero-text p {
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 0 0 30px 0;
+    max-width: 600px;
   }
 
   .hero-image {
@@ -103,69 +131,54 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
     border-radius: {{ section.settings.image_border_radius }}px;
   }
 
-  .hero-sorteo h1 {
-    font-size: 70px;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-    line-height: 1;
-    text-transform: uppercase;
+  /* Estructura especial para móvil */
+  .hero-content-mobile {
+    display: none;
   }
 
-  .hero-sorteo h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin: 0 0 20px 0;
-    color: {{ section.settings.accent_color }};
-  }
-
-  .hero-sorteo p {
-    font-size: 18px;
-    line-height: 1.5;
-    margin: 0 0 30px 0;
-    max-width: 600px;
-  }
-
-  /* Estilos para ajuste vertical del botón */
-  .button-container {
-    width: 100%;
-    padding: 10px 20px 20px;
-    margin-top: {{ section.settings.button_vertical_position }}px;
-  }
-
-  /* Estilos del botón de WhatsApp */
-  .whatsapp-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: {{ section.settings.button_color }};
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 16px 30px;
-    border-radius: {{ section.settings.button_border_radius }}px;
-    margin: 20px auto 0;
-    max-width: 480px;
-    transition: all 0.3s ease;
-    {% if section.settings.button_shadow %}
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
-    {% endif %}
-    text-transform: uppercase;
-  }
-
-  /* Estilos para ajuste vertical de la flecha */
+  /* Flecha */
   .arrow-container {
     position: relative;
     width: 100%;
     height: 50px;
-    margin: 20px 0;
-    text-align: center;
     margin-top: {{ section.settings.arrow_vertical_position }}px;
+    text-align: center;
   }
 
-  /* Estilos del botón de WhatsApp */
+  .arrow-down {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    width: 40px;
+    height: 30px;
+  }
+
+  .arrow-down svg {
+    fill: {{ section.settings.arrow_color }};
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0) translateX(-50%);
+    }
+    40% {
+      transform: translateY(-15px) translateX(-50%);
+    }
+    60% {
+      transform: translateY(-8px) translateX(-50%);
+    }
+  }
+
+  /* Botón de WhatsApp */
   .button-container {
     width: 100%;
-    padding: 10px 20px 20px;
+    margin-top: {{ section.settings.button_vertical_position }}px;
+    padding: 0 20px;
   }
 
   .whatsapp-button {
@@ -178,24 +191,16 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
     font-weight: bold;
     padding: 16px 30px;
     border-radius: {{ section.settings.button_border_radius }}px;
-    margin: 20px auto 0;
+    margin: 0 auto;
     max-width: 480px;
     transition: all 0.3s ease;
-    {% if section.settings.button_shadow %}
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
-    {% endif %}
     text-transform: uppercase;
   }
 
   .whatsapp-button:hover {
     transform: translateY(-2px);
-    {% if section.settings.button_shadow %}
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
-    {% endif %}
-  }
-
-  .whatsapp-button:active {
-    transform: translateY(1px);
   }
 
   .whatsapp-button svg {
@@ -204,7 +209,7 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
     height: 28px;
   }
 
-  /* ======= ESTILOS PARA MÓVIL ======= */
+  /* MÓVIL */
   @media screen and (max-width: 768px) {
     .hero-sorteo {
       padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
@@ -217,15 +222,50 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       {% endif %}
     }
 
-    /* Ajuste de posición vertical para móvil */
-    .button-container {
-      margin-top: {{ section.settings.button_vertical_position_mobile }}px;
+    /* Ocultar contenido normal y mostrar contenido móvil si móvil overlay está activo */
+    {% if section.settings.mobile_overlay_mode %}
+    .hero-content {
+      display: none;
     }
 
-    .arrow-container {
-      margin-top: {{ section.settings.arrow_vertical_position_mobile }}px;
+    .hero-content-mobile {
+      display: block;
+      position: relative;
     }
 
+    /* Imagen arriba */
+    .hero-content-mobile .hero-image {
+      width: 100%;
+      text-align: center;
+      margin-bottom: {{ section.settings.mobile_image_position_y }}px;
+    }
+
+    .hero-content-mobile .hero-image img {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      transform: translateX({{ section.settings.mobile_image_position_x }}px)
+                 translateY(0);
+      border-radius: {{ section.settings.image_border_radius }}px;
+    }
+
+    /* Texto debajo */
+    .hero-content-mobile .hero-text {
+      width: 100%;
+      padding: 0;
+      text-align: center;
+      margin-top: -120px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content-mobile .hero-text h1,
+    .hero-content-mobile .hero-text h2,
+    .hero-content-mobile .hero-text p {
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    }
+    {% else %}
+    /* Si no hay overlay, solo ajustar el diseño original */
     .hero-content {
       flex-direction: column;
       text-align: center;
@@ -243,72 +283,41 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
     }
 
     .hero-image img {
-      max-width: {{ section.settings.mobile_image_scale }}%;
       margin: 0 auto;
       transform: translateX({{ section.settings.mobile_image_position_x }}px)
                  translateY({{ section.settings.mobile_image_position_y }}px);
-      border-radius: {{ section.settings.image_border_radius }}px;
     }
+    {% endif %}
 
-    .hero-sorteo h1 {
+    /* Ajustes de texto */
+    .hero-text h1 {
       font-size: 50px;
     }
 
-    .hero-sorteo h2 {
+    .hero-text h2 {
       font-size: 28px;
     }
 
-    .hero-sorteo p {
+    .hero-text p {
       font-size: 16px;
       margin: 0 auto 30px;
       max-width: 90%;
     }
 
+    /* Ajustes de flecha y botón */
+    .arrow-container {
+      margin-top: {{ section.settings.arrow_vertical_position_mobile }}px;
+    }
+
+    .button-container {
+      margin-top: {{ section.settings.button_vertical_position_mobile }}px;
+    }
+
     .whatsapp-button {
       padding: 14px 24px;
       font-size: 14px;
-      width: 90%;
-    }
-
-    /* Configuración específica para el modo de superposición */
-    {% if section.settings.mobile_overlay_mode %}
-    .hero-content {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    /* Imagen arriba */
-    .hero-image {
       width: 100%;
-      margin-bottom: {{ section.settings.mobile_image_position_y }}px;
-      order: 1; /* Asegura que aparezca primero */
     }
-
-    .hero-image img {
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto;
-      transform: none; /* Eliminamos la transformación para control directo */
-    }
-
-    /* Texto abajo con superposición */
-    .hero-text {
-      width: 100%;
-      order: 2; /* Asegura que aparezca después */
-      margin-top: -120px; /* Crea superposición con la imagen */
-      position: relative;
-      z-index: 2; /* Asegura que esté encima */
-      padding: 0 15px;
-    }
-
-    /* Mejora la legibilidad del texto */
-    .hero-sorteo h1,
-    .hero-sorteo h2,
-    .hero-sorteo p {
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-    }
-    {% endif %}
   }
 </style>
 
@@ -358,13 +367,17 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "default": 0
     },
     {
+      "type": "header",
+      "content": "Imagen - Escritorio"
+    },
+    {
       "type": "range",
       "id": "desktop_image_scale",
       "min": 50,
       "max": 150,
       "step": 5,
       "unit": "%",
-      "label": "Escala de imagen (escritorio)",
+      "label": "Escala de imagen",
       "default": 100
     },
     {
@@ -374,7 +387,7 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición horizontal (escritorio)",
+      "label": "Posición horizontal",
       "default": 0
     },
     {
@@ -384,7 +397,7 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición vertical (escritorio)",
+      "label": "Posición vertical",
       "default": 0
     },
     {
@@ -392,14 +405,11 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "content": "Imagen - Móvil"
     },
     {
-      "type": "range",
-      "id": "mobile_image_scale",
-      "min": 50,
-      "max": 150,
-      "step": 5,
-      "unit": "%",
-      "label": "Escala de imagen (móvil)",
-      "default": 100
+      "type": "checkbox",
+      "id": "mobile_overlay_mode",
+      "label": "Usar modo de superposición en móvil",
+      "default": true,
+      "info": "Coloca la imagen arriba con el texto superpuesto"
     },
     {
       "type": "range",
@@ -408,7 +418,7 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición horizontal (móvil)",
+      "label": "Posición horizontal",
       "default": 0
     },
     {
@@ -423,20 +433,13 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "info": "Valores más negativos aumentan la superposición"
     },
     {
-      "type": "checkbox",
-      "id": "mobile_overlay_mode",
-      "label": "Usar modo de superposición en móvil",
-      "default": true,
-      "info": "Coloca la imagen como fondo con el texto superpuesto"
-    },
-    {
       "type": "header",
-      "content": "Fondo - Opciones"
+      "content": "Fondo"
     },
     {
       "type": "checkbox",
       "id": "use_background_image",
-      "label": "Usar imagen de fondo en lugar de degradado",
+      "label": "Usar imagen de fondo",
       "default": false
     },
     {
@@ -452,19 +455,22 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "step": 5,
       "unit": "%",
       "label": "Posición vertical de fondo (Móvil)",
-      "default": 50,
-      "info": "0% = arriba, 100% = abajo"
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Fondo - Degradado Escritorio"
     },
     {
       "type": "color",
       "id": "background_color_start",
-      "label": "Color de fondo inicial",
+      "label": "Color inicial",
       "default": "#000000"
     },
     {
       "type": "color",
       "id": "background_color_end",
-      "label": "Color de fondo final",
+      "label": "Color final",
       "default": "#7a6900"
     },
     {
@@ -479,18 +485,18 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
     },
     {
       "type": "header",
-      "content": "Fondo - Móvil"
+      "content": "Fondo - Degradado Móvil"
     },
     {
       "type": "color",
       "id": "background_color_start_mobile",
-      "label": "Color de fondo inicial (móvil)",
+      "label": "Color inicial",
       "default": "#000000"
     },
     {
       "type": "color",
       "id": "background_color_end_mobile",
-      "label": "Color de fondo final (móvil)",
+      "label": "Color final",
       "default": "#7a6900"
     },
     {
@@ -500,12 +506,56 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "max": 360,
       "step": 5,
       "unit": "°",
-      "label": "Ángulo del degradado (móvil)",
+      "label": "Ángulo del degradado",
       "default": 125
     },
     {
       "type": "header",
-      "content": "Colores y Estilos"
+      "content": "Posición de Elementos"
+    },
+    {
+      "type": "range",
+      "id": "button_vertical_position",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical del botón (Escritorio)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "button_vertical_position_mobile",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical del botón (Móvil)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "arrow_vertical_position",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical de la flecha (Escritorio)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "arrow_vertical_position_mobile",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical de la flecha (Móvil)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colores"
     },
     {
       "type": "color",
@@ -520,6 +570,10 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "default": "#FFCC00"
     },
     {
+      "type": "header",
+      "content": "Flecha"
+    },
+    {
       "type": "checkbox",
       "id": "show_arrow",
       "label": "Mostrar flecha indicadora",
@@ -532,60 +586,6 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "default": "#FFCC00"
     },
     {
-      "type": "checkbox",
-      "id": "arrow_shadow",
-      "label": "Mostrar sombra en la flecha",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Posición de Elementos"
-    },
-    {
-      "type": "range",
-      "id": "button_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del botón (Escritorio)",
-      "default": 0,
-      "info": "Valores positivos mueven el botón hacia abajo"
-    },
-    {
-      "type": "range",
-      "id": "button_vertical_position_mobile",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del botón (Móvil)",
-      "default": 0,
-      "info": "Valores positivos mueven el botón hacia abajo"
-    },
-    {
-      "type": "range",
-      "id": "arrow_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical de la flecha (Escritorio)",
-      "default": 30,
-      "info": "Valores positivos mueven la flecha hacia abajo"
-    },
-    {
-      "type": "range",
-      "id": "arrow_vertical_position_mobile",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical de la flecha (Móvil)",
-      "default": 20,
-      "info": "Valores positivos mueven la flecha hacia abajo"
-    },
-    {
       "type": "header",
       "content": "Botón de WhatsApp"
     },
@@ -596,9 +596,10 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "default": "QUIERO ACCEDER AL GRUPO DE WHATSAPP"
     },
     {
-      "type": "url",
+      "type": "text",
       "id": "button_link",
-      "label": "Enlace del botón (grupo de WhatsApp)"
+      "label": "Enlace del botón",
+      "default": "#"
     },
     {
       "type": "color",
@@ -615,12 +616,6 @@ translateY(-15px) translateX(-50%); } 60% { transform: translateY(-8px) translat
       "unit": "px",
       "label": "Redondeo de esquinas del botón",
       "default": 12
-    },
-    {
-      "type": "checkbox",
-      "id": "button_shadow",
-      "label": "Mostrar sombra en el botón",
-      "default": true
     },
     {
       "type": "header",
