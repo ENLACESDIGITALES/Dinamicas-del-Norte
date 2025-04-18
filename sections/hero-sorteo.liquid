@@ -68,7 +68,7 @@
             aria-hidden="true"
             focusable="false"
           >
-            <path d="M20 30C18 28 0 10 0 0h40C40 10 22 28 20 30z" />
+            <path d="M20 30L0 0h40z" />
           </svg>
         </div>
       </div>
@@ -128,7 +128,7 @@
     background-repeat: no-repeat;
     {% endif %}
     color: var(--hero-sorteo-text-color);
-    overflow: hidden;
+    overflow: visible;
     z-index: 1;
   }
 
@@ -159,19 +159,19 @@
   .hero-sorteo__content {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .hero-sorteo__image-wrapper {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .hero-sorteo__image {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .hero-sorteo__img {
@@ -179,8 +179,8 @@
     width: 100%;
     height: auto;
     border-radius: var(--hero-sorteo-border-radius);
-    transform: translateY(var(--hero-sorteo-mobile-image-position-y));
-    transition: transform 0.3s ease-out;
+    margin-top: var(--hero-sorteo-mobile-image-position-y);
+    transition: margin 0.3s ease-out;
   }
 
   .hero-sorteo__text-container {
