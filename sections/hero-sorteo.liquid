@@ -1,8 +1,8 @@
 {% comment %}
-  Hero Sorteo con Fondo Degradado y Ganadores
+  Hero Sorteo Responsive con Controles Independientes
 {% endcomment %}
 
-<section class="hero-sorteo">
+<div class="hero-sorteo">
   <div class="hero-container">
     <div class="hero-content">
       <div class="hero-text">
@@ -18,13 +18,15 @@
       {% endif %}
     </div>
 
-    <div class="arrow-container">
-      <div class="arrow-down">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" viewBox="0 0 24 12">
-          <path d="M12 12L0 0h24z" fill="rgba(255,255,255,0.5)"/>
-        </svg>
+    {% if section.settings.show_arrow %}
+      <div class="arrow-container">
+        <div class="arrow-down">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="20" viewBox="0 0 24 12">
+            <path d="M12 12L0 0h24z"/>
+          </svg>
+        </div>
       </div>
-    </div>
+    {% endif %}
 
     <div class="button-container">
       <a href="{{ section.settings.button_link }}" class="whatsapp-button">
@@ -35,14 +37,17 @@
       </a>
     </div>
   </div>
-</section>
+</div>
 
 <style>
   .hero-sorteo {
     position: relative;
     width: 100%;
     padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
-    overflow: visible;
+    background: linear-gradient({{ section.settings.gradient_angle_desktop }}deg,
+                {{ section.settings.background_color_start }},
+                {{ section.settings.background_color_end }});
+    color: {{ section.settings.text_color }};
   }
 
   .hero-container {
@@ -56,8 +61,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    z-index: 2;
   }
 
   .hero-text {
@@ -65,100 +68,17 @@
     padding-right: 30px;
   }
 
-  .hero-image-wrapper {
-    width: 50%;
-    position: relative;
-    overflow: visible;
-  }
-
   .hero-image {
-    position: relative;
-    z-index: 1;
-    overflow: visible;
+    width: 50%;
     text-align: right;
   }
 
   .hero-image img {
-    display: inline-block;
-    max-width: {{ section.settings.image_scale }}%;
-    height: auto;
-    transform: translate({{ section.settings.image_position_x | minus: 50 }}%, {{ section.settings.image_position_y | minus: 50 }}%);
-  }
-
-  .hero-sorteo h1 {
-    font-size: 70px;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-    line-height: 1;
-    text-transform: uppercase;
-  }
-
-  .hero-sorteo h2 {
-    font-size: 32px;
-    font-weight: 700;
-    margin: 0 0 20px 0;
-  }
-
-  .hero-sorteo p {
-    font-size: 18px;
-    line-height: 1.5;
-    margin: 0 0 30px 0;
-    max-width: 600px;
-  }
-
-  .arrow-container {
-    position: relative;
-    width: 100%;
-    height: 40px;
-    margin-bottom: 20px;
-  }
-
-  .arrow-down {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-    z-index: 1;
-  }
-
-  .button-container {
-    position: relative;
-    z-index: 2;
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0) translateX(-50%);
-    }
-    40% {
-      transform: translateY(-20px) translateX(-50%);
-    }
-    60% {
-      transform: translateY(-10px) translateX(-50%);
-    }
-  }
-
-  .whatsapp-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 16px 30px;
-    border-radius: 8px;
-    margin: 0 auto;
-    max-width: 480px;
-    transition: background-color 0.3s ease;
-  }
-
-  .whatsapp-button:hover {
-    opacity: 0.9;
-  }
-
-  .whatsapp-button svg {
-    margin-right: 10px;
+    display: block;
+    max-width: {{ section.settings.desktop_image_scale }}%;
+    margin-left: auto;
+    transform: translateX({{ section.settings.desktop_image_position_x }}px)
+               translateY({{ section.settings.desktop_image_position_y }}px);
   }
 
   .hero-sorteo h1 {
@@ -188,7 +108,6 @@
     width: 100%;
     height: 40px;
     margin-bottom: 20px;
-    display: {% if section.settings.show_arrow %}block{% else %}none{% endif %};
   }
 
   .arrow-down {
@@ -197,16 +116,10 @@
     left: 50%;
     transform: translateX(-50%);
     animation: bounce 2s infinite;
-    z-index: 1;
   }
 
-  .arrow-down svg path {
-    fill: {{ section.settings.arrow_color | color_modify: 'alpha', 0.5 }};
-  }
-
-  .button-container {
-    position: relative;
-    z-index: 2;
+  .arrow-down svg {
+    fill: {{ section.settings.arrow_color }};
   }
 
   @keyframes bounce {
@@ -233,11 +146,11 @@
     border-radius: 8px;
     margin: 0 auto;
     max-width: 480px;
-    transition: background-color 0.3s ease;
+    transition: opacity 0.3s ease;
   }
 
   .whatsapp-button:hover {
-    background-color: {{ section.settings.button_color | color_darken: 15 }};
+    opacity: 0.9;
   }
 
   .whatsapp-button svg {
@@ -248,83 +161,94 @@
     .hero-sorteo {
       padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
       background: linear-gradient({{ section.settings.gradient_angle_mobile }}deg,
-                   {{ section.settings.background_color_start }} 0%,
-                   {{ section.settings.background_color_end | color_modify: 'alpha', section.settings.gradient_opacity | divided_by: 100.0 }} 100%);
-      position: relative;
+                  {{ section.settings.background_color_start_mobile }},
+                  {{ section.settings.background_color_end_mobile }});
     }
 
     .hero-content {
       flex-direction: column;
       text-align: center;
-      position: relative;
     }
 
     .hero-text {
       width: 100%;
       padding-right: 0;
+      margin-bottom: 30px;
       position: relative;
-      z-index: 5;
+      z-index: 2;
     }
 
     .hero-image {
       width: 100%;
-      height: 100%;
+      text-align: center;
+    }
+
+    .hero-image img {
+      max-width: {{ section.settings.mobile_image_scale }}%;
+      margin: 0 auto;
+      transform: translateX({{ section.settings.mobile_image_position_x }}px)
+                 translateY({{ section.settings.mobile_image_position_y }}px);
+    }
+
+    .hero-sorteo h1 {
+      font-size: 50px;
+    }
+
+    .hero-sorteo h2 {
+      font-size: 28px;
+    }
+
+    .hero-sorteo p {
+      font-size: 16px;
+      margin: 0 auto 30px;
+      max-width: 90%;
+    }
+
+    .whatsapp-button {
+      padding: 12px 20px;
+      font-size: 14px;
+    }
+  }
+
+  /* Modo de superposición para móvil */
+  @media screen and (max-width: 768px) {
+    {% if section.settings.mobile_overlay_mode %}
+    .hero-content {
+      position: relative;
+    }
+
+    .hero-image {
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
+      width: 100%;
+      height: 100%;
       z-index: 1;
-      margin: 0;
     }
 
     .hero-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      margin: 0;
-      position: absolute;
-      top: 0;
-      object-position: {{ section.settings.image_position_x }}% {{ section.settings.image_position_y }}%;
     }
 
-    .hero-sorteo h1 {
-      font-size: 50px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    .hero-text {
       position: relative;
-      z-index: 2;
+      z-index: 3;
     }
 
-    .hero-sorteo h2 {
-      font-size: 28px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    .hero-sorteo h1,
+    .hero-sorteo h2,
+    .hero-sorteo p {
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     }
 
     .hero-sorteo p {
-      font-size: 16px;
-      position: relative;
-      z-index: 2;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+      background-color: rgba(0,0,0,0.4);
       padding: 10px;
-      margin: 15px auto 30px;
-      max-width: 90%;
+      border-radius: 5px;
     }
-
-    .arrow-container {
-      position: relative;
-      z-index: 5;
-    }
-
-    .arrow-down svg path {
-      fill: {{ section.settings.arrow_color | color_modify: 'alpha', 0.8 }};
-    }
-
-    .whatsapp-button {
-      padding: 12px 20px;
-      font-size: 14px;
-      position: relative;
-      z-index: 5;
-    }
+    {% endif %}
   }
 </style>
 
@@ -356,7 +280,7 @@
     },
     {
       "type": "header",
-      "content": "Imagen"
+      "content": "Imagen - Escritorio"
     },
     {
       "type": "image_picker",
@@ -365,39 +289,78 @@
     },
     {
       "type": "range",
-      "id": "image_position_x",
-      "min": -50,
+      "id": "desktop_image_scale",
+      "min": 50,
       "max": 150,
       "step": 5,
       "unit": "%",
-      "label": "Posición horizontal de imagen",
-      "default": 50,
-      "info": "0% = izquierda, 100% = derecha, 50% = centro"
-    },
-    {
-      "type": "range",
-      "id": "image_position_y",
-      "min": -50,
-      "max": 150,
-      "step": 5,
-      "unit": "%",
-      "label": "Posición vertical de imagen",
-      "default": 50,
-      "info": "0% = arriba, 100% = abajo, 50% = centro"
-    },
-    {
-      "type": "range",
-      "id": "image_scale",
-      "min": 80,
-      "max": 200,
-      "step": 10,
-      "unit": "%",
-      "label": "Escala de la imagen",
+      "label": "Escala de imagen (escritorio)",
       "default": 100
     },
     {
+      "type": "range",
+      "id": "desktop_image_position_x",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición horizontal (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_image_position_y",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical (escritorio)",
+      "default": 0
+    },
+    {
       "type": "header",
-      "content": "Fondo y Colores"
+      "content": "Imagen - Móvil"
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_scale",
+      "min": 50,
+      "max": 150,
+      "step": 5,
+      "unit": "%",
+      "label": "Escala de imagen (móvil)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_position_x",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición horizontal (móvil)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_image_position_y",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical (móvil)",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_overlay_mode",
+      "label": "Usar modo de superposición en móvil",
+      "default": true,
+      "info": "Coloca la imagen como fondo con el texto superpuesto"
+    },
+    {
+      "type": "header",
+      "content": "Fondo - Escritorio"
     },
     {
       "type": "color",
@@ -418,8 +381,24 @@
       "max": 360,
       "step": 5,
       "unit": "°",
-      "label": "Ángulo del degradado (escritorio)",
+      "label": "Ángulo del degradado",
       "default": 90
+    },
+    {
+      "type": "header",
+      "content": "Fondo - Móvil"
+    },
+    {
+      "type": "color",
+      "id": "background_color_start_mobile",
+      "label": "Color de fondo inicial (móvil)",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color_end_mobile",
+      "label": "Color de fondo final (móvil)",
+      "default": "#FFCC00"
     },
     {
       "type": "range",
@@ -432,35 +411,31 @@
       "default": 180
     },
     {
-      "type": "range",
-      "id": "gradient_position",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Posición del degradado",
-      "default": 40
-    },
-    {
-      "type": "range",
-      "id": "gradient_opacity",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Opacidad del degradado final",
-      "default": 90
-    },
-    {
-      "type": "color",
-      "id": "accent_color",
-      "label": "Color de acento para subtítulo",
-      "default": "#FFCC00"
+      "type": "header",
+      "content": "Colores y Estilos"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "Color de texto principal",
+      "label": "Color de texto",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Color de acento (subtítulo)",
+      "default": "#FFCC00"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Mostrar flecha indicadora",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Color de la flecha",
       "default": "#FFFFFF"
     },
     {
@@ -483,18 +458,6 @@
       "id": "button_color",
       "label": "Color del botón",
       "default": "#25D366"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_arrow",
-      "label": "Mostrar flecha hacia abajo",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "arrow_color",
-      "label": "Color de la flecha",
-      "default": "#FFFFFF"
     },
     {
       "type": "header",
