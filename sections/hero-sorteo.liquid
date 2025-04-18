@@ -169,7 +169,7 @@
     .hero-content {
       flex-direction: column;
       text-align: center;
-      min-height: 300px; /* Altura mínima para evitar recortes */
+      min-height: 400px; /* Aumentamos la altura mínima para evitar recortes */
     }
 
     .hero-text {
@@ -217,8 +217,10 @@
     {% if section.settings.mobile_overlay_mode %}
     .hero-content {
       position: relative;
-      /* Aseguramos que el contenido se expanda para acomodar la imagen desplazada */
-      padding-bottom: calc(50px + {{ section.settings.mobile_image_position_y | abs }}px);
+      min-height: 500px; /* Altura mínima para asegurar que haya espacio suficiente */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .hero-image {
@@ -228,22 +230,21 @@
       width: 100%;
       height: 100%;
       z-index: 1;
-      /* Evitamos que la imagen se recorte con overflow visible */
-      overflow: visible;
+      overflow: hidden; /* Contenemos la imagen dentro del contenedor */
     }
 
     .hero-image img {
       width: 100%;
-      height: auto; /* Cambiado de 100% a auto para mantener proporciones */
+      height: 100%;
       object-fit: cover;
-      /* Eliminamos restricciones de tamaño y dejamos que la transformación funcione */
-      max-height: none;
+      object-position: center calc(50% + {{ section.settings.mobile_image_position_y }}px); /* Permitimos ajustar la posición vertical */
       min-height: 100%;
     }
 
     .hero-text {
       position: relative;
       z-index: 3;
+      padding: 30px 15px;
     }
 
     .hero-sorteo h1,
@@ -254,18 +255,29 @@
 
     .hero-sorteo p {
       background-color: rgba(0,0,0,0.4);
-      padding: 10px;
+      padding: 15px;
       border-radius: 5px;
+      margin-left: auto;
+      margin-right: auto;
     }
     {% endif %}
   }
 
-  /* Media query adicional para casos extremos de posicionamiento negativo */
+  /* Estilos adicionales para mejorar la visualización en móvil */
   @media screen and (max-width: 768px) {
-    {% if section.settings.mobile_overlay_mode and section.settings.mobile_image_position_y < -50 %}
+    {% if section.settings.mobile_overlay_mode %}
+    /* Mantenemos altura adecuada independientemente de la posición de la imagen */
     .hero-sorteo {
-      /* Aumentamos el padding dinámicamente basado en la posición de la imagen */
-      padding-bottom: calc({{ section.settings.padding_bottom_mobile }}px + {{ section.settings.mobile_image_position_y | abs | minus: 50 }}px);
+      min-height: 500px;
+    }
+
+    /* Facilitamos la lectura del texto cuando está superpuesto */
+    .hero-text {
+      background-color: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      margin: 0 auto;
+      max-width: 90%;
+      backdrop-filter: blur(2px);
     }
     {% endif %}
   }
@@ -363,13 +375,13 @@
     {
       "type": "range",
       "id": "mobile_image_position_y",
-      "min": -300,
-      "max": 100,
-      "step": 5,
+      "min": -250,
+      "max": 250,
+      "step": 10,
       "unit": "px",
       "label": "Posición vertical (móvil)",
       "default": 0,
-      "info": "Valores negativos mueven la imagen hacia arriba"
+      "info": "Valores positivos mueven la imagen hacia abajo, valores negativos hacia arriba"
     },
     {
       "type": "checkbox",
