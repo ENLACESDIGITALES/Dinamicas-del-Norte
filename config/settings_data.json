@@ -58,7 +58,7 @@
           "image_border_radius": 0,
           "desktop_image_position_x": 0,
           "desktop_image_position_y": 0,
-          "mobile_image_position_y": -140,
+          "mobile_image_position_y": -260,
           "background_color_start": "#000000",
           "background_color_end": "#000000",
           "gradient_angle": 125,
