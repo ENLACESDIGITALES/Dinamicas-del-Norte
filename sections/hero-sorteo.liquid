@@ -59,8 +59,15 @@
       const mobilePositionY = {{ section.settings.mobile_image_position_y }};
       imageWrapper.style.marginTop = mobilePositionY + 'px';
 
-      // Asegurarse que la altura del contenedor sea suficiente
-      section.style.paddingBottom = Math.max(100, Math.abs(mobilePositionY) + 200) + 'px';
+      // Asegurarse que la altura del contenedor sea suficiente para evitar recortes
+      // en ambas direcciones (arriba y abajo)
+      if (mobilePositionY < 0) {
+        // Si la imagen se mueve hacia arriba, aumentar el padding inferior
+        section.style.paddingBottom = Math.max(100, Math.abs(mobilePositionY) + 200) + 'px';
+      } else if (mobilePositionY > 0) {
+        // Si la imagen se mueve hacia abajo, aumentar el padding superior
+        section.style.paddingTop = Math.max({{ section.settings.padding_top }}, mobilePositionY + 100) + 'px';
+      }
     }
 
     // Ejecutar cuando cargue la página y cuando cambie el tamaño de la ventana
