@@ -1,3 +1,8 @@
+@media screen and (max-width: 768px) { /* Para móvil, añadimos un fondo de degradado al texto para mejor legibilidad */
+.hero-sorteo__overlay-content { background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%,
+rgba(0,0,0,0) 100%); padding-top: 50px; /* Espacio para el degradado */ padding-bottom: 20px; position: absolute;
+bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legible */ .hero-sorteo__title,
+.hero-sorteo__subtitle, .hero-sorteo__description { text-shadow: 1px 1px 3px rgba(0,0,0,0.7); } }
 {% comment %}
   Hero Sorteo - Versión Final Sin Recortes
 {% endcomment %}
@@ -16,7 +21,7 @@
       </div>
     {% endif %}
 
-    <div class="hero-sorteo__content">
+    <div class="hero-sorteo__overlay-content">
       <div class="hero-sorteo__text">
         <h1 class="hero-sorteo__title">{{ section.settings.hero_title }}</h1>
         <h2 class="hero-sorteo__subtitle">{{ section.settings.hero_subtitle }}</h2>
@@ -46,34 +51,8 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Esta función asegura que la imagen se muestre completa sin recortes
-    function adjustImagePosition() {
-      const section = document.querySelector('[data-section-id="{{ section.id }}"]');
-      if (!section) return;
-
-      const imageWrapper = section.querySelector('.hero-sorteo__image-wrapper');
-      if (!imageWrapper) return;
-
-      // Establecer la posición de la imagen según el valor del settings
-      const mobilePositionY = {{ section.settings.mobile_image_position_y }};
-      imageWrapper.style.marginTop = mobilePositionY + 'px';
-
-      // Asegurarse que la altura del contenedor sea suficiente para evitar recortes
-      // en ambas direcciones (arriba y abajo)
-      if (mobilePositionY < 0) {
-        // Si la imagen se mueve hacia arriba, aumentar el padding inferior
-        section.style.paddingBottom = Math.max(100, Math.abs(mobilePositionY) + 200) + 'px';
-      } else if (mobilePositionY > 0) {
-        // Si la imagen se mueve hacia abajo, aumentar el padding superior
-        section.style.paddingTop = Math.max({{ section.settings.padding_top }}, mobilePositionY + 100) + 'px';
-      }
-    }
-
-    // Ejecutar cuando cargue la página y cuando cambie el tamaño de la ventana
-    adjustImagePosition();
-    window.addEventListener('resize', adjustImagePosition);
-  });
+  // No necesitamos JavaScript para esta solución
+  // La imagen se mueve directamente con transform en CSS
 </script>
 
 <style>
@@ -99,11 +78,18 @@
     z-index: -1;
   }
 
+  /* Ajustes para asegurar que no haya recortes */
   .hero-sorteo__container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     position: relative;
+    overflow: visible;
+    min-height: 500px; /* Altura mínima para evitar colapsos */
+  }
+
+  .hero-sorteo {
+    overflow: visible;
   }
 
   /* Imagen principal - Garantizamos que no se recorte */
@@ -111,7 +97,8 @@
     width: 100%;
     position: relative;
     z-index: 1;
-    /* margin-top se establece mediante JavaScript */
+    transform: translateY({{ section.settings.mobile_image_position_y }}px);
+    transition: transform 0.3s ease;
   }
 
   .hero-sorteo__image {
@@ -121,12 +108,12 @@
     border-radius: {{ section.settings.image_border_radius }}px;
   }
 
-  /* Contenido (texto, flecha, botón) */
-  .hero-sorteo__content {
+  /* Contenido superpuesto (texto, flecha, botón) */
+  .hero-sorteo__overlay-content {
     text-align: center;
     padding: 30px 0;
     position: relative;
-    z-index: 2;
+    z-index: 2; /* Siempre por encima de la imagen */
   }
 
   .hero-sorteo__text {
@@ -225,10 +212,9 @@
       width: 50%;
       order: 2;
       transform: translate({{ section.settings.desktop_image_position_x }}px, {{ section.settings.desktop_image_position_y }}px);
-      margin-top: 0; /* Resetear el margen en desktop */
     }
 
-    .hero-sorteo__content {
+    .hero-sorteo__overlay-content {
       width: 50%;
       text-align: left;
       padding-right: 30px;
