@@ -1,13 +1,8 @@
-@media screen and (max-width: 768px) { /* Para móvil, añadimos un fondo de degradado al texto para mejor legibilidad */
-.hero-sorteo__overlay-content { background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 50%,
-rgba(0,0,0,0) 100%); padding-top: 50px; /* Espacio para el degradado */ padding-bottom: 20px; position: absolute;
-bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legible */ .hero-sorteo__title,
-.hero-sorteo__subtitle, .hero-sorteo__description { text-shadow: 1px 1px 3px rgba(0,0,0,0.7); } }
 {% comment %}
-  Hero Sorteo - Versión Final Sin Recortes
+  Hero Sorteo - Versión totalmente limpia
 {% endcomment %}
 
-<div class="hero-sorteo" data-section-id="{{ section.id }}">
+<div class="hero-sorteo">
   <div class="hero-sorteo__background"></div>
 
   <div class="hero-sorteo__container">
@@ -21,8 +16,8 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
       </div>
     {% endif %}
 
-    <div class="hero-sorteo__overlay-content">
-      <div class="hero-sorteo__text">
+    <div class="hero-sorteo__text-container">
+      <div class="hero-sorteo__text-wrapper">
         <h1 class="hero-sorteo__title">{{ section.settings.hero_title }}</h1>
         <h2 class="hero-sorteo__subtitle">{{ section.settings.hero_subtitle }}</h2>
         <p class="hero-sorteo__description">{{ section.settings.hero_description }}</p>
@@ -36,7 +31,7 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
         </div>
       {% endif %}
 
-      <div class="hero-sorteo__button-wrapper">
+      <div class="hero-sorteo__button-container">
         <a href="{{ section.settings.button_link }}" class="hero-sorteo__button">
           <span class="hero-sorteo__button-icon">
             <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
@@ -50,20 +45,15 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
   </div>
 </div>
 
-<script>
-  // No necesitamos JavaScript para esta solución
-  // La imagen se mueve directamente con transform en CSS
-</script>
-
 <style>
-  /* Estilos básicos */
+  /* Estilos base */
   .hero-sorteo {
     position: relative;
     width: 100%;
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
     color: {{ section.settings.text_color }};
-    min-height: 400px; /* Altura mínima para evitar colapso */
+    min-height: 500px;
+    overflow: visible;
   }
 
   .hero-sorteo__background {
@@ -78,27 +68,21 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     z-index: -1;
   }
 
-  /* Ajustes para asegurar que no haya recortes */
   .hero-sorteo__container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     position: relative;
     overflow: visible;
-    min-height: 500px; /* Altura mínima para evitar colapsos */
   }
 
-  .hero-sorteo {
-    overflow: visible;
-  }
-
-  /* Imagen principal - Garantizamos que no se recorte */
+  /* Imagen principal */
   .hero-sorteo__image-wrapper {
     width: 100%;
     position: relative;
     z-index: 1;
+    overflow: visible;
     transform: translateY({{ section.settings.mobile_image_position_y }}px);
-    transition: transform 0.3s ease;
   }
 
   .hero-sorteo__image {
@@ -108,18 +92,21 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     border-radius: {{ section.settings.image_border_radius }}px;
   }
 
-  /* Contenido superpuesto (texto, flecha, botón) */
-  .hero-sorteo__overlay-content {
+  /* Contenido texto */
+  .hero-sorteo__text-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
     text-align: center;
-    padding: 30px 0;
-    position: relative;
-    z-index: 2; /* Siempre por encima de la imagen */
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0) 100%);
+    padding: 50px 20px 20px;
   }
 
-  .hero-sorteo__text {
+  .hero-sorteo__text-wrapper {
     max-width: 600px;
     margin: 0 auto;
-    position: relative;
   }
 
   .hero-sorteo__title {
@@ -127,6 +114,7 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     font-weight: 700;
     margin: 0 0 10px;
     text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
   .hero-sorteo__subtitle {
@@ -134,18 +122,20 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     font-weight: 700;
     margin: 0 0 15px;
     color: {{ section.settings.accent_color }};
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
   .hero-sorteo__description {
     font-size: 16px;
     line-height: 1.5;
     margin: 0 0 30px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
   }
 
   /* Flecha */
   .hero-sorteo__arrow {
     margin: {{ section.settings.arrow_vertical_position }}px auto 20px;
-    animation: bounce 2s infinite;
+    animation: hero-sorteo-bounce 2s infinite;
     width: 40px;
     height: 30px;
   }
@@ -157,7 +147,7 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     height: 100%;
   }
 
-  @keyframes bounce {
+  @keyframes hero-sorteo-bounce {
     0%, 20%, 50%, 80%, 100% {
       transform: translateY(0);
     }
@@ -170,8 +160,9 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
   }
 
   /* Botón de WhatsApp */
-  .hero-sorteo__button-wrapper {
+  .hero-sorteo__button-container {
     margin-top: {{ section.settings.button_vertical_position }}px;
+    margin-bottom: 20px;
   }
 
   .hero-sorteo__button {
@@ -184,11 +175,12 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     font-weight: bold;
     padding: 16px 30px;
     border-radius: {{ section.settings.button_border_radius }}px;
-    transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
     text-transform: uppercase;
-    max-width: 90%;
+    width: 90%;
+    max-width: 480px;
     margin: 0 auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .hero-sorteo__button:hover {
@@ -200,7 +192,7 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
     margin-right: 15px;
   }
 
-  /* Estilos para pantallas más grandes */
+  /* Estilos para escritorio */
   @media screen and (min-width: 769px) {
     .hero-sorteo__container {
       display: flex;
@@ -214,27 +206,32 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
       transform: translate({{ section.settings.desktop_image_position_x }}px, {{ section.settings.desktop_image_position_y }}px);
     }
 
-    .hero-sorteo__overlay-content {
+    .hero-sorteo__text-container {
+      position: static;
       width: 50%;
+      background: none;
+      padding: 0 30px 0 0;
       text-align: left;
-      padding-right: 30px;
       order: 1;
     }
 
-    .hero-sorteo__text {
+    .hero-sorteo__text-wrapper {
       margin: 0;
     }
 
     .hero-sorteo__title {
       font-size: 70px;
+      text-shadow: none;
     }
 
     .hero-sorteo__subtitle {
       font-size: 32px;
+      text-shadow: none;
     }
 
     .hero-sorteo__description {
       font-size: 18px;
+      text-shadow: none;
     }
 
     .hero-sorteo__arrow {
@@ -243,7 +240,7 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
 
     .hero-sorteo__button {
       margin: 0;
-      max-width: 480px;
+      width: auto;
     }
   }
 </style>
@@ -322,7 +319,7 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
       "unit": "px",
       "label": "Posición vertical (móvil)",
       "default": 0,
-      "info": "Valores negativos mueven la imagen hacia arriba, valores positivos hacia abajo"
+      "info": "Mueve la imagen hacia arriba o abajo"
     },
     {
       "type": "header",
@@ -387,6 +384,10 @@ bottom: 0; left: 0; width: 100%; } /* Aseguramos que el texto siempre sea legibl
       "unit": "px",
       "label": "Posición vertical de flecha",
       "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Botón de WhatsApp"
     },
     {
       "type": "text",
