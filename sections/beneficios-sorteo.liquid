@@ -1,5 +1,5 @@
 {% comment %}
-  Beneficios Sorteo - Título y línea juntos
+  Beneficios Sorteo - Con ancho de línea diferente para móvil y escritorio
 {% endcomment %}
 
 <section class="beneficios-nuevo">
@@ -11,11 +11,8 @@
         <!-- TÍTULO Y LÍNEA REPOSICIONADOS EN EL CUADRO ROJO -->
         <div class="titulo-reposicionado">
           <h2>{{ section.settings.beneficios_title }}</h2>
-          <!-- LÍNEA ROJA DEBAJO DEL TÍTULO -->
-          <div
-            class="linea-titulo"
-            style="height: {{ section.settings.line_height }}px; width: {{ section.settings.line_width }}px; background-color: {{ section.settings.line_color }}; margin-top: {{ section.settings.line_margin_top }}px;"
-          ></div>
+          <!-- LÍNEA ROJA DEBAJO DEL TÍTULO - CON ANCHO RESPONSIVE -->
+          <div class="linea-titulo"></div>
         </div>
 
         <!-- Lista de beneficios -->
@@ -125,10 +122,13 @@
     font-weight: bold;
   }
 
-  /* LÍNEA ROJA DEBAJO DEL TÍTULO */
+  /* LÍNEA ROJA DEBAJO DEL TÍTULO - CON ANCHO RESPONSIVE */
   .linea-titulo {
     display: block;
+    height: {{ section.settings.line_height }}px;
+    width: {{ section.settings.line_width_mobile }}px;
     background-color: {{ section.settings.line_color }};
+    margin-top: {{ section.settings.line_margin_top }}px;
   }
 
   /* Columna derecha con imagen */
@@ -227,7 +227,7 @@
     transform: translateY(-2px);
   }
 
-  /* Escritorio */
+  /* Escritorio - ANCHO DE LÍNEA DIFERENTE */
   @media screen and (min-width: 769px) {
     .beneficios-nuevo {
       padding: {{ section.settings.padding_top_desktop }}px 0 {{ section.settings.padding_bottom_desktop }}px;
@@ -254,6 +254,11 @@
 
     .titulo-reposicionado h2 {
       font-size: {{ section.settings.title_size_desktop }}px;
+    }
+
+    /* LÍNEA CON ANCHO DIFERENTE PARA ESCRITORIO */
+    .linea-titulo {
+      width: {{ section.settings.line_width_desktop }}px;
     }
 
     .texto-beneficio h3 {
@@ -300,13 +305,23 @@
     },
     {
       "type": "range",
-      "id": "line_width",
+      "id": "line_width_mobile",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Ancho de línea (móvil)",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "line_width_desktop",
       "min": 50,
       "max": 500,
       "step": 10,
       "unit": "px",
-      "label": "Ancho de la línea",
-      "default": 100
+      "label": "Ancho de línea (escritorio)",
+      "default": 200
     },
     {
       "type": "range",
