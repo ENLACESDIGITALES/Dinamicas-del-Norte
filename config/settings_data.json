@@ -138,7 +138,7 @@
         "settings": {
           "beneficios_title": "Preguntas frecuentes ¿FAQ?",
           "beneficios_image": "shopify://shop_images/File_5.jpg",
-          "image_width": 100,
+          "image_width": 95,
           "image_max_width": 600,
           "image_border_radius": 27,
           "image_position_x_desktop": 50,
