@@ -106,6 +106,7 @@
     text-align: center;
     background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0) 100%);
     padding: 50px 20px 20px;
+    transform: translate({{ section.settings.mobile_text_position_x }}px, {{ section.settings.mobile_text_position_y }}px);
   }
 
   .hero-sorteo__text-wrapper {
@@ -235,6 +236,7 @@
       padding: 0 30px 0 0;
       text-align: left;
       order: 1;
+      transform: translate({{ section.settings.desktop_text_position_x }}px, {{ section.settings.desktop_text_position_y }}px);
     }
 
     .hero-sorteo__text-wrapper {
@@ -484,6 +486,50 @@
       "step": 10,
       "unit": "px",
       "label": "Posición horizontal de flecha (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Posición del texto"
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_position_x",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición horizontal del texto (móvil)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "mobile_text_position_y",
+      "min": -100,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical del texto (móvil)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_position_x",
+      "min": -200,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición horizontal del texto (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "desktop_text_position_y",
+      "min": -200,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical del texto (escritorio)",
       "default": 0
     },
     {
