@@ -3,7 +3,15 @@
 {% endcomment %}
 
 <div class="hero-sorteo">
-  <div class="hero-sorteo__background"></div>
+  <div class="hero-sorteo__background">
+    {% if section.settings.background_image != blank %}
+      <div
+        class="hero-sorteo__background-image"
+        style="background-image: url('{{ section.settings.background_image | img_url: 'master' }}');"
+      ></div>
+    {% endif %}
+    <div class="hero-sorteo__background-overlay"></div>
+  </div>
 
   <div class="hero-sorteo__container">
     {% if section.settings.hero_image != blank %}
@@ -66,9 +74,31 @@
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: -2;
+  }
+
+  .hero-sorteo__background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: {{ section.settings.background_image_size }};
+    background-position: {{ section.settings.background_image_position }};
+    background-repeat: {{ section.settings.background_image_repeat }};
+    z-index: -2;
+  }
+
+  .hero-sorteo__background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: linear-gradient({{ section.settings.gradient_angle }}deg,
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
+    opacity: {{ section.settings.gradient_opacity }};
     z-index: -1;
   }
 
@@ -325,6 +355,135 @@
     },
     {
       "type": "header",
+      "content": "Fondo"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo"
+    },
+    {
+      "type": "select",
+      "id": "background_image_size",
+      "label": "Tamaño de la imagen de fondo",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cubrir todo el espacio"
+        },
+        {
+          "value": "contain",
+          "label": "Contener (mostrar completa)"
+        },
+        {
+          "value": "auto",
+          "label": "Tamaño original"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "background_image_position",
+      "label": "Posición de la imagen de fondo",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Centro"
+        },
+        {
+          "value": "top center",
+          "label": "Superior"
+        },
+        {
+          "value": "bottom center",
+          "label": "Inferior"
+        },
+        {
+          "value": "left center",
+          "label": "Izquierda"
+        },
+        {
+          "value": "right center",
+          "label": "Derecha"
+        },
+        {
+          "value": "top left",
+          "label": "Superior izquierda"
+        },
+        {
+          "value": "top right",
+          "label": "Superior derecha"
+        },
+        {
+          "value": "bottom left",
+          "label": "Inferior izquierda"
+        },
+        {
+          "value": "bottom right",
+          "label": "Inferior derecha"
+        }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "select",
+      "id": "background_image_repeat",
+      "label": "Repetición de la imagen de fondo",
+      "options": [
+        {
+          "value": "no-repeat",
+          "label": "Sin repetición"
+        },
+        {
+          "value": "repeat",
+          "label": "Repetir"
+        },
+        {
+          "value": "repeat-x",
+          "label": "Repetir horizontalmente"
+        },
+        {
+          "value": "repeat-y",
+          "label": "Repetir verticalmente"
+        }
+      ],
+      "default": "no-repeat"
+    },
+    {
+      "type": "color",
+      "id": "background_color_start",
+      "label": "Color de fondo inicial",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color_end",
+      "label": "Color de fondo final",
+      "default": "#7a6900"
+    },
+    {
+      "type": "range",
+      "id": "gradient_angle",
+      "min": 0,
+      "max": 360,
+      "step": 5,
+      "unit": "°",
+      "label": "Ángulo del degradado",
+      "default": 125
+    },
+    {
+      "type": "range",
+      "id": "gradient_opacity",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "label": "Opacidad del degradado",
+      "default": 0.8,
+      "info": "1 = totalmente opaco, 0 = transparente"
+    },
+    {
+      "type": "header",
       "content": "Contenido de texto"
     },
     {
@@ -466,28 +625,6 @@
     {
       "type": "header",
       "content": "Colores"
-    },
-    {
-      "type": "color",
-      "id": "background_color_start",
-      "label": "Color de fondo inicial",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "background_color_end",
-      "label": "Color de fondo final",
-      "default": "#7a6900"
-    },
-    {
-      "type": "range",
-      "id": "gradient_angle",
-      "min": 0,
-      "max": 360,
-      "step": 5,
-      "unit": "°",
-      "label": "Ángulo del degradado",
-      "default": 125
     },
     {
       "type": "color",
