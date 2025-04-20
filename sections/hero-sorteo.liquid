@@ -1,6 +1,3 @@
-{ "type": "range", "id": "button_padding_vertical", "min": 5, "max": 40, "step": 1, "unit": "px", "label": "Espaciado
-vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_horizontal", "min": 10, "max": 100,
-"step": 5, "unit": "px", "label": "Espaciado horizontal del botón", "default": 30 },
 {% comment %}
   Hero Sorteo - Versión con control total
 {% endcomment %}
@@ -60,6 +57,7 @@ vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_
     color: {{ section.settings.text_color }};
     min-height: {{ section.settings.min_height }}px;
     overflow: {{ section.settings.overflow_setting }};
+    margin-bottom: {{ section.settings.margin_bottom }}px;
   }
 
   .hero-sorteo__background {
@@ -170,7 +168,7 @@ vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_
   /* Botón de WhatsApp */
   .hero-sorteo__button-container {
     margin-top: {{ section.settings.button_vertical_position }}px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
   }
 
   .hero-sorteo__button {
@@ -498,42 +496,6 @@ vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_
     },
     {
       "type": "header",
-      "content": "Flecha"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_arrow",
-      "label": "Mostrar flecha",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "arrow_color",
-      "label": "Color de flecha",
-      "default": "#FFCC00"
-    },
-    {
-      "type": "range",
-      "id": "arrow_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical de flecha",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "arrow_horizontal_position",
-      "min": -500,
-      "max": 500,
-      "step": 10,
-      "unit": "px",
-      "label": "Posición horizontal de flecha (escritorio)",
-      "default": 0
-    },
-    {
-      "type": "header",
       "content": "Posición del texto"
     },
     {
@@ -574,6 +536,42 @@ vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_
       "step": 5,
       "unit": "px",
       "label": "Posición vertical del texto (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Flecha"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Mostrar flecha",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Color de flecha",
+      "default": "#FFCC00"
+    },
+    {
+      "type": "range",
+      "id": "arrow_vertical_position",
+      "min": -50,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición vertical de flecha",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "arrow_horizontal_position",
+      "min": -500,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición horizontal de flecha (escritorio)",
       "default": 0
     },
     {
@@ -675,7 +673,7 @@ vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_
       "id": "padding_top",
       "min": 0,
       "max": 800,
-      "step": 20,
+      "step": 10,
       "unit": "px",
       "label": "Espaciado superior",
       "default": 80
@@ -683,13 +681,24 @@ vertical del botón", "default": 16 }, { "type": "range", "id": "button_padding_
     {
       "type": "range",
       "id": "padding_bottom",
-      "min": -200,
+      "min": -400,
       "max": 400,
       "step": 10,
       "unit": "px",
       "label": "Espaciado inferior",
       "default": 0,
       "info": "Usa valores negativos para eliminar espacio inferior"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": -400,
+      "max": 0,
+      "step": 10,
+      "unit": "px",
+      "label": "Margen inferior (valores negativos)",
+      "default": -200,
+      "info": "Usa valores negativos para eliminar espacio adicional"
     }
   ],
   "presets": [
