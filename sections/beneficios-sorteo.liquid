@@ -69,7 +69,7 @@
 
   .section-title:after {
     content: "";
-    display: {% if section.settings.show_title_line %}block{% else %}none{% endif %};
+    display: block;
     width: {{ section.settings.title_line_width }}px;
     height: {{ section.settings.title_line_height }}px;
     background-color: {{ section.settings.title_line_color }};
@@ -270,10 +270,10 @@
       "content": "Líneas y bordes"
     },
     {
-      "type": "checkbox",
-      "id": "show_title_line",
-      "label": "Mostrar línea debajo del título",
-      "default": true
+      "type": "color",
+      "id": "title_line_color",
+      "label": "Color de la línea del título",
+      "default": "#FF0000"
     },
     {
       "type": "range",
@@ -294,12 +294,6 @@
       "unit": "px",
       "label": "Altura de la línea del título",
       "default": 3
-    },
-    {
-      "type": "color",
-      "id": "title_line_color",
-      "label": "Color de la línea del título",
-      "default": "#FFCC00"
     },
     {
       "type": "range",
