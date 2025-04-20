@@ -136,7 +136,7 @@
           "beneficio_BTqMpt"
         ],
         "settings": {
-          "beneficios_title": "¿PORQUE CON DINAMICAS DEL NORTE?",
+          "beneficios_title": "Preguntas frecuentes ¿FAQ?",
           "beneficios_image": "shopify://shop_images/File_5.jpg",
           "title_background_color": "#ff0000",
           "line_color": "#ffffff00",
@@ -165,7 +165,7 @@
           "image_position_y_desktop": 0,
           "icon_size": 24,
           "icon_font_size": 14,
-          "title_size_mobile": 24,
+          "title_size_mobile": 22,
           "title_item_size_mobile": 14,
           "text_size_mobile": 13,
           "title_size_desktop": 24,
