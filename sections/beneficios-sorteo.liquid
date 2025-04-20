@@ -1,31 +1,30 @@
 {% comment %}
-  Beneficios Sorteo - Con título reposicionado
+  Beneficios Sorteo - Título en posición específica
 {% endcomment %}
 
-<section class="beneficios-unique">
-  <div class="container-unique">
-    <!-- Espacio para el título -->
+<section class="beneficios-nuevo">
+  <div class="container-nuevo">
+    <!-- Línea roja centrada en la parte superior (original) -->
     <div
-      class="title-wrapper-unique"
-      style="margin-top: {{ section.settings.title_top_margin }}px; margin-bottom: {{ section.settings.title_bottom_margin }}px;"
-    >
-      <!-- TÍTULO REPOSICIONADO -->
-      <h2 class="title-unique">{{ section.settings.beneficios_title }}</h2>
+      class="linea-superior"
+      style="height: {{ section.settings.line_height }}px; width: {{ section.settings.line_width }}px; background-color: {{ section.settings.line_color }}; margin: 10px auto 30px;"
+    ></div>
 
-      <!-- ÚNICA LÍNEA ROJA CONTROLABLE -->
-      <div
-        class="line-unique"
-        style="height: {{ section.settings.line_height }}px; width: {{ section.settings.line_width }}px; background-color: {{ section.settings.line_color }}; margin-top: {{ section.settings.line_margin_top }}px; margin-bottom: {{ section.settings.line_margin_bottom }}px; {% if section.settings.line_center %}margin-left: auto; margin-right: auto;{% else %}margin-left: {{ section.settings.line_position }}px; margin-right: auto;{% endif %}"
-      ></div>
-    </div>
+    <!-- Contenido principal con título reposicionado -->
+    <div class="contenido-principal">
+      <!-- Columna izquierda para beneficios -->
+      <div class="columna-izquierda">
+        <!-- TÍTULO REPOSICIONADO EN EL CUADRO ROJO -->
+        <div class="titulo-reposicionado">
+          <h2>{{ section.settings.beneficios_title }}</h2>
+        </div>
 
-    <div class="content-unique">
-      <div class="list-unique">
+        <!-- Lista de beneficios -->
         {% for block in section.blocks %}
           {% if block.type == 'beneficio' %}
-            <div class="item-unique">
-              <div class="icon-unique">✓</div>
-              <div class="text-unique">
+            <div class="item-beneficio">
+              <div class="icono-beneficio">✓</div>
+              <div class="texto-beneficio">
                 <h3>{{ block.settings.titulo }}</h3>
                 <p>{{ block.settings.descripcion }}</p>
               </div>
@@ -33,19 +32,24 @@
           {% endif %}
         {% endfor %}
       </div>
-      <div class="image-unique">
+
+      <!-- Columna derecha para imagen -->
+      <div class="columna-derecha">
         {% if section.settings.beneficios_image != blank %}
           <img
             src="{{ section.settings.beneficios_image | img_url: 'master' }}"
             alt="{{ section.settings.beneficios_title }}"
+            class="imagen-beneficios"
           >
         {% endif %}
       </div>
     </div>
-    <div class="button-container-unique" style="margin-top: {{ section.settings.button_spacing }}px;">
+
+    <!-- Botón de WhatsApp -->
+    <div class="contenedor-boton" style="margin-top: {{ section.settings.button_spacing }}px;">
       <a
         href="{{ section.settings.button_link }}"
-        class="button-unique {% if section.settings.button_shake_effect %}shake-unique{% endif %}"
+        class="boton-whatsapp {% if section.settings.button_shake_effect %}con-sacudida{% endif %}"
       >
         <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
           <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
@@ -57,27 +61,22 @@
 </section>
 
 <style>
-  /* Reset para eliminar todos los estilos por defecto */
-  .beneficios-unique * {
+  /* Reset de estilos */
+  .beneficios-nuevo * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: none;
-    outline: none;
-    background: none;
-    box-shadow: none;
-    text-shadow: none;
   }
 
-  /* Elimina cualquier posible pseudo-elemento */
-  .beneficios-unique *:before,
-  .beneficios-unique *:after {
+  /* Eliminación de pseudo-elementos */
+  .beneficios-nuevo *:before,
+  .beneficios-nuevo *:after {
     display: none !important;
     content: none !important;
   }
 
-  /* Estilos base */
-  .beneficios-unique {
+  /* Contenedor principal */
+  .beneficios-nuevo {
     position: relative;
     width: 100%;
     padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
@@ -87,61 +86,67 @@
                 {{ section.settings.background_color_end }});
   }
 
-  .container-unique {
+  .container-nuevo {
     max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
     padding: 0 {{ section.settings.container_padding }}px;
-    text-align: center;
   }
 
-  /* Contenedor del título */
-  .title-wrapper-unique {
-    text-align: center;
+  /* Línea superior */
+  .linea-superior {
+    display: block;
+    background-color: {{ section.settings.line_color }};
+  }
+
+  /* Contenido principal en dos columnas */
+  .contenido-principal {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Columna izquierda con título reposicionado y beneficios */
+  .columna-izquierda {
+    order: 1;
     position: relative;
+    margin-bottom: 30px;
   }
 
-  /* Título con estilo mínimo */
-  .title-unique {
+  /* TÍTULO REPOSICIONADO EN CUADRO ROJO */
+  .titulo-reposicionado {
+    position: relative;
+    margin-bottom: 60px; /* Espacio para que los beneficios empiecen después del cuadro rojo */
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .titulo-reposicionado h2 {
     font-size: {{ section.settings.title_size_mobile }}px;
     color: {{ section.settings.text_color }};
     margin: 0;
     padding: 0;
     font-weight: bold;
-    text-align: center;
-    display: block;
+    display: inline-block;
+    position: relative;
+    background-color: {{ section.settings.title_background_color }};
+    padding: 15px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
   }
 
-  /* LA ÚNICA LÍNEA */
-  .line-unique {
-    display: block;
-    background-color: {{ section.settings.line_color }};
-  }
-
-  /* Contenido */
-  .content-unique {
-    display: flex;
-    flex-direction: column;
-    gap: {{ section.settings.items_spacing_mobile }}px;
-    margin-top: {{ section.settings.content_margin_top }}px;
-  }
-
-  .list-unique {
-    order: 1;
-  }
-
-  .image-unique {
+  /* Columna derecha con imagen */
+  .columna-derecha {
     order: 2;
-    text-align: center;
-    transform: translateY({{ section.settings.image_position_y_mobile }}px);
   }
 
-  .image-unique img {
+  .imagen-beneficios {
     max-width: 100%;
     height: auto;
     border-radius: {{ section.settings.image_border_radius }}px;
   }
 
-  .item-unique {
+  /* Estilos para los items de beneficios */
+  .item-beneficio {
     display: flex;
     margin-bottom: {{ section.settings.item_spacing }}px;
     align-items: flex-start;
@@ -150,7 +155,7 @@
     padding-bottom: {% if section.settings.show_item_border %}{{ section.settings.item_spacing | divided_by: 2 }}px{% else %}0{% endif %};
   }
 
-  .icon-unique {
+  .icono-beneficio {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,25 +170,26 @@
     border: {{ section.settings.icon_border_width }}px {{ section.settings.icon_border_style }} {{ section.settings.icon_border_color }};
   }
 
-  .text-unique h3 {
+  .texto-beneficio h3 {
     font-size: {{ section.settings.title_item_size_mobile }}px;
     color: {{ section.settings.title_item_color }};
     margin: 0 0 5px;
     font-weight: 600;
   }
 
-  .text-unique p {
+  .texto-beneficio p {
     font-size: {{ section.settings.text_size_mobile }}px;
     line-height: 1.5;
     margin: 0;
     color: {{ section.settings.text_color }};
   }
 
-  .button-container-unique {
+  /* Botón de WhatsApp */
+  .contenedor-boton {
     text-align: center;
   }
 
-  .button-unique {
+  .boton-whatsapp {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -198,66 +204,66 @@
     font-size: {{ section.settings.button_text_size }}px;
   }
 
-  .button-unique svg {
+  .boton-whatsapp svg {
     margin-right: 10px;
   }
 
   /* Efecto de sacudida para el botón */
-  @keyframes shake-effect {
+  @keyframes sacudida {
     0% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
     20%, 40%, 60%, 80% { transform: translateX(5px); }
     100% { transform: translateX(0); }
   }
 
-  .button-unique.shake-unique {
-    animation: shake-effect 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  .boton-whatsapp.con-sacudida {
+    animation: sacudida 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
   }
 
-  .button-unique:hover {
+  .boton-whatsapp:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
   }
 
-  .button-unique.shake-unique:hover {
+  .boton-whatsapp.con-sacudida:hover {
     animation: none;
     transform: translateY(-2px);
   }
 
   /* Escritorio */
   @media screen and (min-width: 769px) {
-    .beneficios-unique {
+    .beneficios-nuevo {
       padding: {{ section.settings.padding_top_desktop }}px 0 {{ section.settings.padding_bottom_desktop }}px;
       margin-bottom: {{ section.settings.margin_bottom_desktop }}px;
     }
 
-    .title-unique {
-      font-size: {{ section.settings.title_size_desktop }}px;
-    }
-
-    .content-unique {
+    .contenido-principal {
       flex-direction: row;
-      align-items: center;
-      gap: {{ section.settings.items_spacing_desktop }}px;
+      align-items: flex-start;
     }
 
-    .list-unique {
+    .columna-izquierda {
+      width: 50%;
       order: 1;
-      width: 50%;
       padding-right: 30px;
+      margin-bottom: 0;
     }
 
-    .image-unique {
-      order: 2;
+    .columna-derecha {
       width: 50%;
+      order: 2;
       transform: translate({{ section.settings.image_position_x_desktop }}px, {{ section.settings.image_position_y_desktop }}px);
     }
 
-    .text-unique h3 {
+    .titulo-reposicionado h2 {
+      font-size: {{ section.settings.title_size_desktop }}px;
+    }
+
+    .texto-beneficio h3 {
       font-size: {{ section.settings.title_item_size_desktop }}px;
     }
 
-    .text-unique p {
+    .texto-beneficio p {
       font-size: {{ section.settings.text_size_desktop }}px;
     }
   }
@@ -280,28 +286,14 @@
     },
     {
       "type": "header",
-      "content": "Posición del título"
+      "content": "Configuración del título"
     },
     {
-      "type": "range",
-      "id": "title_top_margin",
-      "min": 0,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "label": "Espacio superior del título",
-      "default": 100,
-      "info": "Ajusta este valor para bajar el título"
-    },
-    {
-      "type": "range",
-      "id": "title_bottom_margin",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Espacio inferior del título",
-      "default": 30
+      "type": "color",
+      "id": "title_background_color",
+      "label": "Color de fondo del título (rectángulo)",
+      "default": "#000000",
+      "info": "Ajusta este color para hacer visible el rectángulo donde va el título"
     },
     {
       "type": "header",
@@ -332,54 +324,6 @@
       "unit": "px",
       "label": "Altura de la línea",
       "default": 3
-    },
-    {
-      "type": "range",
-      "id": "line_margin_top",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "label": "Espacio superior de la línea",
-      "default": 10
-    },
-    {
-      "type": "range",
-      "id": "line_margin_bottom",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "label": "Espacio inferior de la línea",
-      "default": 20
-    },
-    {
-      "type": "checkbox",
-      "id": "line_center",
-      "label": "Centrar línea",
-      "default": true,
-      "info": "Si está activado, la línea se centrará. Si está desactivado, puedes posicionarla horizontalmente."
-    },
-    {
-      "type": "range",
-      "id": "line_position",
-      "min": -250,
-      "max": 250,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición horizontal de la línea",
-      "default": 0,
-      "info": "Solo aplica si 'Centrar línea' está desactivado. Valores negativos mueven a la izquierda, positivos a la derecha."
-    },
-    {
-      "type": "range",
-      "id": "content_margin_top",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Espacio entre línea y contenido",
-      "default": 30
     },
     {
       "type": "header",
@@ -553,16 +497,6 @@
     },
     {
       "type": "range",
-      "id": "image_position_y_mobile",
-      "min": -200,
-      "max": 200,
-      "step": 10,
-      "unit": "px",
-      "label": "Posición vertical (móvil)",
-      "default": 0
-    },
-    {
-      "type": "range",
       "id": "image_position_x_desktop",
       "min": -300,
       "max": 300,
@@ -686,26 +620,6 @@
       "unit": "px",
       "label": "Espaciado entre items",
       "default": 20
-    },
-    {
-      "type": "range",
-      "id": "items_spacing_mobile",
-      "min": 10,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Espaciado entre lista e imagen (móvil)",
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "items_spacing_desktop",
-      "min": 10,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Espaciado entre lista e imagen (escritorio)",
-      "default": 30
     },
     {
       "type": "header",
