@@ -74,7 +74,7 @@
                         or block.settings.video_url contains 'youtu.be'
                       %}
                         <iframe
-                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}?rel=0&controls=1&autoplay={% if section.settings.video_autoplay %}1{% else %}0{% endif %}&mute={% if section.settings.video_autoplay %}1{% else %}0{% endif %}"
+                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}?rel=0&controls=1&playsinline=1&enablejsapi=1"
                           frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowfullscreen
@@ -82,7 +82,7 @@
                         </iframe>
                       {% elsif block.settings.video_url contains 'vimeo.com' %}
                         <iframe
-                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}?autoplay={% if section.settings.video_autoplay %}1{% else %}0{% endif %}&muted={% if section.settings.video_autoplay %}1{% else %}0{% endif %}&title=0&byline=0&portrait=0"
+                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}?title=0&byline=0&portrait=0&playsinline=1"
                           frameborder="0"
                           allow="autoplay; fullscreen; picture-in-picture"
                           allowfullscreen
@@ -93,9 +93,9 @@
                       <video
                         controls
                         playsinline
-                        {% if section.settings.video_autoplay %}
-                          autoplay muted loop
-                        {% endif %}
+                        preload="auto"
+                        poster="{{ block.settings.video_thumbnail | img_url: 'master' }}"
+                        style="width: 100%; height: 100%; object-fit: cover;"
                       >
                         <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
                         Tu navegador no soporta videos HTML5.
@@ -222,7 +222,9 @@
     position: relative;
     display: flex;
     align-items: center;
-    margin: 0 -10px;
+    padding: 0 {{ section.settings.container_padding }}px;
+    margin: 0 -{{ section.settings.container_padding }}px;
+    overflow: visible;
   }
 
   /* Botones de navegación */
@@ -237,10 +239,11 @@
     color: {{ section.settings.arrow_color }};
     border: none;
     cursor: pointer;
-    z-index: 2;
+    z-index: 5;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
+    position: absolute;
   }
 
   .slider-arrow:hover {
@@ -249,31 +252,33 @@
   }
 
   .prev-arrow {
-    margin-right: 5px;
+    left: {{ section.settings.container_padding }}px;
   }
 
   .next-arrow {
-    margin-left: 5px;
+    right: {{ section.settings.container_padding }}px;
   }
 
   /* Wrapper del track */
   .reviews-track-wrapper {
-    flex-grow: 1;
+    width: 100%;
     overflow: hidden;
-    margin: 0;
     position: relative;
+    padding: 0 30px;
+    margin: 0 -10px; /* Esto crea el efecto de ver parcialmente el siguiente slide */
   }
 
   /* Track del slider */
   .reviews-track {
     display: flex;
     transition: transform 0.5s ease;
+    margin: 0 -10px; /* Esto ayuda con el espacio entre slides */
   }
 
   /* Slides individuales */
   .review-slide {
+    width: {{ section.settings.slide_width }}%; /* Ancho configurable para el efecto infinito */
     flex: 0 0 auto;
-    width: calc(100% / {{ section.settings.slides_per_view_mobile }});
     padding: 0 10px;
     box-sizing: border-box;
   }
@@ -547,15 +552,13 @@
       
       // Determinar slides por vista basado en el tamaño de pantalla
       function updateSlidesPerView() {
-        if (window.innerWidth >= 769) {
-          slidesPerView = {{ section.settings.slides_per_view_desktop }};
-        } else {
-          slidesPerView = {{ section.settings.slides_per_view_mobile }};
-        }
+        // Siempre mostramos 1 slide completo y una parte del siguiente para el efecto de infinito
+        slidesPerView = 1;
         
         // Actualizar el ancho de los slides
         slides.forEach(slide => {
-          slide.style.width = `calc(100% / ${slidesPerView})`;
+          // Ancho configurable para mostrar 1 slide completo y parte del siguiente
+          slide.style.width = '{{ section.settings.slide_width }}%';
         });
         
         goToSlide(currentIndex);
@@ -563,26 +566,39 @@
       
       // Ir a un slide específico
       function goToSlide(index) {
-        // Calcular el índice máximo al que se puede llegar
-        const maxIndex = Math.max(0, slides.length - slidesPerView);
-        
+        // Para efecto circular/infinito
         if (index < 0) {
+          // Si vamos hacia atrás desde el primer slide, saltar al último
+          index = slides.length - 1;
+          
+          // Aplicar la transición instantánea para dar efecto de loop
+          track.style.transition = 'none';
+          track.style.transform = `translateX(-${100 * index}%)`;
+          
+          // Forzar reflow para que la transición se reinicie
+          void track.offsetWidth;
+          track.style.transition = 'transform 0.5s ease';
+        } else if (index >= slides.length) {
+          // Si vamos más allá del último slide, saltar al primero
           index = 0;
-        } else if (index > maxIndex) {
-          index = maxIndex;
+          
+          // Aplicar la transición instantánea para dar efecto de loop
+          track.style.transition = 'none';
+          track.style.transform = `translateX(0)`;
+          
+          // Forzar reflow para que la transición se reinicie
+          void track.offsetWidth;
+          track.style.transition = 'transform 0.5s ease';
         }
         
         currentIndex = index;
         
-        // Calcular el desplazamiento
-        const slideWidth = 100 / slidesPerView;
-        const offset = -slideWidth * currentIndex;
-        track.style.transform = `translateX(${offset}%)`;
+        // Aplicar la transformación para mostrar el slide actual
+        track.style.transform = `translateX(-${100 * currentIndex}%)`;
         
         // Actualizar dots
         dots.forEach((dot, i) => {
-          // Activar el dot que corresponde a la posición actual
-          dot.classList.toggle('active', i === Math.min(currentIndex, dots.length - 1));
+          dot.classList.toggle('active', i === currentIndex);
         });
       }
       
@@ -702,23 +718,14 @@
     },
     {
       "type": "range",
-      "id": "slides_per_view_mobile",
-      "min": 1,
-      "max": 3,
-      "step": 1,
-      "label": "Testimonios por vista (móvil)",
-      "default": 1,
-      "info": "Para móviles, se recomienda 1-2 testimonios por vista (3 puede ser demasiado pequeño)"
-    },
-    {
-      "type": "range",
-      "id": "slides_per_view_desktop",
-      "min": 2,
-      "max": 5,
-      "step": 1,
-      "label": "Testimonios por vista (escritorio)",
-      "default": 3,
-      "info": "Para escritorio, se recomienda 3-4 testimonios por vista"
+      "id": "slide_width",
+      "min": 70,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Ancho del testimonio visible",
+      "default": 85,
+      "info": "Controla cuánto se muestra del testimonio principal. Un valor menor mostrará más del siguiente testimonio."
     },
     {
       "type": "header",
@@ -1317,6 +1324,12 @@
           "id": "video_file",
           "label": "Archivo de video",
           "info": "Sube un archivo MP4 directamente"
+        },
+        {
+          "type": "image_picker",
+          "id": "video_thumbnail",
+          "label": "Imagen de portada del video (opcional)",
+          "info": "Se mostrará antes de reproducir el video"
         },
         {
           "type": "image_picker",
