@@ -1,12 +1,11 @@
 {% comment %}
-  Hero Sorteo con Beneficios - Versión con control total
+  Beneficios Sorteo - Componente independiente con control total
 {% endcomment %}
 
-<section class="hero-sorteo">
-  <div class="hero-sorteo__background"></div>
+<section class="beneficios">
   <div class="container">
     <div class="section-title">
-      <h2>{{ section.settings.hero_title }}</h2>
+      <h2>{{ section.settings.beneficios_title }}</h2>
     </div>
     <div class="beneficios-container">
       <div class="beneficios-list">
@@ -23,15 +22,15 @@
         {% endfor %}
       </div>
       <div class="beneficio-image">
-        {% if section.settings.hero_image != blank %}
+        {% if section.settings.beneficios_image != blank %}
           <img
-            src="{{ section.settings.hero_image | img_url: 'master' }}"
-            alt="{{ section.settings.hero_title }}"
+            src="{{ section.settings.beneficios_image | img_url: 'master' }}"
+            alt="{{ section.settings.beneficios_title }}"
           >
         {% endif %}
       </div>
     </div>
-    <div class="text-center" style="margin-top: {{ section.settings.button_vertical_position }}px;">
+    <div class="text-center" style="margin-top: {{ section.settings.button_spacing }}px;">
       <a
         href="{{ section.settings.button_link }}"
         class="button {% if section.settings.button_shake_effect %}shake{% endif %}"
@@ -46,53 +45,38 @@
 </section>
 
 <style>
-  /* Estilos base */
-  .hero-sorteo {
+  .beneficios {
     position: relative;
     width: 100%;
-    padding: {{ section.settings.mobile_padding_top }}px 0 {{ section.settings.mobile_padding_bottom }}px;
-    color: {{ section.settings.text_color }};
-    overflow: {{ section.settings.overflow_setting }};
-    margin-bottom: {{ section.settings.mobile_margin_bottom }}px;
-  }
-
-  .hero-sorteo__background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
     background: linear-gradient({{ section.settings.gradient_angle }}deg,
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
-    z-index: -1;
   }
 
   .container {
-    max-width: {{ section.settings.container_max_width }}px;
+    max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
     padding: 0 {{ section.settings.container_padding }}px;
-    position: relative;
   }
 
   .section-title {
     text-align: center;
-    margin-bottom: 30px;
-    transform: translate({{ section.settings.mobile_text_position_x }}px, {{ section.settings.mobile_text_position_y }}px);
+    margin-bottom: {{ section.settings.title_spacing }}px;
   }
 
   .section-title h2 {
-    font-size: {{ section.settings.mobile_title_size }}px;
-    font-weight: 700;
+    font-size: {{ section.settings.title_size_mobile }}px;
     color: {{ section.settings.text_color }};
     margin: 0;
-    text-transform: uppercase;
+    font-weight: bold;
   }
 
   .beneficios-container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: {{ section.settings.items_spacing_mobile }}px;
   }
 
   .beneficios-list {
@@ -102,7 +86,7 @@
   .beneficio-image {
     order: 1;
     text-align: center;
-    transform: translateY({{ section.settings.mobile_image_position_y }}px);
+    transform: translateY({{ section.settings.image_position_y_mobile }}px);
   }
 
   .beneficio-image img {
@@ -113,7 +97,7 @@
 
   .beneficio-item {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: {{ section.settings.item_spacing }}px;
     align-items: flex-start;
   }
 
@@ -121,24 +105,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    background-color: {{ section.settings.accent_color }};
-    color: #fff;
+    width: {{ section.settings.icon_size }}px;
+    height: {{ section.settings.icon_size }}px;
+    background-color: {{ section.settings.icon_color }};
+    color: {{ section.settings.icon_text_color }};
     border-radius: 50%;
     margin-right: 15px;
     flex-shrink: 0;
+    font-size: {{ section.settings.icon_font_size }}px;
   }
 
   .beneficio-content h3 {
-    font-size: {{ section.settings.mobile_subtitle_size }}px;
-    color: {{ section.settings.accent_color }};
+    font-size: {{ section.settings.title_item_size_mobile }}px;
+    color: {{ section.settings.title_item_color }};
     margin: 0 0 5px;
     font-weight: 600;
   }
 
   .beneficio-content p {
-    font-size: {{ section.settings.mobile_text_size }}px;
+    font-size: {{ section.settings.text_size_mobile }}px;
     line-height: 1.5;
     margin: 0;
     color: {{ section.settings.text_color }};
@@ -189,21 +174,21 @@
     transform: translateY(-2px);
   }
 
-  /* Estilos para escritorio */
+  /* Escritorio */
   @media screen and (min-width: 769px) {
-    .hero-sorteo {
-      padding: {{ section.settings.desktop_padding_top }}px 0 {{ section.settings.desktop_padding_bottom }}px;
-      margin-bottom: {{ section.settings.desktop_margin_bottom }}px;
+    .beneficios {
+      padding: {{ section.settings.padding_top_desktop }}px 0 {{ section.settings.padding_bottom_desktop }}px;
+      margin-bottom: {{ section.settings.margin_bottom_desktop }}px;
     }
 
     .section-title h2 {
-      font-size: {{ section.settings.desktop_title_size }}px;
-      transform: translate({{ section.settings.desktop_text_position_x }}px, {{ section.settings.desktop_text_position_y }}px);
+      font-size: {{ section.settings.title_size_desktop }}px;
     }
 
     .beneficios-container {
       flex-direction: row;
       align-items: center;
+      gap: {{ section.settings.items_spacing_desktop }}px;
     }
 
     .beneficios-list {
@@ -215,58 +200,45 @@
     .beneficio-image {
       order: 2;
       width: 50%;
-      transform: translate({{ section.settings.desktop_image_position_x }}px, {{ section.settings.desktop_image_position_y }}px);
+      transform: translate({{ section.settings.image_position_x_desktop }}px, {{ section.settings.image_position_y_desktop }}px);
     }
 
     .beneficio-content h3 {
-      font-size: {{ section.settings.desktop_subtitle_size }}px;
+      font-size: {{ section.settings.title_item_size_desktop }}px;
     }
 
     .beneficio-content p {
-      font-size: {{ section.settings.desktop_text_size }}px;
+      font-size: {{ section.settings.text_size_desktop }}px;
     }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Hero Sorteo Beneficios",
+  "name": "Beneficios Sorteo",
   "settings": [
     {
       "type": "header",
-      "content": "Configuración principal"
+      "content": "Contenido Principal"
     },
     {
       "type": "text",
-      "id": "hero_title",
+      "id": "beneficios_title",
       "label": "Título de la sección",
       "default": "Con J&C tienes 3 oportunidades de ganar"
     },
     {
       "type": "image_picker",
-      "id": "hero_image",
-      "label": "Imagen principal"
+      "id": "beneficios_image",
+      "label": "Imagen de beneficios"
     },
     {
-      "type": "select",
-      "id": "overflow_setting",
-      "label": "Comportamiento de desbordamiento",
-      "options": [
-        {
-          "value": "visible",
-          "label": "Visible (permite elementos fuera del contenedor)"
-        },
-        {
-          "value": "hidden",
-          "label": "Oculto (recorta elementos fuera del contenedor)"
-        }
-      ],
-      "default": "visible",
-      "info": "Controla cómo se manejan los elementos que sobresalen del contenedor"
+      "type": "header",
+      "content": "Contenedor"
     },
     {
       "type": "range",
-      "id": "container_max_width",
+      "id": "container_width",
       "min": 800,
       "max": 2000,
       "step": 50,
@@ -281,76 +253,58 @@
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Padding horizontal del contenedor",
+      "label": "Padding horizontal",
       "default": 20
     },
     {
       "type": "header",
-      "content": "Tamaños de texto - Móvil"
+      "content": "Colores"
+    },
+    {
+      "type": "color",
+      "id": "background_color_start",
+      "label": "Color de fondo inicial",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color_end",
+      "label": "Color de fondo final",
+      "default": "#000000"
     },
     {
       "type": "range",
-      "id": "mobile_title_size",
-      "min": 20,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Tamaño del título (móvil)",
-      "default": 32
-    },
-    {
-      "type": "range",
-      "id": "mobile_subtitle_size",
-      "min": 16,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "label": "Tamaño del subtítulo (móvil)",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "mobile_text_size",
-      "min": 12,
-      "max": 24,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño del texto (móvil)",
-      "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Tamaños de texto - Escritorio"
-    },
-    {
-      "type": "range",
-      "id": "desktop_title_size",
-      "min": 30,
-      "max": 120,
+      "id": "gradient_angle",
+      "min": 0,
+      "max": 360,
       "step": 5,
-      "unit": "px",
-      "label": "Tamaño del título (escritorio)",
-      "default": 40
+      "unit": "°",
+      "label": "Ángulo del degradado",
+      "default": 0
     },
     {
-      "type": "range",
-      "id": "desktop_subtitle_size",
-      "min": 18,
-      "max": 60,
-      "step": 2,
-      "unit": "px",
-      "label": "Tamaño del subtítulo (escritorio)",
-      "default": 24
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto",
+      "default": "#FFFFFF"
     },
     {
-      "type": "range",
-      "id": "desktop_text_size",
-      "min": 14,
-      "max": 40,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño del texto (escritorio)",
-      "default": 18
+      "type": "color",
+      "id": "title_item_color",
+      "label": "Color de título de item",
+      "default": "#FFCC00"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Color de fondo del ícono",
+      "default": "#FFCC00"
+    },
+    {
+      "type": "color",
+      "id": "icon_text_color",
+      "label": "Color del ícono",
+      "default": "#FFFFFF"
     },
     {
       "type": "header",
@@ -368,7 +322,17 @@
     },
     {
       "type": "range",
-      "id": "desktop_image_position_x",
+      "id": "image_position_y_mobile",
+      "min": -200,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición vertical (móvil)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_position_x_desktop",
       "min": -300,
       "max": 300,
       "step": 10,
@@ -378,7 +342,7 @@
     },
     {
       "type": "range",
-      "id": "desktop_image_position_y",
+      "id": "image_position_y_desktop",
       "min": -300,
       "max": 300,
       "step": 10,
@@ -387,96 +351,140 @@
       "default": 0
     },
     {
+      "type": "header",
+      "content": "Ícono"
+    },
+    {
       "type": "range",
-      "id": "mobile_image_position_y",
-      "min": -200,
-      "max": 200,
-      "step": 10,
+      "id": "icon_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
       "unit": "px",
-      "label": "Posición vertical (móvil)",
-      "default": 0
+      "label": "Tamaño del ícono",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño de la tipografía del ícono",
+      "default": 14
     },
     {
       "type": "header",
-      "content": "Colores"
-    },
-    {
-      "type": "color",
-      "id": "background_color_start",
-      "label": "Color de fondo inicial",
-      "default": "#000000"
-    },
-    {
-      "type": "color",
-      "id": "background_color_end",
-      "label": "Color de fondo final",
-      "default": "#7a6900"
+      "content": "Textos Móvil"
     },
     {
       "type": "range",
-      "id": "gradient_angle",
-      "min": 0,
-      "max": 360,
-      "step": 5,
-      "unit": "°",
-      "label": "Ángulo del degradado",
-      "default": 125
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamaño título principal (móvil)",
+      "default": 26
     },
     {
-      "type": "color",
-      "id": "text_color",
-      "label": "Color de texto",
-      "default": "#FFFFFF"
+      "type": "range",
+      "id": "title_item_size_mobile",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño título item (móvil)",
+      "default": 18
     },
     {
-      "type": "color",
-      "id": "accent_color",
-      "label": "Color de acento (subtítulos)",
-      "default": "#FFCC00"
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño texto (móvil)",
+      "default": 14
     },
     {
       "type": "header",
-      "content": "Posición del texto"
+      "content": "Textos Escritorio"
     },
     {
       "type": "range",
-      "id": "mobile_text_position_x",
-      "min": -100,
+      "id": "title_size_desktop",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamaño título principal (escritorio)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "title_item_size_desktop",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño título item (escritorio)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "text_size_desktop",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño texto (escritorio)",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Espaciados"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "min": 10,
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición horizontal del título (móvil)",
-      "default": 0
+      "label": "Espaciado inferior del título",
+      "default": 30
     },
     {
       "type": "range",
-      "id": "mobile_text_position_y",
-      "min": -100,
+      "id": "item_spacing",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Espaciado entre items",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "items_spacing_mobile",
+      "min": 10,
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición vertical del título (móvil)",
-      "default": 0
+      "label": "Espaciado entre lista e imagen (móvil)",
+      "default": 30
     },
     {
       "type": "range",
-      "id": "desktop_text_position_x",
-      "min": -200,
-      "max": 200,
+      "id": "items_spacing_desktop",
+      "min": 10,
+      "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición horizontal del título (escritorio)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "desktop_text_position_y",
-      "min": -200,
-      "max": 200,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del título (escritorio)",
-      "default": 0
+      "label": "Espaciado entre lista e imagen (escritorio)",
+      "default": 30
     },
     {
       "type": "header",
@@ -549,8 +557,8 @@
     },
     {
       "type": "range",
-      "id": "button_vertical_position",
-      "min": 0,
+      "id": "button_spacing",
+      "min": 10,
       "max": 100,
       "step": 5,
       "unit": "px",
@@ -559,75 +567,71 @@
     },
     {
       "type": "header",
-      "content": "Tamaño y espaciado - Móvil"
+      "content": "Márgenes y Paddings"
     },
     {
       "type": "range",
-      "id": "mobile_padding_top",
+      "id": "padding_top_mobile",
       "min": 0,
-      "max": 800,
+      "max": 200,
       "step": 10,
       "unit": "px",
-      "label": "Espaciado superior (móvil)",
-      "default": 60
+      "label": "Padding superior (móvil)",
+      "default": 40
     },
     {
       "type": "range",
-      "id": "mobile_padding_bottom",
-      "min": -400,
-      "max": 400,
+      "id": "padding_bottom_mobile",
+      "min": -200,
+      "max": 200,
       "step": 10,
       "unit": "px",
-      "label": "Espaciado inferior (móvil)",
-      "default": 0,
-      "info": "Usa valores negativos para eliminar espacio inferior"
+      "label": "Padding inferior (móvil)",
+      "default": 40,
+      "info": "Usa valores negativos para eliminar espacio"
     },
     {
       "type": "range",
-      "id": "mobile_margin_bottom",
-      "min": -400,
+      "id": "margin_bottom_mobile",
+      "min": -200,
       "max": 0,
       "step": 10,
       "unit": "px",
       "label": "Margen inferior (móvil)",
-      "default": -200,
-      "info": "Usa valores negativos para eliminar espacio adicional en móvil"
-    },
-    {
-      "type": "header",
-      "content": "Tamaño y espaciado - Escritorio"
-    },
-    {
-      "type": "range",
-      "id": "desktop_padding_top",
-      "min": 0,
-      "max": 800,
-      "step": 10,
-      "unit": "px",
-      "label": "Espaciado superior (escritorio)",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "desktop_padding_bottom",
-      "min": -400,
-      "max": 400,
-      "step": 10,
-      "unit": "px",
-      "label": "Espaciado inferior (escritorio)",
       "default": 0,
-      "info": "Usa valores negativos para eliminar espacio inferior"
+      "info": "Usa valores negativos para eliminar espacio"
     },
     {
       "type": "range",
-      "id": "desktop_margin_bottom",
-      "min": -400,
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding superior (escritorio)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": -200,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding inferior (escritorio)",
+      "default": 60,
+      "info": "Usa valores negativos para eliminar espacio"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "min": -200,
       "max": 0,
       "step": 10,
       "unit": "px",
       "label": "Margen inferior (escritorio)",
-      "default": -200,
-      "info": "Usa valores negativos para eliminar espacio adicional en escritorio"
+      "default": 0,
+      "info": "Usa valores negativos para eliminar espacio"
     }
   ],
   "blocks": [
@@ -652,7 +656,7 @@
   ],
   "presets": [
     {
-      "name": "Hero Sorteo Beneficios",
+      "name": "Beneficios Sorteo",
       "category": "Sorteos",
       "blocks": [
         {
