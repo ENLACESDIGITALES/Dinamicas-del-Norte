@@ -53,11 +53,11 @@
   .hero-sorteo {
     position: relative;
     width: 100%;
-    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    padding: {{ section.settings.mobile_padding_top }}px 0 {{ section.settings.mobile_padding_bottom }}px;
     color: {{ section.settings.text_color }};
-    min-height: {{ section.settings.min_height }}px;
+    min-height: {{ section.settings.mobile_min_height }}px;
     overflow: {{ section.settings.overflow_setting }};
-    margin-bottom: {{ section.settings.margin_bottom }}px;
+    margin-bottom: {{ section.settings.mobile_margin_bottom }}px;
   }
 
   .hero-sorteo__background {
@@ -78,7 +78,7 @@
     padding: 0 {{ section.settings.container_padding }}px;
     position: relative;
     overflow: {{ section.settings.overflow_setting }};
-    min-height: {{ section.settings.min_height | minus: section.settings.padding_top | minus: section.settings.padding_bottom }}px;
+    min-height: {{ section.settings.mobile_min_height | minus: section.settings.mobile_padding_top | minus: section.settings.mobile_padding_bottom }}px;
   }
 
   /* Imagen principal */
@@ -218,10 +218,17 @@
 
   /* Estilos para escritorio */
   @media screen and (min-width: 769px) {
+    .hero-sorteo {
+      padding: {{ section.settings.desktop_padding_top }}px 0 {{ section.settings.desktop_padding_bottom }}px;
+      min-height: {{ section.settings.desktop_min_height }}px;
+      margin-bottom: {{ section.settings.desktop_margin_bottom }}px;
+    }
+
     .hero-sorteo__container {
       display: flex;
       flex-direction: row;
       align-items: center;
+      min-height: {{ section.settings.desktop_min_height | minus: section.settings.desktop_padding_top | minus: section.settings.desktop_padding_bottom }}px;
     }
 
     .hero-sorteo__image-wrapper {
@@ -655,50 +662,97 @@
     },
     {
       "type": "header",
-      "content": "Tamaño y espaciado"
+      "content": "Tamaño y espaciado - Móvil"
     },
     {
       "type": "range",
-      "id": "min_height",
-      "min": 300,
-      "max": 1200,
+      "id": "mobile_min_height",
+      "min": 200,
+      "max": 1000,
       "step": 50,
       "unit": "px",
-      "label": "Altura mínima",
+      "label": "Altura mínima (móvil)",
       "default": 500,
-      "info": "Altura mínima del componente"
+      "info": "Altura mínima del componente en móvil"
     },
     {
       "type": "range",
-      "id": "padding_top",
+      "id": "mobile_padding_top",
       "min": 0,
       "max": 800,
       "step": 10,
       "unit": "px",
-      "label": "Espaciado superior",
-      "default": 80
+      "label": "Espaciado superior (móvil)",
+      "default": 60
     },
     {
       "type": "range",
-      "id": "padding_bottom",
+      "id": "mobile_padding_bottom",
       "min": -400,
       "max": 400,
       "step": 10,
       "unit": "px",
-      "label": "Espaciado inferior",
+      "label": "Espaciado inferior (móvil)",
       "default": 0,
       "info": "Usa valores negativos para eliminar espacio inferior"
     },
     {
       "type": "range",
-      "id": "margin_bottom",
+      "id": "mobile_margin_bottom",
       "min": -400,
       "max": 0,
       "step": 10,
       "unit": "px",
-      "label": "Margen inferior (valores negativos)",
+      "label": "Margen inferior (móvil)",
       "default": -200,
-      "info": "Usa valores negativos para eliminar espacio adicional"
+      "info": "Usa valores negativos para eliminar espacio adicional en móvil"
+    },
+    {
+      "type": "header",
+      "content": "Tamaño y espaciado - Escritorio"
+    },
+    {
+      "type": "range",
+      "id": "desktop_min_height",
+      "min": 300,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Altura mínima (escritorio)",
+      "default": 500,
+      "info": "Altura mínima del componente en escritorio"
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_top",
+      "min": 0,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Espaciado superior (escritorio)",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "desktop_padding_bottom",
+      "min": -400,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "label": "Espaciado inferior (escritorio)",
+      "default": 0,
+      "info": "Usa valores negativos para eliminar espacio inferior"
+    },
+    {
+      "type": "range",
+      "id": "desktop_margin_bottom",
+      "min": -400,
+      "max": 0,
+      "step": 10,
+      "unit": "px",
+      "label": "Margen inferior (escritorio)",
+      "default": -200,
+      "info": "Usa valores negativos para eliminar espacio adicional en escritorio"
     }
   ],
   "presets": [
