@@ -177,7 +177,7 @@
           "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
           "button_link": "https://wa.me/573000000000",
           "button_color": "#00d14d",
-          "button_padding_vertical": 16,
+          "button_padding_vertical": 21,
           "button_padding_horizontal": 30,
           "button_border_radius": 12,
           "button_text_size": 14,
