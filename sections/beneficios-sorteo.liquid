@@ -36,6 +36,7 @@
             src="{{ section.settings.beneficios_image | img_url: 'master' }}"
             alt="{{ section.settings.beneficios_title }}"
             class="imagen-beneficios"
+            style="width: {{ section.settings.image_width }}%; max-width: {{ section.settings.image_max_width }}px;"
           >
         {% endif %}
       </div>
@@ -140,6 +141,7 @@
     max-width: 100%;
     height: auto;
     border-radius: {{ section.settings.image_border_radius }}px;
+    /* El ancho y max-width se aplican directamente al elemento img como atributos inline */
   }
 
   /* Estilos para los items de beneficios */
@@ -250,6 +252,7 @@
       width: 50%;
       order: 2;
       transform: translate({{ section.settings.image_position_x_desktop }}px, {{ section.settings.image_position_y_desktop }}px);
+      /* La imagen ocupa el espacio definido por los nuevos controles de tamaño */
     }
 
     .titulo-reposicionado h2 {
@@ -285,6 +288,62 @@
       "type": "image_picker",
       "id": "beneficios_image",
       "label": "Imagen de beneficios"
+    },
+    {
+      "type": "header",
+      "content": "Configuración de la imagen"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Ancho de la imagen (porcentaje)",
+      "default": 100,
+      "info": "Define el ancho de la imagen como porcentaje del contenedor"
+    },
+    {
+      "type": "range",
+      "id": "image_max_width",
+      "min": 200,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Ancho máximo de la imagen (píxeles)",
+      "default": 600,
+      "info": "Limita el tamaño máximo de la imagen en píxeles"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Esquinas redondeadas",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_position_x_desktop",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición horizontal (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_position_y_desktop",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición vertical (escritorio)",
+      "default": 0
     },
     {
       "type": "header",
@@ -498,40 +557,6 @@
       "id": "icon_text_color",
       "label": "Color del ícono",
       "default": "#FFFFFF"
-    },
-    {
-      "type": "header",
-      "content": "Imagen"
-    },
-    {
-      "type": "range",
-      "id": "image_border_radius",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "label": "Esquinas redondeadas",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "image_position_x_desktop",
-      "min": -300,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "label": "Posición horizontal (escritorio)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "image_position_y_desktop",
-      "min": -300,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "label": "Posición vertical (escritorio)",
-      "default": 0
     },
     {
       "type": "header",
