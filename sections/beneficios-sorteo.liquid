@@ -1,5 +1,5 @@
 {% comment %}
-  Beneficios Sorteo - Con tamaños más pequeños para título e imagen
+  Beneficios Sorteo - Con ancho de línea diferente para móvil y escritorio
 {% endcomment %}
 
 <section class="beneficios-nuevo">
@@ -36,7 +36,6 @@
             src="{{ section.settings.beneficios_image | img_url: 'master' }}"
             alt="{{ section.settings.beneficios_title }}"
             class="imagen-beneficios"
-            style="width: {{ section.settings.image_width_mobile }}%;"
           >
         {% endif %}
       </div>
@@ -135,15 +134,12 @@
   /* Columna derecha con imagen */
   .columna-derecha {
     order: 2;
-    text-align: center;
   }
 
   .imagen-beneficios {
-    width: {{ section.settings.image_width_mobile }}%;
+    max-width: 100%;
     height: auto;
     border-radius: {{ section.settings.image_border_radius }}px;
-    max-width: 100%;
-    display: inline-block;
   }
 
   /* Estilos para los items de beneficios */
@@ -231,7 +227,7 @@
     transform: translateY(-2px);
   }
 
-  /* Escritorio - ANCHO DE LÍNEA DIFERENTE Y TAMAÑO DE IMAGEN */
+  /* Escritorio - ANCHO DE LÍNEA DIFERENTE */
   @media screen and (min-width: 769px) {
     .beneficios-nuevo {
       padding: {{ section.settings.padding_top_desktop }}px 0 {{ section.settings.padding_bottom_desktop }}px;
@@ -263,11 +259,6 @@
     /* LÍNEA CON ANCHO DIFERENTE PARA ESCRITORIO */
     .linea-titulo {
       width: {{ section.settings.line_width_desktop }}px;
-    }
-
-    /* TAMAÑO DE IMAGEN DIFERENTE PARA ESCRITORIO */
-    .imagen-beneficios {
-      width: {{ section.settings.image_width_desktop }}%;
     }
 
     .texto-beneficio h3 {
@@ -305,26 +296,6 @@
       "label": "Color de fondo del cuadro rojo",
       "default": "rgba(0,0,0,0)",
       "info": "Por defecto es transparente. Ajusta este color para hacer visible el rectángulo."
-    },
-    {
-      "type": "range",
-      "id": "title_size_mobile",
-      "min": 10,
-      "max": 60,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño título principal (móvil)",
-      "default": 18
-    },
-    {
-      "type": "range",
-      "id": "title_size_desktop",
-      "min": 14,
-      "max": 80,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño título principal (escritorio)",
-      "default": 24
     },
     {
       "type": "color",
@@ -371,62 +342,6 @@
       "unit": "px",
       "label": "Espacio entre título y línea",
       "default": 10
-    },
-    {
-      "type": "header",
-      "content": "Configuración de la imagen"
-    },
-    {
-      "type": "range",
-      "id": "image_width_mobile",
-      "min": 30,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Ancho de la imagen (móvil)",
-      "default": 100,
-      "info": "Porcentaje del ancho del contenedor"
-    },
-    {
-      "type": "range",
-      "id": "image_width_desktop",
-      "min": 30,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "label": "Ancho de la imagen (escritorio)",
-      "default": 90,
-      "info": "Porcentaje del ancho del contenedor"
-    },
-    {
-      "type": "range",
-      "id": "image_border_radius",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "unit": "px",
-      "label": "Esquinas redondeadas",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "image_position_x_desktop",
-      "min": -300,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "label": "Posición horizontal (escritorio)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "image_position_y_desktop",
-      "min": -300,
-      "max": 300,
-      "step": 10,
-      "unit": "px",
-      "label": "Posición vertical (escritorio)",
-      "default": 0
     },
     {
       "type": "header",
@@ -586,6 +501,40 @@
     },
     {
       "type": "header",
+      "content": "Imagen"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Esquinas redondeadas",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_position_x_desktop",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición horizontal (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_position_y_desktop",
+      "min": -300,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición vertical (escritorio)",
+      "default": 0
+    },
+    {
+      "type": "header",
       "content": "Ícono"
     },
     {
@@ -610,7 +559,17 @@
     },
     {
       "type": "header",
-      "content": "Textos"
+      "content": "Textos Móvil"
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamaño título principal (móvil)",
+      "default": 26
     },
     {
       "type": "range",
@@ -631,6 +590,20 @@
       "unit": "px",
       "label": "Tamaño texto (móvil)",
       "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Textos Escritorio"
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "min": 24,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamaño título principal (escritorio)",
+      "default": 32
     },
     {
       "type": "range",
