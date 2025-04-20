@@ -99,8 +99,8 @@
           "mobile_padding_top": 190,
           "mobile_padding_bottom": 10,
           "mobile_margin_bottom": 0,
-          "desktop_min_height": 500,
-          "desktop_padding_top": 130,
+          "desktop_min_height": 550,
+          "desktop_padding_top": 270,
           "desktop_padding_bottom": 0,
           "desktop_margin_bottom": -200
         }
