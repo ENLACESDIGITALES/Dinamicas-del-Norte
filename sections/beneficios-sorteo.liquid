@@ -1,22 +1,5 @@
-{ "type": "header", "content": "Líneas y bordes" }, { "type": "checkbox", "id": "show_title_line", "label": "Mostrar
-línea debajo del título", "default": true }, { "type": "range", "id": "title_line_width", "min": 50, "max": 500, "step":
-10, "unit": "px", "label": "Ancho de la línea del título", "default": 100 }, { "type": "range", "id":
-"title_line_height", "min": 1, "max": 10, "step": 1, "unit": "px", "label": "Altura de la línea del título", "default":
-3 }, { "type": "color", "id": "title_line_color", "label": "Color de la línea del título", "default": "#FFCC00" }, {
-"type": "range", "id": "title_line_spacing", "min": 5, "max": 30, "step": 1, "unit": "px", "label": "Espacio entre
-título y línea", "default": 10 }, { "type": "checkbox", "id": "show_item_border", "label": "Mostrar borde debajo de cada
-beneficio", "default": false }, { "type": "select", "id": "item_border_style", "label": "Estilo de borde de beneficio",
-"options": [ { "value": "solid", "label": "Línea sólida" }, { "value": "dashed", "label": "Línea punteada" }, { "value":
-"dotted", "label": "Línea de puntos" } ], "default": "solid" }, { "type": "range", "id": "item_border_width", "min": 1,
-"max": 5, "step": 1, "unit": "px", "label": "Grosor del borde de beneficio", "default": 1 }, { "type": "color", "id":
-"item_border_color", "label": "Color del borde de beneficio", "default": "#333333" }, { "type": "range", "id":
-"icon_border_width", "min": 0, "max": 5, "step": 1, "unit": "px", "label": "Grosor del borde del ícono", "default": 0 },
-{ "type": "select", "id": "icon_border_style", "label": "Estilo de borde del ícono", "options": [ { "value": "solid",
-"label": "Línea sólida" }, { "value": "dashed", "label": "Línea punteada" }, { "value": "dotted", "label": "Línea de
-puntos" } ], "default": "solid" }, { "type": "color", "id": "icon_border_color", "label": "Color del borde del ícono",
-"default": "#FFFFFF" },
 {% comment %}
-  Beneficios Sorteo - Componente independiente con control total
+  Beneficios Sorteo - Componente independiente con control total (versión corregida)
 {% endcomment %}
 
 <section class="beneficios">
@@ -248,10 +231,6 @@ puntos" } ], "default": "solid" }, { "type": "color", "id": "icon_border_color",
   "name": "Beneficios Sorteo",
   "settings": [
     {
-      "type": "header",
-      "content": "Contenido Principal"
-    },
-    {
       "type": "text",
       "id": "beneficios_title",
       "label": "Título de la sección",
@@ -285,6 +264,130 @@ puntos" } ], "default": "solid" }, { "type": "color", "id": "icon_border_color",
       "unit": "px",
       "label": "Padding horizontal",
       "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Líneas y bordes"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_line",
+      "label": "Mostrar línea debajo del título",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "title_line_width",
+      "min": 50,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Ancho de la línea del título",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "title_line_height",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Altura de la línea del título",
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "title_line_color",
+      "label": "Color de la línea del título",
+      "default": "#FFCC00"
+    },
+    {
+      "type": "range",
+      "id": "title_line_spacing",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Espacio entre título y línea",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_item_border",
+      "label": "Mostrar borde debajo de cada beneficio",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "item_border_style",
+      "label": "Estilo de borde de beneficio",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Línea sólida"
+        },
+        {
+          "value": "dashed",
+          "label": "Línea punteada"
+        },
+        {
+          "value": "dotted",
+          "label": "Línea de puntos"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "range",
+      "id": "item_border_width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Grosor del borde de beneficio",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "item_border_color",
+      "label": "Color del borde de beneficio",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "icon_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Grosor del borde del ícono",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "icon_border_style",
+      "label": "Estilo de borde del ícono",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Línea sólida"
+        },
+        {
+          "value": "dashed",
+          "label": "Línea punteada"
+        },
+        {
+          "value": "dotted",
+          "label": "Línea de puntos"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Color del borde del ícono",
+      "default": "#FFFFFF"
     },
     {
       "type": "header",
