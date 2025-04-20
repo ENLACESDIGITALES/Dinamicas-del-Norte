@@ -140,7 +140,7 @@
           "beneficios_image": "shopify://shop_images/File_5.jpg",
           "title_background_color": "rgba(0,0,0,0)",
           "line_color": "#FF0000",
-          "line_width": 500,
+          "line_width": 180,
           "line_height": 4,
           "line_margin_top": 10,
           "container_width": 1200,
