@@ -210,10 +210,20 @@
               "video_file": "shopify://files/videos/WhatsApp Video 2025-04-20 at 4.38.19 PM.mp4",
               "imagen_perfil": "shopify://shop_images/File_4.jpg"
             }
+          },
+          "testimonio_video_GNgwJg": {
+            "type": "testimonio_video",
+            "settings": {
+              "autor": "Juan Pérez",
+              "video_url": "",
+              "video_file": "shopify://files/videos/WhatsApp Video 2025-04-20 at 4.38.49 PM.mp4",
+              "imagen_perfil": "shopify://shop_images/File_5.jpg"
+            }
           }
         },
         "block_order": [
-          "testimonio_video_zFUPFc"
+          "testimonio_video_zFUPFc",
+          "testimonio_video_GNgwJg"
         ],
         "settings": {
           "testimonios_title": "TESTIMONIOS",
