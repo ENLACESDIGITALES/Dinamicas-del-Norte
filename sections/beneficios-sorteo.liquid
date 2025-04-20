@@ -1,11 +1,15 @@
 {% comment %}
-  Beneficios Sorteo - Versión restaurada
+  Beneficios Sorteo - Versión final con control total sobre la línea
 {% endcomment %}
 
 <section class="beneficios">
   <div class="container">
     <div class="section-title">
       <h2>{{ section.settings.beneficios_title }}</h2>
+      <div
+        class="title-line"
+        style="width: {{ section.settings.title_line_width }}px; height: {{ section.settings.title_line_height }}px; background-color: {{ section.settings.title_line_color }}; margin-top: {{ section.settings.title_line_spacing }}px; {% if section.settings.title_line_center %}margin-left: auto; margin-right: auto;{% else %}margin-left: {{ section.settings.title_line_position }}px; margin-right: auto;{% endif %}"
+      ></div>
     </div>
     <div class="beneficios-container">
       <div class="beneficios-list">
@@ -72,17 +76,12 @@
     color: {{ section.settings.text_color }};
     margin: 0;
     font-weight: bold;
-    display: inline-block;
-    position: relative;
   }
 
-  .section-title h2:after {
-    content: "";
+  .title-line {
     display: block;
-    width: {{ section.settings.title_line_width }}px;
     height: {{ section.settings.title_line_height }}px;
     background-color: {{ section.settings.title_line_color }};
-    margin: {{ section.settings.title_line_spacing }}px auto 0;
   }
 
   .beneficios-container {
@@ -282,6 +281,24 @@
       "unit": "px",
       "label": "Espacio entre título y línea",
       "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "title_line_center",
+      "label": "Centrar línea",
+      "default": true,
+      "info": "Si está activado, la línea se centrará. Si está desactivado, puedes posicionarla horizontalmente."
+    },
+    {
+      "type": "range",
+      "id": "title_line_position",
+      "min": -250,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición horizontal de la línea",
+      "default": 0,
+      "info": "Solo aplica si 'Centrar línea' está desactivado. Valores negativos mueven a la izquierda, positivos a la derecha."
     },
     {
       "type": "header",
