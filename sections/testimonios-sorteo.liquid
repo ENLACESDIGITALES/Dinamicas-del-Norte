@@ -676,22 +676,26 @@
       // Soporte táctil (swipe)
       const trackWrapper = slider.querySelector('.reviews-track-wrapper');
       
-      // Variable para detectar si estamos interactuando con video
+      // Variable para detectar si estamos interactuando con un elemento de video
       let isInteractingWithVideo = false;
       
-      // Función para verificar si el toque comenzó en un video
+      // Función para verificar si el toque comenzó en un elemento de video
       function checkIfTouchingVideo(e) {
         const touch = e.touches[0];
         const touchTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        // Verificar si tocamos algún elemento de video o sus controles
         return touchTarget.tagName.toLowerCase() === 'video' || 
-               touchTarget.closest('.review-video-container') !== null;
+               touchTarget.closest('.video-poster') !== null ||
+               touchTarget.closest('.play-button') !== null ||
+               touchTarget.closest('.shopify-video-container') !== null;
       }
       
       trackWrapper.addEventListener('touchstart', e => {
-        // Comprobar si estamos tocando un video
+        // Comprobar si estamos tocando un elemento de video
         isInteractingWithVideo = checkIfTouchingVideo(e);
         
-        // Solo procesar deslizamiento si no estamos en un video
+        // Solo procesar deslizamiento si no estamos en un elemento de video
         if (!isInteractingWithVideo) {
           startX = e.touches[0].clientX;
           if (autoplayInterval) clearInterval(autoplayInterval);
@@ -699,7 +703,7 @@
       }, { passive: true });
       
       trackWrapper.addEventListener('touchmove', e => {
-        // No hacer nada si estamos interactuando con video
+        // No hacer nada si estamos interactuando con un elemento de video
         if (isInteractingWithVideo) return;
         
         // Procesar deslizamiento normalmente
@@ -707,14 +711,18 @@
         const currentX = e.touches[0].clientX;
         const diffX = startX - currentX;
         
-        // Si el deslizamiento es significativo, prevenir scroll vertical
+        // Si el deslizamiento es significativo, intentar prevenir scroll vertical
         if (Math.abs(diffX) > 10) {
-          e.preventDefault();
+          try {
+            e.preventDefault();
+          } catch (err) {
+            // Algunos navegadores no permiten preventDefault en eventos pasivos
+          }
         }
       }, { passive: false });
       
       trackWrapper.addEventListener('touchend', e => {
-        // No hacer nada si estamos interactuando con video
+        // No hacer nada si estamos interactuando con un elemento de video
         if (isInteractingWithVideo) {
           isInteractingWithVideo = false;
           return;
