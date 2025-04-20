@@ -90,10 +90,14 @@
           "button_text_size": 14,
           "button_shake_effect": true,
           "button_vertical_position": 5,
-          "min_height": 300,
-          "padding_top": 200,
-          "padding_bottom": 200,
-          "margin_bottom": -200
+          "mobile_min_height": 200,
+          "mobile_padding_top": 190,
+          "mobile_padding_bottom": 10,
+          "mobile_margin_bottom": 0,
+          "desktop_min_height": 500,
+          "desktop_padding_top": 130,
+          "desktop_padding_bottom": 0,
+          "desktop_margin_bottom": -200
         }
       },
       "beneficios-sorteo": {
