@@ -74,7 +74,7 @@
                         or block.settings.video_url contains 'youtu.be'
                       %}
                         <iframe
-                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}?rel=0&controls=1&playsinline=1&enablejsapi=1"
+                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}"
                           frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowfullscreen
@@ -82,7 +82,7 @@
                         </iframe>
                       {% elsif block.settings.video_url contains 'vimeo.com' %}
                         <iframe
-                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}?title=0&byline=0&portrait=0&playsinline=1"
+                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}"
                           frameborder="0"
                           allow="autoplay; fullscreen; picture-in-picture"
                           allowfullscreen
@@ -95,7 +95,6 @@
                         playsinline
                         preload="auto"
                         poster="{{ block.settings.video_thumbnail | img_url: 'master' }}"
-                        style="width: 100%; height: 100%; object-fit: cover;"
                       >
                         <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
                         Tu navegador no soporta videos HTML5.
@@ -677,12 +676,51 @@
       // Soporte táctil (swipe)
       const trackWrapper = slider.querySelector('.reviews-track-wrapper');
       
+      // Variable para detectar si estamos interactuando con video
+      let isInteractingWithVideo = false;
+      
+      // Función para verificar si el toque comenzó en un video
+      function checkIfTouchingVideo(e) {
+        const touch = e.touches[0];
+        const touchTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+        return touchTarget.tagName.toLowerCase() === 'video' || 
+               touchTarget.closest('.review-video-container') !== null;
+      }
+      
       trackWrapper.addEventListener('touchstart', e => {
-        startX = e.touches[0].clientX;
-        if (autoplayInterval) clearInterval(autoplayInterval);
+        // Comprobar si estamos tocando un video
+        isInteractingWithVideo = checkIfTouchingVideo(e);
+        
+        // Solo procesar deslizamiento si no estamos en un video
+        if (!isInteractingWithVideo) {
+          startX = e.touches[0].clientX;
+          if (autoplayInterval) clearInterval(autoplayInterval);
+        }
       }, { passive: true });
       
+      trackWrapper.addEventListener('touchmove', e => {
+        // No hacer nada si estamos interactuando con video
+        if (isInteractingWithVideo) return;
+        
+        // Procesar deslizamiento normalmente
+        if (!startX) return;
+        const currentX = e.touches[0].clientX;
+        const diffX = startX - currentX;
+        
+        // Si el deslizamiento es significativo, prevenir scroll vertical
+        if (Math.abs(diffX) > 10) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+      
       trackWrapper.addEventListener('touchend', e => {
+        // No hacer nada si estamos interactuando con video
+        if (isInteractingWithVideo) {
+          isInteractingWithVideo = false;
+          return;
+        }
+        
+        // Procesar fin de deslizamiento normalmente
         if (!startX) return;
         
         endX = e.changedTouches[0].clientX;
