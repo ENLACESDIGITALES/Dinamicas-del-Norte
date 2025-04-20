@@ -6,6 +6,10 @@
   <div class="container">
     <div class="section-title">
       <h2>{{ section.settings.beneficios_title }}</h2>
+      <div
+        class="title-line"
+        style="background-color: {{ section.settings.title_line_color }}; width: {{ section.settings.title_line_width }}px; height: {{ section.settings.title_line_height }}px; margin: {{ section.settings.title_line_spacing }}px auto;"
+      ></div>
     </div>
     <div class="beneficios-container">
       <div class="beneficios-list">
@@ -67,20 +71,17 @@
     position: relative;
   }
 
-  .section-title:after {
-    content: "";
-    display: block;
-    width: {{ section.settings.title_line_width }}px;
-    height: {{ section.settings.title_line_height }}px;
-    background-color: {{ section.settings.title_line_color }};
-    margin: {{ section.settings.title_line_spacing }}px auto 0;
-  }
-
   .section-title h2 {
     font-size: {{ section.settings.title_size_mobile }}px;
     color: {{ section.settings.text_color }};
     margin: 0;
     font-weight: bold;
+  }
+
+  .title-line {
+    display: block;
+    background-color: {{ section.settings.title_line_color }};
+    margin: {{ section.settings.title_line_spacing }}px auto;
   }
 
   .beneficios-container {
