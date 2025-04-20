@@ -184,13 +184,14 @@
     background: linear-gradient({{ section.settings.gradient_angle }}deg,
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
-    overflow: hidden;
+    overflow: visible; /* Permitir desbordamiento para efecto infinito */
   }
 
   .container-reviews {
     max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
-    padding: 0 {{ section.settings.container_padding }}px;
+    padding: 0;
+    overflow: visible; /* Permitir desbordamiento para efecto infinito */
   }
 
   /* Título de la sección */
@@ -222,9 +223,13 @@
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0 {{ section.settings.container_padding }}px;
-    margin: 0 -{{ section.settings.container_padding }}px;
+    margin: 0 -15px;
     overflow: visible;
+    width: 100vw; /* Usar ancho completo de la ventana */
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
   }
 
   /* Botones de navegación */
@@ -252,27 +257,26 @@
   }
 
   .prev-arrow {
-    left: {{ section.settings.container_padding }}px;
+    left: 20px;
   }
 
   .next-arrow {
-    right: {{ section.settings.container_padding }}px;
+    right: 20px;
   }
 
   /* Wrapper del track */
   .reviews-track-wrapper {
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
-    padding: 0 30px;
-    margin: 0 -10px; /* Esto crea el efecto de ver parcialmente el siguiente slide */
+    padding: 0 50px; /* Espacio para las flechas */
   }
 
   /* Track del slider */
   .reviews-track {
     display: flex;
     transition: transform 0.5s ease;
-    margin: 0 -10px; /* Esto ayuda con el espacio entre slides */
+    margin-left: 7%; /* Ajuste para mostrar parte del slider anterior en móvil */
   }
 
   /* Slides individuales */
@@ -552,34 +556,51 @@
       
       // Determinar slides por vista basado en el tamaño de pantalla
       function updateSlidesPerView() {
-        // Siempre mostramos 1 slide completo y una parte del siguiente para el efecto de infinito
-        slidesPerView = 1;
-        
-        // Actualizar el ancho de los slides
-        slides.forEach(slide => {
-          // Ancho configurable para mostrar 1 slide completo y parte del siguiente
-          slide.style.width = '{{ section.settings.slide_width }}%';
-        });
+        if (window.innerWidth >= 769) {
+          // En escritorio, usar la configuración elegida
+          slidesPerView = {{ section.settings.slides_per_view_desktop }};
+          
+          // Actualizar el ancho de los slides para escritorio
+          slides.forEach(slide => {
+            slide.style.width = `calc(100% / ${slidesPerView})`;
+          });
+          
+          // Reset del margen en escritorio
+          track.style.marginLeft = '0';
+        } else {
+          // En móvil, mostrar 1 completo + parte de otro
+          slidesPerView = 1;
+          
+          // Actualizar el ancho de los slides para móvil
+          slides.forEach(slide => {
+            slide.style.width = '{{ section.settings.slide_width_mobile }}%';
+          });
+          
+          // Aplicar offset en móvil para efecto infinito
+          track.style.marginLeft = '7%';
+        }
         
         goToSlide(currentIndex);
       }
       
       // Ir a un slide específico
       function goToSlide(index) {
+        const isMobile = window.innerWidth < 769;
+        
         // Para efecto circular/infinito
         if (index < 0) {
           // Si vamos hacia atrás desde el primer slide, saltar al último
-          index = slides.length - 1;
+          index = slides.length - (isMobile ? 1 : slidesPerView);
           
           // Aplicar la transición instantánea para dar efecto de loop
           track.style.transition = 'none';
-          track.style.transform = `translateX(-${100 * index}%)`;
+          track.style.transform = `translateX(-${100 * index / slidesPerView}%)`;
           
           // Forzar reflow para que la transición se reinicie
           void track.offsetWidth;
           track.style.transition = 'transform 0.5s ease';
-        } else if (index >= slides.length) {
-          // Si vamos más allá del último slide, saltar al primero
+        } else if (index >= slides.length - (isMobile ? 0 : (slidesPerView - 1))) {
+          // Si vamos más allá del último slide visible, saltar al primero
           index = 0;
           
           // Aplicar la transición instantánea para dar efecto de loop
@@ -593,8 +614,16 @@
         
         currentIndex = index;
         
-        // Aplicar la transformación para mostrar el slide actual
-        track.style.transform = `translateX(-${100 * currentIndex}%)`;
+        // Aplicar la transformación adecuada según el dispositivo
+        if (isMobile) {
+          // En móvil, cada slide ocupa un porcentaje fijo del contenedor
+          track.style.transform = `translateX(-${100 * currentIndex}%)`;
+        } else {
+          // En escritorio, el desplazamiento depende de cuántos slides se muestran a la vez
+          const slideWidth = 100 / slidesPerView;
+          const offset = slideWidth * currentIndex;
+          track.style.transform = `translateX(-${offset}%)`;
+        }
         
         // Actualizar dots
         dots.forEach((dot, i) => {
@@ -718,14 +747,24 @@
     },
     {
       "type": "range",
-      "id": "slide_width",
+      "id": "slides_per_view_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Testimonios por vista (escritorio)",
+      "default": 2,
+      "info": "Cuántos testimonios completos mostrar simultáneamente en pantallas grandes"
+    },
+    {
+      "type": "range",
+      "id": "slide_width_mobile",
       "min": 70,
       "max": 90,
       "step": 5,
       "unit": "%",
-      "label": "Ancho del testimonio visible",
+      "label": "Ancho del testimonio visible (móvil)",
       "default": 85,
-      "info": "Controla cuánto se muestra del testimonio principal. Un valor menor mostrará más del siguiente testimonio."
+      "info": "Controla cuánto del testimonio principal se muestra en móviles. Ajustar para mostrar 1 completo + parte de otro."
     },
     {
       "type": "header",
