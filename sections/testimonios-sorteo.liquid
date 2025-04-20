@@ -74,7 +74,7 @@
                         or block.settings.video_url contains 'youtu.be'
                       %}
                         <iframe
-                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}"
+                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}?rel=0&controls=1&autoplay={% if section.settings.video_autoplay %}1{% else %}0{% endif %}&mute={% if section.settings.video_autoplay %}1{% else %}0{% endif %}"
                           frameborder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowfullscreen
@@ -82,7 +82,7 @@
                         </iframe>
                       {% elsif block.settings.video_url contains 'vimeo.com' %}
                         <iframe
-                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}"
+                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}?autoplay={% if section.settings.video_autoplay %}1{% else %}0{% endif %}&muted={% if section.settings.video_autoplay %}1{% else %}0{% endif %}&title=0&byline=0&portrait=0"
                           frameborder="0"
                           allow="autoplay; fullscreen; picture-in-picture"
                           allowfullscreen
@@ -90,7 +90,13 @@
                         </iframe>
                       {% endif %}
                     {% elsif block.settings.video_file != blank %}
-                      <video controls>
+                      <video
+                        controls
+                        playsinline
+                        {% if section.settings.video_autoplay %}
+                          autoplay muted loop
+                        {% endif %}
+                      >
                         <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
                         Tu navegador no soporta videos HTML5.
                       </video>
@@ -283,6 +289,14 @@
     flex-direction: column;
   }
 
+  /* Estilos específicos para tarjetas con video */
+  .video-slide .review-card {
+    padding-top: {{ section.settings.card_padding }}px;
+    padding-left: {{ section.settings.card_padding }}px;
+    padding-right: {{ section.settings.card_padding }}px;
+    padding-bottom: {{ section.settings.card_padding }}px;
+  }
+
   /* Cabecera de la review */
   .review-header {
     display: flex;
@@ -369,9 +383,16 @@
   .review-video-container {
     width: 100%;
     position: relative;
-    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+    {% if section.settings.video_format == 'vertical' %}
+    padding-bottom: 177.78%; /* Aspect ratio 9:16 (vertical como Instagram Stories) */
+    {% elsif section.settings.video_format == 'square' %}
+    padding-bottom: 100%; /* Aspect ratio 1:1 (cuadrado) */
+    {% else %}
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 (horizontal estándar) */
+    {% endif %}
     height: 0;
     overflow: hidden;
+    margin-bottom: 10px;
   }
 
   .review-video-container iframe,
@@ -382,6 +403,7 @@
     width: 100%;
     height: 100%;
     border-radius: {{ section.settings.video_border_radius }}px;
+    object-fit: cover;
   }
 
   /* Indicadores de posición */
@@ -981,6 +1003,33 @@
       "unit": "px",
       "label": "Radio de borde del video",
       "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Reproducción automática de videos (cuando sea posible)",
+      "default": false,
+      "info": "La reproducción automática puede no funcionar en todos los navegadores móviles debido a las políticas de los mismos"
+    },
+    {
+      "type": "select",
+      "id": "video_format",
+      "label": "Formato de video",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "Vertical (9:16, tipo Instagram Stories)"
+        },
+        {
+          "value": "square",
+          "label": "Cuadrado (1:1)"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal (16:9)"
+        }
+      ],
+      "default": "vertical"
     },
     {
       "type": "header",
