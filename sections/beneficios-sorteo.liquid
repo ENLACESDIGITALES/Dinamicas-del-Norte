@@ -1,39 +1,25 @@
 {% comment %}
-  Beneficios Sorteo - Versión final completa corregida
+  Beneficios Sorteo - SOLAMENTE UNA LÍNEA
 {% endcomment %}
 
-<section class="beneficios">
-  <div class="container">
-    <div class="section-title">
-      <h2>{{ section.settings.beneficios_title }}</h2>
-    </div>
+<section class="beneficios-unique">
+  <div class="container-unique">
+    <!-- TÍTULO SIN NINGÚN ESTILO ADICIONAL -->
+    <h2 class="title-unique">{{ section.settings.beneficios_title }}</h2>
 
-    <!-- LÍNEA ÚNICA COMPLETAMENTE CONTROLABLE -->
+    <!-- ÚNICA LÍNEA ROJA CONTROLABLE -->
     <div
-      class="title-line"
-      style="
-        height: {{ section.settings.line_height }}px;
-        width: {{ section.settings.line_width }}px;
-        background-color: {{ section.settings.line_color }};
-        margin-top: {{ section.settings.line_margin_top }}px;
-        margin-bottom: {{ section.settings.line_margin_bottom }}px;
-        {% if section.settings.line_center %}
-          margin-left: auto;
-          margin-right: auto;
-        {% else %}
-          margin-left: {{ section.settings.line_position }}px;
-          margin-right: auto;
-        {% endif %}
-      "
+      class="line-unique"
+      style="height: {{ section.settings.line_height }}px; width: {{ section.settings.line_width }}px; background-color: {{ section.settings.line_color }}; margin-top: {{ section.settings.line_margin_top }}px; margin-bottom: {{ section.settings.line_margin_bottom }}px; {% if section.settings.line_center %}margin-left: auto; margin-right: auto;{% else %}margin-left: {{ section.settings.line_position }}px; margin-right: auto;{% endif %}"
     ></div>
 
-    <div class="beneficios-container">
-      <div class="beneficios-list">
+    <div class="content-unique">
+      <div class="list-unique">
         {% for block in section.blocks %}
           {% if block.type == 'beneficio' %}
-            <div class="beneficio-item">
-              <div class="beneficio-icon">✓</div>
-              <div class="beneficio-content">
+            <div class="item-unique">
+              <div class="icon-unique">✓</div>
+              <div class="text-unique">
                 <h3>{{ block.settings.titulo }}</h3>
                 <p>{{ block.settings.descripcion }}</p>
               </div>
@@ -41,7 +27,7 @@
           {% endif %}
         {% endfor %}
       </div>
-      <div class="beneficio-image">
+      <div class="image-unique">
         {% if section.settings.beneficios_image != blank %}
           <img
             src="{{ section.settings.beneficios_image | img_url: 'master' }}"
@@ -50,10 +36,10 @@
         {% endif %}
       </div>
     </div>
-    <div class="text-center" style="margin-top: {{ section.settings.button_spacing }}px;">
+    <div class="button-container-unique" style="margin-top: {{ section.settings.button_spacing }}px;">
       <a
         href="{{ section.settings.button_link }}"
-        class="button {% if section.settings.button_shake_effect %}shake{% endif %}"
+        class="button-unique {% if section.settings.button_shake_effect %}shake-unique{% endif %}"
       >
         <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
           <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
@@ -65,7 +51,27 @@
 </section>
 
 <style>
-  .beneficios {
+  /* Reset para eliminar todos los estilos por defecto */
+  .beneficios-unique * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    background: none;
+    box-shadow: none;
+    text-shadow: none;
+  }
+
+  /* Elimina cualquier posible pseudo-elemento */
+  .beneficios-unique *:before,
+  .beneficios-unique *:after {
+    display: none !important;
+    content: none !important;
+  }
+
+  /* Estilos base */
+  .beneficios-unique {
     position: relative;
     width: 100%;
     padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
@@ -75,62 +81,64 @@
                 {{ section.settings.background_color_end }});
   }
 
-  .container {
+  .container-unique {
     max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
     padding: 0 {{ section.settings.container_padding }}px;
-  }
-
-  .section-title {
     text-align: center;
-    margin-bottom: 0;
   }
 
-  .section-title h2 {
+  /* Título con estilo mínimo */
+  .title-unique {
     font-size: {{ section.settings.title_size_mobile }}px;
     color: {{ section.settings.text_color }};
     margin: 0;
+    padding: 0;
     font-weight: bold;
+    text-align: center;
+    display: block;
   }
 
-  /* Línea estilizada como elemento independiente */
-  .title-line {
+  /* LA ÚNICA LÍNEA */
+  .line-unique {
     display: block;
     background-color: {{ section.settings.line_color }};
   }
 
-  .beneficios-container {
+  /* Contenido */
+  .content-unique {
     display: flex;
     flex-direction: column;
     gap: {{ section.settings.items_spacing_mobile }}px;
     margin-top: {{ section.settings.content_margin_top }}px;
   }
 
-  .beneficios-list {
+  .list-unique {
     order: 1;
   }
 
-  .beneficio-image {
+  .image-unique {
     order: 2;
     text-align: center;
     transform: translateY({{ section.settings.image_position_y_mobile }}px);
   }
 
-  .beneficio-image img {
+  .image-unique img {
     max-width: 100%;
     height: auto;
     border-radius: {{ section.settings.image_border_radius }}px;
   }
 
-  .beneficio-item {
+  .item-unique {
     display: flex;
     margin-bottom: {{ section.settings.item_spacing }}px;
     align-items: flex-start;
+    text-align: left;
     border-bottom: {% if section.settings.show_item_border %}{{ section.settings.item_border_width }}px {{ section.settings.item_border_style }} {{ section.settings.item_border_color }}{% else %}none{% endif %};
     padding-bottom: {% if section.settings.show_item_border %}{{ section.settings.item_spacing | divided_by: 2 }}px{% else %}0{% endif %};
   }
 
-  .beneficio-icon {
+  .icon-unique {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,25 +153,25 @@
     border: {{ section.settings.icon_border_width }}px {{ section.settings.icon_border_style }} {{ section.settings.icon_border_color }};
   }
 
-  .beneficio-content h3 {
+  .text-unique h3 {
     font-size: {{ section.settings.title_item_size_mobile }}px;
     color: {{ section.settings.title_item_color }};
     margin: 0 0 5px;
     font-weight: 600;
   }
 
-  .beneficio-content p {
+  .text-unique p {
     font-size: {{ section.settings.text_size_mobile }}px;
     line-height: 1.5;
     margin: 0;
     color: {{ section.settings.text_color }};
   }
 
-  .text-center {
+  .button-container-unique {
     text-align: center;
   }
 
-  .button {
+  .button-unique {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -178,66 +186,66 @@
     font-size: {{ section.settings.button_text_size }}px;
   }
 
-  .button svg {
+  .button-unique svg {
     margin-right: 10px;
   }
 
   /* Efecto de sacudida para el botón */
-  @keyframes shake {
+  @keyframes shake-effect {
     0% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
     20%, 40%, 60%, 80% { transform: translateX(5px); }
     100% { transform: translateX(0); }
   }
 
-  .button.shake {
-    animation: shake 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  .button-unique.shake-unique {
+    animation: shake-effect 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
   }
 
-  .button:hover {
+  .button-unique:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
   }
 
-  .button.shake:hover {
+  .button-unique.shake-unique:hover {
     animation: none;
     transform: translateY(-2px);
   }
 
   /* Escritorio */
   @media screen and (min-width: 769px) {
-    .beneficios {
+    .beneficios-unique {
       padding: {{ section.settings.padding_top_desktop }}px 0 {{ section.settings.padding_bottom_desktop }}px;
       margin-bottom: {{ section.settings.margin_bottom_desktop }}px;
     }
 
-    .section-title h2 {
+    .title-unique {
       font-size: {{ section.settings.title_size_desktop }}px;
     }
 
-    .beneficios-container {
+    .content-unique {
       flex-direction: row;
       align-items: center;
       gap: {{ section.settings.items_spacing_desktop }}px;
     }
 
-    .beneficios-list {
+    .list-unique {
       order: 1;
       width: 50%;
       padding-right: 30px;
     }
 
-    .beneficio-image {
+    .image-unique {
       order: 2;
       width: 50%;
       transform: translate({{ section.settings.image_position_x_desktop }}px, {{ section.settings.image_position_y_desktop }}px);
     }
 
-    .beneficio-content h3 {
+    .text-unique h3 {
       font-size: {{ section.settings.title_item_size_desktop }}px;
     }
 
-    .beneficio-content p {
+    .text-unique p {
       font-size: {{ section.settings.text_size_desktop }}px;
     }
   }
