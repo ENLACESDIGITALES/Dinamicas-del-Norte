@@ -1,22 +1,21 @@
 {% comment %}
-  Beneficios Sorteo - Título en posición específica
+  Beneficios Sorteo - Título y línea juntos
 {% endcomment %}
 
 <section class="beneficios-nuevo">
   <div class="container-nuevo">
-    <!-- Línea roja centrada en la parte superior (original) -->
-    <div
-      class="linea-superior"
-      style="height: {{ section.settings.line_height }}px; width: {{ section.settings.line_width }}px; background-color: {{ section.settings.line_color }}; margin: 10px auto 30px;"
-    ></div>
-
     <!-- Contenido principal con título reposicionado -->
     <div class="contenido-principal">
       <!-- Columna izquierda para beneficios -->
       <div class="columna-izquierda">
-        <!-- TÍTULO REPOSICIONADO EN EL CUADRO ROJO -->
+        <!-- TÍTULO Y LÍNEA REPOSICIONADOS EN EL CUADRO ROJO -->
         <div class="titulo-reposicionado">
           <h2>{{ section.settings.beneficios_title }}</h2>
+          <!-- LÍNEA ROJA DEBAJO DEL TÍTULO -->
+          <div
+            class="linea-titulo"
+            style="height: {{ section.settings.line_height }}px; width: {{ section.settings.line_width }}px; background-color: {{ section.settings.line_color }}; margin-top: {{ section.settings.line_margin_top }}px;"
+          ></div>
         </div>
 
         <!-- Lista de beneficios -->
@@ -92,12 +91,6 @@
     padding: 0 {{ section.settings.container_padding }}px;
   }
 
-  /* Línea superior */
-  .linea-superior {
-    display: block;
-    background-color: {{ section.settings.line_color }};
-  }
-
   /* Contenido principal en dos columnas */
   .contenido-principal {
     display: flex;
@@ -117,6 +110,11 @@
     margin-bottom: 60px; /* Espacio para que los beneficios empiecen después del cuadro rojo */
     margin-top: 20px;
     text-align: left;
+    padding: 15px;
+    background-color: {{ section.settings.title_background_color }};
+    border-radius: 5px;
+    display: inline-block;
+    max-width: 100%;
   }
 
   .titulo-reposicionado h2 {
@@ -125,13 +123,12 @@
     margin: 0;
     padding: 0;
     font-weight: bold;
-    display: inline-block;
-    position: relative;
-    background-color: {{ section.settings.title_background_color }};
-    padding: 15px;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 400px;
+  }
+
+  /* LÍNEA ROJA DEBAJO DEL TÍTULO */
+  .linea-titulo {
+    display: block;
+    background-color: {{ section.settings.line_color }};
   }
 
   /* Columna derecha con imagen */
@@ -286,18 +283,14 @@
     },
     {
       "type": "header",
-      "content": "Configuración del título"
+      "content": "Configuración del título y línea"
     },
     {
       "type": "color",
       "id": "title_background_color",
-      "label": "Color de fondo del título (rectángulo)",
-      "default": "#000000",
-      "info": "Ajusta este color para hacer visible el rectángulo donde va el título"
-    },
-    {
-      "type": "header",
-      "content": "Configuración de la línea"
+      "label": "Color de fondo del cuadro rojo",
+      "default": "rgba(0,0,0,0)",
+      "info": "Por defecto es transparente. Ajusta este color para hacer visible el rectángulo."
     },
     {
       "type": "color",
@@ -324,6 +317,16 @@
       "unit": "px",
       "label": "Altura de la línea",
       "default": 3
+    },
+    {
+      "type": "range",
+      "id": "line_margin_top",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Espacio entre título y línea",
+      "default": 10
     },
     {
       "type": "header",
