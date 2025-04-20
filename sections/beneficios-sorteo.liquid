@@ -1,196 +1,153 @@
 {% comment %}
-  Hero Sorteo - Versión con control total
+  Beneficios Sorteo - Versión final con control total sobre la línea
 {% endcomment %}
 
-<div class="hero-sorteo">
-  <div class="hero-sorteo__background">
-    {% if section.settings.background_image != blank %}
+<section class="beneficios">
+  <div class="container">
+    <div class="section-title">
+      <h2>{{ section.settings.beneficios_title }}</h2>
       <div
-        class="hero-sorteo__background-image"
-        style="background-image: url('{{ section.settings.background_image | img_url: 'master' }}');"
+        class="title-line"
+        style="width: {{ section.settings.title_line_width }}px; height: {{ section.settings.title_line_height }}px; background-color: {{ section.settings.title_line_color }}; margin-top: {{ section.settings.title_line_spacing }}px; {% if section.settings.title_line_center %}margin-left: auto; margin-right: auto;{% else %}margin-left: {{ section.settings.title_line_position }}px; margin-right: auto;{% endif %}"
       ></div>
-    {% endif %}
-  </div>
-
-  <div class="hero-sorteo__container">
-    {% if section.settings.hero_image != blank %}
-      <div class="hero-sorteo__image-wrapper">
-        <img
-          src="{{ section.settings.hero_image | img_url: 'master' }}"
-          alt="{{ section.settings.hero_title | escape }}"
-          class="hero-sorteo__image"
-        >
+    </div>
+    <div class="beneficios-container">
+      <div class="beneficios-list">
+        {% for block in section.blocks %}
+          {% if block.type == 'beneficio' %}
+            <div class="beneficio-item">
+              <div class="beneficio-icon">✓</div>
+              <div class="beneficio-content">
+                <h3>{{ block.settings.titulo }}</h3>
+                <p>{{ block.settings.descripcion }}</p>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
-    {% endif %}
-
-    <div class="hero-sorteo__text-container">
-      <div class="hero-sorteo__text-wrapper">
-        <h1 class="hero-sorteo__title">{{ section.settings.hero_title }}</h1>
-        <h2 class="hero-sorteo__subtitle">{{ section.settings.hero_subtitle }}</h2>
-        <p class="hero-sorteo__description">{{ section.settings.hero_description }}</p>
-      </div>
-
-      {% if section.settings.show_arrow %}
-        <div class="hero-sorteo__arrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="30" viewBox="0 0 40 30">
-            <path d="M20 30L0 0h40z" />
-          </svg>
-        </div>
-      {% endif %}
-
-      <div class="hero-sorteo__button-container">
-        <a
-          href="{{ section.settings.button_link }}"
-          class="hero-sorteo__button {% if section.settings.button_shake_effect %}shake{% endif %}"
-        >
-          <span class="hero-sorteo__button-icon">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-              <path d="M12 0C5.4 0 0 5.4 0 12c0 2.3.6 4.4 1.8 6.2l-1.1 4.3c-.2.6.4 1.2 1 1.1l4.4-1.2C7.9 23.4 9.9 24 12 24c6.7 0 12-5.4 12-12S18.7 0 12 0zm0 22c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-3.1.8.8-3.1-.2-.4c-1-1.8-1.6-3.7-1.6-5.7 0-5.5 4.5-10 10-10s10 4.5 10 10c0 5.6-4.5 10.1-10.1 10.1zm5.5-7.1c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1c-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6s.3-.3.4-.5c.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5 0-.1-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5-.2 0-.4 0-.6 0-.2 0-.5.1-.8.3C6.9 7.8 6 8.7 6 10.3c0 1.6 1.2 3.2 1.3 3.4.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4z"/>
-            </svg>
-          </span>
-          <span class="hero-sorteo__button-text">{{ section.settings.button_text }}</span>
-        </a>
+      <div class="beneficio-image">
+        {% if section.settings.beneficios_image != blank %}
+          <img
+            src="{{ section.settings.beneficios_image | img_url: 'master' }}"
+            alt="{{ section.settings.beneficios_title }}"
+          >
+        {% endif %}
       </div>
     </div>
+    <div class="text-center" style="margin-top: {{ section.settings.button_spacing }}px;">
+      <a
+        href="{{ section.settings.button_link }}"
+        class="button {% if section.settings.button_shake_effect %}shake{% endif %}"
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
+          <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
+        </svg>
+        {{ section.settings.button_text }}
+      </a>
+    </div>
   </div>
-</div>
+</section>
 
 <style>
-  /* Estilos base */
-  .hero-sorteo {
+  .beneficios {
     position: relative;
     width: 100%;
-    padding: {{ section.settings.mobile_padding_top }}px 0 {{ section.settings.mobile_padding_bottom }}px;
-    color: {{ section.settings.text_color }};
-    min-height: {{ section.settings.mobile_min_height }}px;
-    overflow: {{ section.settings.overflow_setting }};
-    margin-bottom: {{ section.settings.mobile_margin_bottom }}px;
-  }
-
-  .hero-sorteo__background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    padding: {{ section.settings.padding_top_mobile }}px 0 {{ section.settings.padding_bottom_mobile }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
     background: linear-gradient({{ section.settings.gradient_angle }}deg,
                 {{ section.settings.background_color_start }},
                 {{ section.settings.background_color_end }});
-    z-index: -2;
   }
 
-  .hero-sorteo__background-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-size: {{ section.settings.background_image_size }};
-    background-position: {{ section.settings.background_image_position }};
-    background-repeat: {{ section.settings.background_image_repeat }};
-    z-index: -1;
-  }
-
-  .hero-sorteo__container {
-    max-width: {{ section.settings.container_max_width }}px;
+  .container {
+    max-width: {{ section.settings.container_width }}px;
     margin: 0 auto;
     padding: 0 {{ section.settings.container_padding }}px;
-    position: relative;
-    overflow: {{ section.settings.overflow_setting }};
-    min-height: {{ section.settings.mobile_min_height | minus: section.settings.mobile_padding_top | minus: section.settings.mobile_padding_bottom }}px;
   }
 
-  /* Imagen principal */
-  .hero-sorteo__image-wrapper {
-    width: 100%;
+  .section-title {
+    text-align: center;
+    margin-bottom: {{ section.settings.title_spacing }}px;
     position: relative;
-    z-index: 1;
-    overflow: visible;
-    transform: translateY({{ section.settings.mobile_image_position_y }}px);
   }
 
-  .hero-sorteo__image {
+  .section-title h2 {
+    font-size: {{ section.settings.title_size_mobile }}px;
+    color: {{ section.settings.text_color }};
+    margin: 0;
+    font-weight: bold;
+  }
+
+  .title-line {
     display: block;
-    width: 100%;
+    height: {{ section.settings.title_line_height }}px;
+    background-color: {{ section.settings.title_line_color }};
+  }
+
+  .beneficios-container {
+    display: flex;
+    flex-direction: column;
+    gap: {{ section.settings.items_spacing_mobile }}px;
+  }
+
+  .beneficios-list {
+    order: 1;
+  }
+
+  .beneficio-image {
+    order: 2;
+    text-align: center;
+    transform: translateY({{ section.settings.image_position_y_mobile }}px);
+  }
+
+  .beneficio-image img {
+    max-width: 100%;
     height: auto;
     border-radius: {{ section.settings.image_border_radius }}px;
   }
 
-  /* Contenido texto */
-  .hero-sorteo__text-container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 2;
-    text-align: center;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0) 100%);
-    padding: 50px 20px 20px;
-    transform: translate({{ section.settings.mobile_text_position_x }}px, {{ section.settings.mobile_text_position_y }}px);
+  .beneficio-item {
+    display: flex;
+    margin-bottom: {{ section.settings.item_spacing }}px;
+    align-items: flex-start;
+    border-bottom: {% if section.settings.show_item_border %}{{ section.settings.item_border_width }}px {{ section.settings.item_border_style }} {{ section.settings.item_border_color }}{% else %}none{% endif %};
+    padding-bottom: {% if section.settings.show_item_border %}{{ section.settings.item_spacing | divided_by: 2 }}px{% else %}0{% endif %};
   }
 
-  .hero-sorteo__text-wrapper {
-    max-width: 600px;
-    margin: 0 auto;
+  .beneficio-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ section.settings.icon_size }}px;
+    height: {{ section.settings.icon_size }}px;
+    background-color: {{ section.settings.icon_color }};
+    color: {{ section.settings.icon_text_color }};
+    border-radius: 50%;
+    margin-right: 15px;
+    flex-shrink: 0;
+    font-size: {{ section.settings.icon_font_size }}px;
+    border: {{ section.settings.icon_border_width }}px {{ section.settings.icon_border_style }} {{ section.settings.icon_border_color }};
   }
 
-  .hero-sorteo__title {
-    font-size: {{ section.settings.mobile_title_size }}px;
-    font-weight: 700;
-    margin: 0 0 10px;
-    text-transform: uppercase;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  .beneficio-content h3 {
+    font-size: {{ section.settings.title_item_size_mobile }}px;
+    color: {{ section.settings.title_item_color }};
+    margin: 0 0 5px;
+    font-weight: 600;
   }
 
-  .hero-sorteo__subtitle {
-    font-size: {{ section.settings.mobile_subtitle_size }}px;
-    font-weight: 700;
-    margin: 0 0 15px;
-    color: {{ section.settings.accent_color }};
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
-  }
-
-  .hero-sorteo__description {
-    font-size: {{ section.settings.mobile_text_size }}px;
+  .beneficio-content p {
+    font-size: {{ section.settings.text_size_mobile }}px;
     line-height: 1.5;
-    margin: 0 0 30px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    margin: 0;
+    color: {{ section.settings.text_color }};
   }
 
-  /* Flecha */
-  .hero-sorteo__arrow {
-    margin: {{ section.settings.arrow_vertical_position }}px auto 20px;
-    animation: hero-sorteo-bounce 2s infinite;
-    width: 40px;
-    height: 30px;
+  .text-center {
+    text-align: center;
   }
 
-  .hero-sorteo__arrow svg {
-    fill: {{ section.settings.arrow_color }};
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-    width: 100%;
-    height: 100%;
-  }
-
-  @keyframes hero-sorteo-bounce {
-    0%, 20%, 50%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-15px);
-    }
-    60% {
-      transform: translateY(-8px);
-    }
-  }
-
-  /* Botón de WhatsApp */
-  .hero-sorteo__button-container {
-    margin-top: {{ section.settings.button_vertical_position }}px;
-    margin-bottom: 0;
-  }
-
-  .hero-sorteo__button {
+  .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -202,20 +159,11 @@
     border-radius: {{ section.settings.button_border_radius }}px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
     text-transform: uppercase;
-    width: 90%;
-    max-width: 480px;
-    margin: 0 auto;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     font-size: {{ section.settings.button_text_size }}px;
   }
 
-  .hero-sorteo__button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
-  }
-
-  .hero-sorteo__button-icon {
-    margin-right: 15px;
+  .button svg {
+    margin-right: 10px;
   }
 
   /* Efecto de sacudida para el botón */
@@ -226,105 +174,139 @@
     100% { transform: translateX(0); }
   }
 
-  .hero-sorteo__button.shake {
+  .button.shake {
     animation: shake 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
   }
 
-  .hero-sorteo__button.shake:hover {
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
+  }
+
+  .button.shake:hover {
     animation: none;
     transform: translateY(-2px);
   }
 
-  /* Estilos para escritorio */
+  /* Escritorio */
   @media screen and (min-width: 769px) {
-    .hero-sorteo {
-      padding: {{ section.settings.desktop_padding_top }}px 0 {{ section.settings.desktop_padding_bottom }}px;
-      min-height: {{ section.settings.desktop_min_height }}px;
-      margin-bottom: {{ section.settings.desktop_margin_bottom }}px;
+    .beneficios {
+      padding: {{ section.settings.padding_top_desktop }}px 0 {{ section.settings.padding_bottom_desktop }}px;
+      margin-bottom: {{ section.settings.margin_bottom_desktop }}px;
     }
 
-    .hero-sorteo__container {
-      display: flex;
+    .section-title h2 {
+      font-size: {{ section.settings.title_size_desktop }}px;
+    }
+
+    .beneficios-container {
       flex-direction: row;
       align-items: center;
-      min-height: {{ section.settings.desktop_min_height | minus: section.settings.desktop_padding_top | minus: section.settings.desktop_padding_bottom }}px;
+      gap: {{ section.settings.items_spacing_desktop }}px;
     }
 
-    .hero-sorteo__image-wrapper {
-      width: 50%;
-      order: 2;
-      transform: translate({{ section.settings.desktop_image_position_x }}px, {{ section.settings.desktop_image_position_y }}px);
-    }
-
-    .hero-sorteo__text-container {
-      position: static;
-      width: 50%;
-      background: none;
-      padding: 0 30px 0 0;
-      text-align: left;
+    .beneficios-list {
       order: 1;
-      transform: translate({{ section.settings.desktop_text_position_x }}px, {{ section.settings.desktop_text_position_y }}px);
+      width: 50%;
+      padding-right: 30px;
     }
 
-    .hero-sorteo__text-wrapper {
-      margin: 0;
+    .beneficio-image {
+      order: 2;
+      width: 50%;
+      transform: translate({{ section.settings.image_position_x_desktop }}px, {{ section.settings.image_position_y_desktop }}px);
     }
 
-    .hero-sorteo__title {
-      font-size: {{ section.settings.desktop_title_size }}px;
-      text-shadow: none;
+    .beneficio-content h3 {
+      font-size: {{ section.settings.title_item_size_desktop }}px;
     }
 
-    .hero-sorteo__subtitle {
-      font-size: {{ section.settings.desktop_subtitle_size }}px;
-      text-shadow: none;
-    }
-
-    .hero-sorteo__description {
-      font-size: {{ section.settings.desktop_text_size }}px;
-      text-shadow: none;
-    }
-
-    .hero-sorteo__arrow {
-      margin-left: {{ section.settings.arrow_horizontal_position }}px;
-      margin-right: auto;
-    }
-
-    .hero-sorteo__button {
-      margin: 0;
-      width: auto;
+    .beneficio-content p {
+      font-size: {{ section.settings.text_size_desktop }}px;
     }
   }
 </style>
 
 {% schema %}
 {
-  "name": "Hero Sorteo",
+  "name": "Beneficios Sorteo",
   "settings": [
     {
-      "type": "header",
-      "content": "Configuración principal"
+      "type": "text",
+      "id": "beneficios_title",
+      "label": "Título de la sección",
+      "default": "¿PORQUE CON DINAMICAS DEL NORTE?"
     },
     {
-      "type": "select",
-      "id": "overflow_setting",
-      "label": "Comportamiento de desbordamiento",
-      "options": [
-        {
-          "value": "visible",
-          "label": "Visible (permite elementos fuera del contenedor)"
-        },
-        {
-          "value": "hidden",
-          "label": "Oculto (recorta elementos fuera del contenedor)"
-        }
-      ],
-      "default": "visible",
-      "info": "Controla cómo se manejan los elementos que sobresalen del contenedor"
+      "type": "image_picker",
+      "id": "beneficios_image",
+      "label": "Imagen de beneficios"
+    },
+    {
+      "type": "header",
+      "content": "Línea del título"
+    },
+    {
+      "type": "color",
+      "id": "title_line_color",
+      "label": "Color de la línea",
+      "default": "#FF0000"
     },
     {
       "type": "range",
-      "id": "container_max_width",
+      "id": "title_line_width",
+      "min": 50,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "label": "Ancho de la línea",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "title_line_height",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Altura de la línea",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "title_line_spacing",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Espacio entre título y línea",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "title_line_center",
+      "label": "Centrar línea",
+      "default": true,
+      "info": "Si está activado, la línea se centrará. Si está desactivado, puedes posicionarla horizontalmente."
+    },
+    {
+      "type": "range",
+      "id": "title_line_position",
+      "min": -250,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "label": "Posición horizontal de la línea",
+      "default": 0,
+      "info": "Solo aplica si 'Centrar línea' está desactivado. Valores negativos mueven a la izquierda, positivos a la derecha."
+    },
+    {
+      "type": "header",
+      "content": "Contenedor"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
       "min": 800,
       "max": 2000,
       "step": 50,
@@ -339,105 +321,94 @@
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Padding horizontal del contenedor",
+      "label": "Padding horizontal",
       "default": 20
     },
     {
       "type": "header",
-      "content": "Fondo"
+      "content": "Líneas y bordes"
     },
     {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Imagen de fondo"
-    },
-    {
-      "type": "select",
-      "id": "background_image_size",
-      "label": "Tamaño de la imagen de fondo",
-      "options": [
-        {
-          "value": "cover",
-          "label": "Cubrir todo el espacio"
-        },
-        {
-          "value": "contain",
-          "label": "Contener (mostrar completa)"
-        },
-        {
-          "value": "auto",
-          "label": "Tamaño original"
-        }
-      ],
-      "default": "cover"
+      "type": "checkbox",
+      "id": "show_item_border",
+      "label": "Mostrar borde debajo de cada beneficio",
+      "default": false
     },
     {
       "type": "select",
-      "id": "background_image_position",
-      "label": "Posición de la imagen de fondo",
+      "id": "item_border_style",
+      "label": "Estilo de borde de beneficio",
       "options": [
         {
-          "value": "center center",
-          "label": "Centro"
+          "value": "solid",
+          "label": "Línea sólida"
         },
         {
-          "value": "top center",
-          "label": "Superior"
+          "value": "dashed",
+          "label": "Línea punteada"
         },
         {
-          "value": "bottom center",
-          "label": "Inferior"
-        },
-        {
-          "value": "left center",
-          "label": "Izquierda"
-        },
-        {
-          "value": "right center",
-          "label": "Derecha"
-        },
-        {
-          "value": "top left",
-          "label": "Superior izquierda"
-        },
-        {
-          "value": "top right",
-          "label": "Superior derecha"
-        },
-        {
-          "value": "bottom left",
-          "label": "Inferior izquierda"
-        },
-        {
-          "value": "bottom right",
-          "label": "Inferior derecha"
+          "value": "dotted",
+          "label": "Línea de puntos"
         }
       ],
-      "default": "center center"
+      "default": "solid"
+    },
+    {
+      "type": "range",
+      "id": "item_border_width",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Grosor del borde de beneficio",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "item_border_color",
+      "label": "Color del borde de beneficio",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "icon_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Grosor del borde del ícono",
+      "default": 0
     },
     {
       "type": "select",
-      "id": "background_image_repeat",
-      "label": "Repetición de la imagen de fondo",
+      "id": "icon_border_style",
+      "label": "Estilo de borde del ícono",
       "options": [
         {
-          "value": "no-repeat",
-          "label": "Sin repetición"
+          "value": "solid",
+          "label": "Línea sólida"
         },
         {
-          "value": "repeat",
-          "label": "Repetir"
+          "value": "dashed",
+          "label": "Línea punteada"
         },
         {
-          "value": "repeat-x",
-          "label": "Repetir horizontalmente"
-        },
-        {
-          "value": "repeat-y",
-          "label": "Repetir verticalmente"
+          "value": "dotted",
+          "label": "Línea de puntos"
         }
       ],
-      "default": "no-repeat"
+      "default": "solid"
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Color del borde del ícono",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Colores"
     },
     {
       "type": "color",
@@ -449,7 +420,7 @@
       "type": "color",
       "id": "background_color_end",
       "label": "Color de fondo final",
-      "default": "#7a6900"
+      "default": "#000000"
     },
     {
       "type": "range",
@@ -459,106 +430,35 @@
       "step": 5,
       "unit": "°",
       "label": "Ángulo del degradado",
-      "default": 125
+      "default": 0
     },
     {
-      "type": "header",
-      "content": "Contenido de texto"
+      "type": "color",
+      "id": "text_color",
+      "label": "Color de texto",
+      "default": "#FFFFFF"
     },
     {
-      "type": "text",
-      "id": "hero_title",
-      "label": "Título",
-      "default": "SORTEO"
+      "type": "color",
+      "id": "title_item_color",
+      "label": "Color de título de item",
+      "default": "#FFCC00"
     },
     {
-      "type": "text",
-      "id": "hero_subtitle",
-      "label": "Subtítulo",
-      "default": "3 GANADORES DIARIOS"
+      "type": "color",
+      "id": "icon_color",
+      "label": "Color de fondo del ícono",
+      "default": "#FFCC00"
     },
     {
-      "type": "textarea",
-      "id": "hero_description",
-      "label": "Descripción",
-      "default": "Participar en nuestros sorteos te dará una experiencia emocionante, con la posibilidad real de ser uno de los tres ganadores diarios."
-    },
-    {
-      "type": "header",
-      "content": "Tamaños de texto - Móvil"
-    },
-    {
-      "type": "range",
-      "id": "mobile_title_size",
-      "min": 30,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Tamaño del título (móvil)",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "mobile_subtitle_size",
-      "min": 18,
-      "max": 50,
-      "step": 2,
-      "unit": "px",
-      "label": "Tamaño del subtítulo (móvil)",
-      "default": 28
-    },
-    {
-      "type": "range",
-      "id": "mobile_text_size",
-      "min": 12,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño del texto (móvil)",
-      "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Tamaños de texto - Escritorio"
-    },
-    {
-      "type": "range",
-      "id": "desktop_title_size",
-      "min": 40,
-      "max": 200,
-      "step": 5,
-      "unit": "px",
-      "label": "Tamaño del título (escritorio)",
-      "default": 70
-    },
-    {
-      "type": "range",
-      "id": "desktop_subtitle_size",
-      "min": 20,
-      "max": 120,
-      "step": 2,
-      "unit": "px",
-      "label": "Tamaño del subtítulo (escritorio)",
-      "default": 32
-    },
-    {
-      "type": "range",
-      "id": "desktop_text_size",
-      "min": 14,
-      "max": 60,
-      "step": 1,
-      "unit": "px",
-      "label": "Tamaño del texto (escritorio)",
-      "default": 18
+      "type": "color",
+      "id": "icon_text_color",
+      "label": "Color del ícono",
+      "default": "#FFFFFF"
     },
     {
       "type": "header",
       "content": "Imagen"
-    },
-    {
-      "type": "image_picker",
-      "id": "hero_image",
-      "label": "Imagen principal"
     },
     {
       "type": "range",
@@ -572,7 +472,17 @@
     },
     {
       "type": "range",
-      "id": "desktop_image_position_x",
+      "id": "image_position_y_mobile",
+      "min": -200,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Posición vertical (móvil)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_position_x_desktop",
       "min": -300,
       "max": 300,
       "step": 10,
@@ -582,120 +492,149 @@
     },
     {
       "type": "range",
-      "id": "desktop_image_position_y",
-      "min": -400,
-      "max": 400,
+      "id": "image_position_y_desktop",
+      "min": -300,
+      "max": 300,
       "step": 10,
       "unit": "px",
       "label": "Posición vertical (escritorio)",
       "default": 0
     },
     {
+      "type": "header",
+      "content": "Ícono"
+    },
+    {
       "type": "range",
-      "id": "mobile_image_position_y",
-      "min": -500,
-      "max": 500,
-      "step": 10,
+      "id": "icon_size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
       "unit": "px",
-      "label": "Posición vertical (móvil)",
-      "default": 0,
-      "info": "Mueve la imagen hacia arriba o abajo"
+      "label": "Tamaño del ícono",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_font_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño de la tipografía del ícono",
+      "default": 14
     },
     {
       "type": "header",
-      "content": "Colores"
+      "content": "Textos Móvil"
     },
     {
-      "type": "color",
-      "id": "text_color",
-      "label": "Color de texto",
-      "default": "#FFFFFF"
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Tamaño título principal (móvil)",
+      "default": 26
     },
     {
-      "type": "color",
-      "id": "accent_color",
-      "label": "Color de acento (subtítulo)",
-      "default": "#FFCC00"
+      "type": "range",
+      "id": "title_item_size_mobile",
+      "min": 14,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño título item (móvil)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "text_size_mobile",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tamaño texto (móvil)",
+      "default": 14
     },
     {
       "type": "header",
-      "content": "Posición del texto"
+      "content": "Textos Escritorio"
     },
     {
       "type": "range",
-      "id": "mobile_text_position_x",
-      "min": -100,
-      "max": 100,
-      "step": 5,
+      "id": "title_size_desktop",
+      "min": 24,
+      "max": 80,
+      "step": 2,
       "unit": "px",
-      "label": "Posición horizontal del texto (móvil)",
-      "default": 0
+      "label": "Tamaño título principal (escritorio)",
+      "default": 32
     },
     {
       "type": "range",
-      "id": "mobile_text_position_y",
-      "min": -100,
-      "max": 100,
-      "step": 5,
+      "id": "title_item_size_desktop",
+      "min": 16,
+      "max": 40,
+      "step": 1,
       "unit": "px",
-      "label": "Posición vertical del texto (móvil)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "desktop_text_position_x",
-      "min": -200,
-      "max": 200,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición horizontal del texto (escritorio)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "desktop_text_position_y",
-      "min": -200,
-      "max": 200,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical del texto (escritorio)",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Flecha"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_arrow",
-      "label": "Mostrar flecha",
-      "default": true
-    },
-    {
-      "type": "color",
-      "id": "arrow_color",
-      "label": "Color de flecha",
-      "default": "#FFCC00"
-    },
-    {
-      "type": "range",
-      "id": "arrow_vertical_position",
-      "min": -50,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Posición vertical de flecha",
+      "label": "Tamaño título item (escritorio)",
       "default": 20
     },
     {
       "type": "range",
-      "id": "arrow_horizontal_position",
-      "min": -500,
-      "max": 500,
-      "step": 10,
+      "id": "text_size_desktop",
+      "min": 14,
+      "max": 24,
+      "step": 1,
       "unit": "px",
-      "label": "Posición horizontal de flecha (escritorio)",
-      "default": 0
+      "label": "Tamaño texto (escritorio)",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Espaciados"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Espaciado inferior del título",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Espaciado entre items",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "items_spacing_mobile",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Espaciado entre lista e imagen (móvil)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "items_spacing_desktop",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Espaciado entre lista e imagen (escritorio)",
+      "default": 30
     },
     {
       "type": "header",
@@ -711,7 +650,7 @@
       "type": "text",
       "id": "button_link",
       "label": "Enlace del botón",
-      "default": "#"
+      "default": "https://wa.me/573000000000"
     },
     {
       "type": "color",
@@ -768,113 +707,124 @@
     },
     {
       "type": "range",
-      "id": "button_vertical_position",
-      "min": -50,
+      "id": "button_spacing",
+      "min": 10,
       "max": 100,
       "step": 5,
       "unit": "px",
-      "label": "Posición vertical del botón",
-      "default": 0
+      "label": "Espaciado superior del botón",
+      "default": 40
     },
     {
       "type": "header",
-      "content": "Tamaño y espaciado - Móvil"
+      "content": "Márgenes y Paddings"
     },
     {
       "type": "range",
-      "id": "mobile_min_height",
-      "min": 200,
-      "max": 1000,
-      "step": 50,
-      "unit": "px",
-      "label": "Altura mínima (móvil)",
-      "default": 500,
-      "info": "Altura mínima del componente en móvil"
-    },
-    {
-      "type": "range",
-      "id": "mobile_padding_top",
+      "id": "padding_top_mobile",
       "min": 0,
-      "max": 800,
+      "max": 200,
       "step": 10,
       "unit": "px",
-      "label": "Espaciado superior (móvil)",
-      "default": 60
+      "label": "Padding superior (móvil)",
+      "default": 40
     },
     {
       "type": "range",
-      "id": "mobile_padding_bottom",
-      "min": -400,
-      "max": 400,
+      "id": "padding_bottom_mobile",
+      "min": -200,
+      "max": 200,
       "step": 10,
       "unit": "px",
-      "label": "Espaciado inferior (móvil)",
-      "default": 0,
-      "info": "Usa valores negativos para eliminar espacio inferior"
+      "label": "Padding inferior (móvil)",
+      "default": 40,
+      "info": "Usa valores negativos para eliminar espacio"
     },
     {
       "type": "range",
-      "id": "mobile_margin_bottom",
-      "min": -400,
+      "id": "margin_bottom_mobile",
+      "min": -200,
       "max": 0,
       "step": 10,
       "unit": "px",
       "label": "Margen inferior (móvil)",
-      "default": -200,
-      "info": "Usa valores negativos para eliminar espacio adicional en móvil"
-    },
-    {
-      "type": "header",
-      "content": "Tamaño y espaciado - Escritorio"
-    },
-    {
-      "type": "range",
-      "id": "desktop_min_height",
-      "min": 300,
-      "max": 1200,
-      "step": 50,
-      "unit": "px",
-      "label": "Altura mínima (escritorio)",
-      "default": 500,
-      "info": "Altura mínima del componente en escritorio"
-    },
-    {
-      "type": "range",
-      "id": "desktop_padding_top",
-      "min": 0,
-      "max": 800,
-      "step": 10,
-      "unit": "px",
-      "label": "Espaciado superior (escritorio)",
-      "default": 80
-    },
-    {
-      "type": "range",
-      "id": "desktop_padding_bottom",
-      "min": -400,
-      "max": 400,
-      "step": 10,
-      "unit": "px",
-      "label": "Espaciado inferior (escritorio)",
       "default": 0,
-      "info": "Usa valores negativos para eliminar espacio inferior"
+      "info": "Usa valores negativos para eliminar espacio"
     },
     {
       "type": "range",
-      "id": "desktop_margin_bottom",
-      "min": -400,
+      "id": "padding_top_desktop",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding superior (escritorio)",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_desktop",
+      "min": -200,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding inferior (escritorio)",
+      "default": 60,
+      "info": "Usa valores negativos para eliminar espacio"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "min": -200,
       "max": 0,
       "step": 10,
       "unit": "px",
       "label": "Margen inferior (escritorio)",
-      "default": -200,
-      "info": "Usa valores negativos para eliminar espacio adicional en escritorio"
+      "default": 0,
+      "info": "Usa valores negativos para eliminar espacio"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "beneficio",
+      "name": "Beneficio",
+      "settings": [
+        {
+          "type": "text",
+          "id": "titulo",
+          "label": "Título del beneficio",
+          "default": "Participar en una dinámica confiable y emocionante"
+        },
+        {
+          "type": "textarea",
+          "id": "descripcion",
+          "label": "Descripción del beneficio",
+          "default": "Cada día tienes una nueva oportunidad para cambiar tu destino financiero con solo $10,000."
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Hero Sorteo",
-      "category": "Sorteos"
+      "name": "Beneficios Sorteo",
+      "category": "Sorteos",
+      "blocks": [
+        {
+          "type": "beneficio"
+        },
+        {
+          "type": "beneficio"
+        },
+        {
+          "type": "beneficio"
+        },
+        {
+          "type": "beneficio"
+        },
+        {
+          "type": "beneficio"
+        }
+      ]
     }
   ]
 }
