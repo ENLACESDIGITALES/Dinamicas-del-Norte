@@ -237,9 +237,9 @@
         ],
         "settings": {
           "testimonios_title": "TESTIMONIOS",
-          "disable_slider": false,
-          "autoplay": false,
           "slides_per_view_desktop": 3,
+          "slides_per_row": 3,
+          "autoplay": true,
           "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
           "button_link": "https://wa.me/573000000000",
           "button_shake_effect": true
