@@ -207,7 +207,7 @@
             "settings": {
               "autor": "Juan Pérez",
               "video_url": "",
-              "video_file": "shopify://files/videos/WhatsApp Video 2025-04-20 at 4.38.19 PM.mp4",
+              "video_mp4_url": "https://cdn.shopify.com/videos/c/o/v/c2f6a44c10894f9ebecd7cba81b07780.mp4",
               "video_thumbnail": "shopify://shop_images/File_4.jpg",
               "imagen_perfil": "shopify://shop_images/File_4.jpg"
             }
@@ -217,7 +217,7 @@
             "settings": {
               "autor": "Juan Pérez",
               "video_url": "",
-              "video_file": "shopify://files/videos/WhatsApp Video 2025-04-20 at 4.38.19 PM.mp4",
+              "video_mp4_url": "https://cdn.shopify.com/videos/c/o/v/c2f6a44c10894f9ebecd7cba81b07780.mp4",
               "video_thumbnail": "shopify://shop_images/File_4.jpg",
               "imagen_perfil": "shopify://shop_images/File_4.jpg"
             }
@@ -227,7 +227,7 @@
             "settings": {
               "autor": "Juan Pérez",
               "video_url": "",
-              "video_file": "shopify://files/videos/WhatsApp Video 2025-04-20 at 4.38.49 PM.mp4",
+              "video_mp4_url": "https://cdn.shopify.com/videos/c/o/v/c2f6a44c10894f9ebecd7cba81b07780.mp4",
               "video_thumbnail": "shopify://shop_images/File_5.jpg",
               "imagen_perfil": "shopify://shop_images/File_5.jpg"
             }
@@ -274,7 +274,6 @@
           "stars_size_mobile": 14,
           "stars_size_desktop": 16,
           "video_border_radius": 4,
-          "video_autoplay": false,
           "video_format": "vertical",
           "arrow_color": "#380473",
           "arrow_background_color": "#ff0022",
@@ -295,7 +294,6 @@
           "background_color_end": "#310208",
           "gradient_angle": 0,
           "container_width": 1200,
-          "container_padding": 15,
           "padding_top_mobile": 30,
           "padding_bottom_mobile": 30,
           "margin_bottom_mobile": 0,
