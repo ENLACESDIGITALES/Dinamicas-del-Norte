@@ -1,5 +1,5 @@
 {% comment %}
-  Testimonios Reviews - Tarjetas compactas con reproducción de video simplificada
+  Testimonios Reviews - Con reproducción de video en modal
 {% endcomment %}
 
 <section class="testimonios-reviews">
@@ -68,41 +68,29 @@
             {% elsif block.type == 'testimonio_video' %}
               <div class="review-slide video-slide" {{ block.shopify_attributes }}>
                 <div class="review-card">
-                  <div class="review-video-wrapper">
-                    {% if block.settings.video_url != blank %}
-                      {% if block.settings.video_url contains 'youtube.com'
-                        or block.settings.video_url contains 'youtu.be'
-                      %}
-                        <iframe
-                          src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' | split: '&' | first }}"
-                          frameborder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowfullscreen
-                        >
-                        </iframe>
-                      {% elsif block.settings.video_url contains 'vimeo.com' %}
-                        <iframe
-                          src="{{ block.settings.video_url | replace: 'vimeo.com', 'player.vimeo.com/video' }}"
-                          frameborder="0"
-                          allow="autoplay; fullscreen; picture-in-picture"
-                          allowfullscreen
-                        >
-                        </iframe>
-                      {% endif %}
-                    {% elsif block.settings.video_file != blank %}
-                      <div class="video-container-simple">
-                        <!-- Video nativo con controles nativos -->
-                        <video
-                          controls
-                          playsinline
-                          preload="auto"
-                          style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px;"
-                        >
-                          <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
-                          Tu navegador no soporta videos HTML5.
-                        </video>
+                  <!-- Miniatura con botón de reproducción que abre el modal -->
+                  <div
+                    class="video-thumbnail-container"
+                    data-video-url="{% if block.settings.video_url != blank %}{{ block.settings.video_url }}{% else %}{{ block.settings.video_file | file_url }}{% endif %}"
+                    data-video-type="{% if block.settings.video_url != blank %}{% if block.settings.video_url contains 'youtube' %}youtube{% elsif block.settings.video_url contains 'vimeo' %}vimeo{% endif %}{% else %}mp4{% endif %}"
+                  >
+                    {% if block.settings.video_thumbnail != blank %}
+                      <img
+                        src="{{ block.settings.video_thumbnail | img_url: 'master' }}"
+                        alt="Video thumbnail"
+                        class="video-thumbnail"
+                      >
+                    {% else %}
+                      <div class="video-thumbnail-placeholder">
+                        <span>Ver Video</span>
                       </div>
                     {% endif %}
+
+                    <div class="play-button-big">
+                      <svg viewBox="0 0 24 24" width="48" height="48">
+                        <path d="M8 5v14l11-7z" fill="#ffffff"/>
+                      </svg>
+                    </div>
                   </div>
 
                   <div class="review-header video-header">
@@ -162,6 +150,17 @@
     </div>
   </div>
 </section>
+
+<!-- Modal para reproducción de video -->
+<div class="video-modal" id="videoModal">
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <div class="modal-video-container">
+      <!-- El contenido del video se insertará aquí dinámicamente -->
+    </div>
+    <button class="modal-close">×</button>
+  </div>
+</div>
 
 <style>
   /* Reset de estilos */
@@ -383,10 +382,10 @@
     -webkit-box-orient: vertical;
   }
 
-  /* Contenedor para el video */
-  .review-video-wrapper {
-    width: 100%;
+  /* Contenedor de thumbnail de video */
+  .video-thumbnail-container {
     position: relative;
+    width: 100%;
     {% if section.settings.video_format == 'vertical' %}
     padding-bottom: 177.78%; /* Aspect ratio 9:16 (vertical como Instagram Stories) */
     {% elsif section.settings.video_format == 'square' %}
@@ -394,35 +393,128 @@
     {% else %}
     padding-bottom: 56.25%; /* Aspect ratio 16:9 (horizontal estándar) */
     {% endif %}
-    height: 0;
-    overflow: visible;
-    margin-bottom: 10px;
     border-radius: {{ section.settings.video_border_radius }}px;
-    background-color: #000; /* Fondo negro para videos */
+    overflow: hidden;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background-color: #000000;
   }
 
-  .review-video-wrapper iframe {
+  .video-thumbnail {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    border-radius: {{ section.settings.video_border_radius }}px;
     object-fit: cover;
+  }
+
+  .video-thumbnail-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #222222;
+    color: white;
+    font-weight: bold;
+  }
+
+  .play-button-big {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background-color: rgba(255, 0, 0, 0.8);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    border: 3px solid white;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .video-thumbnail-container:hover .play-button-big {
+    transform: translate(-50%, -50%) scale(1.1);
+    background-color: rgba(255, 0, 0, 1);
+  }
+
+  /* Estilos del modal de video */
+  .video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+  }
+
+  .video-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
     z-index: 1;
   }
 
-  /* Nuevo contenedor de reproducción de video MP4 simplificado */
-  .video-container-simple {
+  .modal-content {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 1000px;
+  }
+
+  .modal-video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    overflow: hidden;
+    background-color: #000;
+  }
+
+  .modal-video-container iframe,
+  .modal-video-container video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: visible;
-    border-radius: {{ section.settings.video_border_radius }}px;
-    background-color: #000;
-    z-index: 2;
+    border: none;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    font-weight: bold;
   }
 
   /* Indicadores de posición (dots) */
@@ -552,7 +644,123 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const sliders = document.querySelectorAll('.testimonios-reviews');
+    const videoModal = document.getElementById('videoModal');
+    const modalContainer = videoModal.querySelector('.modal-video-container');
+    const modalClose = videoModal.querySelector('.modal-close');
+    const modalOverlay = videoModal.querySelector('.modal-overlay');
     
+    // Configuración del modal de video
+    function setupVideoModal() {
+      // Obtener todos los contenedores de miniaturas de video
+      const videoThumbnails = document.querySelectorAll('.video-thumbnail-container');
+      
+      videoThumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', function() {
+          const videoUrl = this.getAttribute('data-video-url');
+          const videoType = this.getAttribute('data-video-type');
+          
+          // Limpiar el contenedor modal
+          modalContainer.innerHTML = '';
+          
+          // Crear el elemento adecuado según el tipo de video
+          if (videoType === 'youtube') {
+            // YouTube video
+            const videoId = videoUrl.includes('watch?v=')
+              ? videoUrl.split('watch?v=')[1].split('&')[0]
+              : videoUrl.split('/').pop();
+            
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+            iframe.setAttribute('allowfullscreen', '');
+            modalContainer.appendChild(iframe);
+          } else if (videoType === 'vimeo') {
+            // Vimeo video
+            const videoId = videoUrl.split('/').pop();
+            
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+            iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+            iframe.setAttribute('allowfullscreen', '');
+            modalContainer.appendChild(iframe);
+          } else {
+            // MP4 video
+            const video = document.createElement('video');
+            video.setAttribute('controls', '');
+            video.setAttribute('autoplay', '');
+            video.style.width = '100%';
+            video.style.height = '100%';
+            
+            const source = document.createElement('source');
+            source.src = videoUrl;
+            source.type = 'video/mp4';
+            
+            video.appendChild(source);
+            modalContainer.appendChild(video);
+            
+            // Intentar reproducir el video con manejo de errores
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(error => {
+                console.log('Error en reproducción automática:', error);
+                // Si falla la reproducción automática, asegurarse de que se muestren los controles
+                video.controls = true;
+              });
+            }
+          }
+          
+          // Mostrar el modal
+          videoModal.classList.add('active');
+          
+          // Evitar scroll en el body mientras el modal está abierto
+          document.body.style.overflow = 'hidden';
+        });
+      });
+      
+      // Cerrar modal al hacer clic en botón X
+      modalClose.addEventListener('click', closeModal);
+      
+      // Cerrar modal al hacer clic en overlay
+      modalOverlay.addEventListener('click', closeModal);
+      
+      // Cerrar modal con tecla ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+      
+      function closeModal() {
+        // Detener todos los videos al cerrar el modal
+        const videos = modalContainer.querySelectorAll('video');
+        videos.forEach(video => {
+          try {
+            if (!video.paused) {
+              video.pause();
+            }
+          } catch(e) {}
+        });
+        
+        // Limpiar iframes
+        const iframes = modalContainer.querySelectorAll('iframe');
+        iframes.forEach(iframe => {
+          iframe.src = '';
+        });
+        
+        // Ocultar modal
+        videoModal.classList.remove('active');
+        
+        // Restaurar scroll
+        document.body.style.overflow = '';
+        
+        // Limpiar contenedor
+        setTimeout(() => {
+          modalContainer.innerHTML = '';
+        }, 300);
+      }
+    }
+    
+    // Configuración del slider
     sliders.forEach(slider => {
       const track = slider.querySelector('.reviews-track');
       const slides = slider.querySelectorAll('.review-slide');
@@ -562,7 +770,6 @@
       
       if (!track || !slides.length) return;
       
-      // CONFIGURACIÓN DEL SLIDER
       let currentIndex = 0;
       let startX, endX;
       let isAutoplay = {{ section.settings.autoplay }};
@@ -642,23 +849,6 @@
         dots.forEach((dot, i) => {
           dot.classList.toggle('active', i === currentIndex);
         });
-        
-        // Pausar todos los videos cuando cambia el slide
-        pauseAllVideos();
-      }
-      
-      function pauseAllVideos() {
-        // Buscar todos los videos y pausarlos
-        const videos = slider.querySelectorAll('video');
-        videos.forEach(video => {
-          if (video && !video.paused) {
-            try {
-              video.pause();
-            } catch(e) {
-              console.error('Error pausando video:', e);
-            }
-          }
-        });
       }
       
       function toggleAutoplay() {
@@ -720,12 +910,12 @@
       const trackWrapper = slider.querySelector('.reviews-track-wrapper');
       
       trackWrapper.addEventListener('touchstart', e => {
-        // Verificar si estamos haciendo clic en un video
+        // Verificar si estamos tocando una miniatura de video
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
-        // No iniciar deslizamiento si tocamos un video
-        if (element.tagName === 'VIDEO') {
+        // No iniciar deslizamiento si tocamos un elemento de video
+        if (element.closest('.video-thumbnail-container')) {
           return;
         }
         
@@ -763,6 +953,9 @@
         toggleAutoplay();
       });
     });
+    
+    // Inicializar el modal de video
+    setupVideoModal();
   });
 </script>
 
@@ -1401,6 +1594,12 @@
           "id": "video_file",
           "label": "Archivo de video",
           "info": "Sube un archivo MP4 directamente"
+        },
+        {
+          "type": "image_picker",
+          "id": "video_thumbnail",
+          "label": "Miniatura del video",
+          "info": "Recomendado: usar una imagen para la miniatura del video"
         },
         {
           "type": "image_picker",
