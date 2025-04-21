@@ -1,11 +1,37 @@
-/* Estilos para los ganadores */ .ganadores-container { margin-top: 30px; padding: 20px; background-color: #1a1a1a;
-border-radius: 8px; } .ganadores-titulo { font-size: 24px; margin-bottom: 15px; color: #ffffff; text-align: center; }
-.ganadores-lista { display: flex; flex-direction: column; gap: 10px; } .ganador-item { display: flex; align-items:
-center; padding: 10px; background-color: #222222; border-radius: 6px; } .ganador-numero { width: 40px; height: 40px;
-border-radius: 50%; background-color: #25D366; color: white; display: flex; align-items: center; justify-content:
-center; font-weight: bold; margin-right: 15px; flex-shrink: 0; } .ganador-info { flex: 1; } .ganador-nombre {
-font-weight: bold; color: #ffffff; font-size: 16px; } .ganador-premio { font-size: 14px; color: #cccccc; margin-top:
-3px; }
+/* Estilos de la tabla de puestos */ .tabla-puestos-container { margin-bottom: 50px; }
+
+.tabla-subtitle { text-align: center; margin-bottom: 20px; font-size: 16px; color: #cccccc; }
+
+.tabla-container { background-color: #111111; border-radius: 8px; padding: 20px; box-shadow: 0 5px 15px rgba(0, 0, 0,
+0.3); }
+
+.tabla-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; margin-bottom: 20px; }
+
+.tabla-item { height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size:
+16px; border-radius: 4px; }
+
+.tabla-item.disponible { background-color: #25D366; color: #FFFFFF; cursor: pointer; transition: all 0.3s ease; }
+
+.tabla-item.disponible:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(37, 211, 102, 0.5); }
+
+.tabla-item.no-disponible { background-color: #444444; }
+
+.leyenda { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+
+.leyenda-item { display: flex; align-items: center; }
+
+.leyenda-color { width: 20px; height: 20px; border-radius: 4px; margin-right: 8px; }
+
+.leyenda-color.disponible { background-color: #25D366; }
+
+.leyenda-color.no-disponible { background-color: #444444; }/* Ganadores */ .ganadores-container { margin-top: 30px;
+padding: 20px; background-color: #1a1a1a; border-radius: 8px; } .ganadores-titulo { font-size: 24px; margin-bottom:
+15px; color: #ffffff; text-align: center; } .ganadores-lista { display: flex; flex-direction: column; gap: 10px; }
+.ganador-item { display: flex; align-items: center; padding: 10px; background-color: #222222; border-radius: 6px; }
+.ganador-numero { width: 40px; height: 40px; border-radius: 50%; background-color: #25D366; color: white; display: flex;
+align-items: center; justify-content: center; font-weight: bold; margin-right: 15px; flex-shrink: 0; } .ganador-info {
+flex: 1; } .ganador-nombre { font-weight: bold; color: #ffffff; font-size: 16px; } .ganador-premio { font-size: 14px;
+color: #cccccc; margin-top: 3px; }
 {% comment %}
   Premio y Tabla de Puestos - Para páginas de sorteos - Versión con Tres Premios
 {% endcomment %}
