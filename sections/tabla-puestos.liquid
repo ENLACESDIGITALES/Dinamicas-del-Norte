@@ -1,75 +1,171 @@
+/* Estilos para los ganadores */ .ganadores-container { margin-top: 30px; padding: 20px; background-color: #1a1a1a;
+border-radius: 8px; } .ganadores-titulo { font-size: 24px; margin-bottom: 15px; color: #ffffff; text-align: center; }
+.ganadores-lista { display: flex; flex-direction: column; gap: 10px; } .ganador-item { display: flex; align-items:
+center; padding: 10px; background-color: #222222; border-radius: 6px; } .ganador-numero { width: 40px; height: 40px;
+border-radius: 50%; background-color: #25D366; color: white; display: flex; align-items: center; justify-content:
+center; font-weight: bold; margin-right: 15px; flex-shrink: 0; } .ganador-info { flex: 1; } .ganador-nombre {
+font-weight: bold; color: #ffffff; font-size: 16px; } .ganador-premio { font-size: 14px; color: #cccccc; margin-top:
+3px; }
 {% comment %}
-  Premio y Tabla de Puestos - Para páginas de sorteos - Versión Premio Único con Múltiples Ganadores
+  Premio y Tabla de Puestos - Para páginas de sorteos - Versión con Tres Premios
 {% endcomment %}
 
 <section class="premio-sorteo">
   <div class="container">
-    <!-- Premio único con múltiples ganadores -->
-    <div class="premio-info">
-      <div class="premio-imagen-container">
-        {% if section.settings.premio_imagen != blank %}
-          <img
-            src="{{ section.settings.premio_imagen | img_url: 'large' }}"
-            alt="{{ section.settings.premio_titulo }}"
-            class="premio-imagen"
-          >
-        {% else %}
-          <div class="premio-imagen-placeholder">
-            <span>Imagen del premio</span>
-          </div>
-        {% endif %}
+    <!-- Sección de premios -->
+    <div class="premios-container">
+      <div class="section-title">
+        <h2>{{ section.settings.sorteo_titulo }}</h2>
       </div>
 
-      <div class="premio-detalles">
-        <div class="section-title">
-          <h2>{{ section.settings.premio_titulo }}</h2>
+      <div class="sorteo-descripcion">
+        {{ section.settings.sorteo_descripcion }}
+      </div>
+
+      {% if section.settings.mostrar_fecha_sorteo %}
+        <div class="sorteo-fecha-container">
+          <div class="sorteo-fecha"><strong>Fecha del sorteo:</strong> {{ section.settings.fecha_sorteo }}</div>
         </div>
+      {% endif %}
 
-        <div class="premio-descripcion">
-          {{ section.settings.premio_descripcion }}
-        </div>
-
-        {% if section.settings.mostrar_fecha_sorteo %}
-          <div class="premio-fecha"><strong>Fecha del sorteo:</strong> {{ section.settings.fecha_sorteo }}</div>
-        {% endif %}
-
-        {% if section.settings.mostrar_valor %}
-          <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.valor_premio }}</div>
-        {% endif %}
-
-        <div class="premio-lista">
-          {% for caracteristica in section.settings.caracteristicas %}
-            {% if caracteristica != blank %}
-              <div class="premio-caracteristica">
-                <div class="caracteristica-icono">✓</div>
-                <div class="caracteristica-texto">{{ caracteristica }}</div>
+      <div class="premios-grid">
+        <!-- Premio 1 -->
+        {% if section.settings.premio1_activo %}
+          <div class="premio-card">
+            <div class="premio-numero">1° Premio</div>
+            <div class="premio-imagen-container">
+              {% if section.settings.premio1_imagen != blank %}
+                <img
+                  src="{{ section.settings.premio1_imagen | img_url: 'medium' }}"
+                  alt="{{ section.settings.premio1_titulo }}"
+                  class="premio-imagen"
+                >
+              {% else %}
+                <div class="premio-imagen-placeholder">
+                  <span>Imagen del premio</span>
+                </div>
+              {% endif %}
+            </div>
+            <div class="premio-info">
+              <h3 class="premio-titulo">{{ section.settings.premio1_titulo }}</h3>
+              <div class="premio-descripcion">
+                {{ section.settings.premio1_descripcion }}
               </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-        
-        <!-- Ganadores -->
-        {% if section.settings.mostrar_ganadores and section.blocks.size > 0 %}
-          <div class="ganadores-container">
-            <h3 class="ganadores-titulo">{{ section.settings.titulo_ganadores }}</h3>
-            <div class="ganadores-lista">
-              {% for block in section.blocks %}
-                {% if block.type == 'ganador' %}
-                  <div class="ganador-item" {{ block.shopify_attributes }}>
-                    <div class="ganador-numero">{{ block.settings.numero }}</div>
-                    <div class="ganador-info">
-                      <div class="ganador-nombre">{{ block.settings.nombre }}</div>
-                      {% if block.settings.premio_adicional != blank %}
-                        <div class="ganador-premio-adicional">{{ block.settings.premio_adicional }}</div>
-                      {% endif %}
+              {% if section.settings.mostrar_valor %}
+                <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio1_valor }}</div>
+              {% endif %}
+              <div class="premio-lista">
+                {% for caracteristica in section.settings.premio1_caracteristicas %}
+                  {% if caracteristica != blank %}
+                    <div class="premio-caracteristica">
+                      <div class="caracteristica-icono">✓</div>
+                      <div class="caracteristica-texto">{{ caracteristica }}</div>
                     </div>
-                  </div>
-                {% endif %}
-              {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Premio 2 -->
+        {% if section.settings.premio2_activo %}
+          <div class="premio-card">
+            <div class="premio-numero">2° Premio</div>
+            <div class="premio-imagen-container">
+              {% if section.settings.premio2_imagen != blank %}
+                <img
+                  src="{{ section.settings.premio2_imagen | img_url: 'medium' }}"
+                  alt="{{ section.settings.premio2_titulo }}"
+                  class="premio-imagen"
+                >
+              {% else %}
+                <div class="premio-imagen-placeholder">
+                  <span>Imagen del premio</span>
+                </div>
+              {% endif %}
+            </div>
+            <div class="premio-info">
+              <h3 class="premio-titulo">{{ section.settings.premio2_titulo }}</h3>
+              <div class="premio-descripcion">
+                {{ section.settings.premio2_descripcion }}
+              </div>
+              {% if section.settings.mostrar_valor %}
+                <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio2_valor }}</div>
+              {% endif %}
+              <div class="premio-lista">
+                {% for caracteristica in section.settings.premio2_caracteristicas %}
+                  {% if caracteristica != blank %}
+                    <div class="premio-caracteristica">
+                      <div class="caracteristica-icono">✓</div>
+                      <div class="caracteristica-texto">{{ caracteristica }}</div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Premio 3 -->
+        {% if section.settings.premio3_activo %}
+          <div class="premio-card">
+            <div class="premio-numero">3° Premio</div>
+            <div class="premio-imagen-container">
+              {% if section.settings.premio3_imagen != blank %}
+                <img
+                  src="{{ section.settings.premio3_imagen | img_url: 'medium' }}"
+                  alt="{{ section.settings.premio3_titulo }}"
+                  class="premio-imagen"
+                >
+              {% else %}
+                <div class="premio-imagen-placeholder">
+                  <span>Imagen del premio</span>
+                </div>
+              {% endif %}
+            </div>
+            <div class="premio-info">
+              <h3 class="premio-titulo">{{ section.settings.premio3_titulo }}</h3>
+              <div class="premio-descripcion">
+                {{ section.settings.premio3_descripcion }}
+              </div>
+              {% if section.settings.mostrar_valor %}
+                <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio3_valor }}</div>
+              {% endif %}
+              <div class="premio-lista">
+                {% for caracteristica in section.settings.premio3_caracteristicas %}
+                  {% if caracteristica != blank %}
+                    <div class="premio-caracteristica">
+                      <div class="caracteristica-icono">✓</div>
+                      <div class="caracteristica-texto">{{ caracteristica }}</div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
             </div>
           </div>
         {% endif %}
       </div>
+
+      <!-- Ganadores -->
+      {% if section.settings.mostrar_ganadores and section.blocks.size > 0 %}
+        <div class="ganadores-container">
+          <h3 class="ganadores-titulo">{{ section.settings.titulo_ganadores }}</h3>
+          <div class="ganadores-lista">
+            {% for block in section.blocks %}
+              {% if block.type == 'ganador' %}
+                <div class="ganador-item" {{ block.shopify_attributes }}>
+                  <div class="ganador-numero">{{ block.settings.numero }}</div>
+                  <div class="ganador-info">
+                    <div class="ganador-nombre">{{ block.settings.nombre }}</div>
+                    <div class="ganador-premio">{{ block.settings.premio }}</div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     </div>
 
     <!-- Tabla de puestos personalizable -->
@@ -84,18 +180,76 @@
 
       <div class="tabla-container">
         <div class="tabla-grid">
-          {% for block in section.blocks %}
-            {% if block.type == 'numero' %}
-              <div class="tabla-item {% if block.settings.disponible %}disponible{% else %}no-disponible{% endif %}" 
-                   data-numero="{{ block.settings.numero }}" {{ block.shopify_attributes }}>
-                {% if block.settings.texto_personalizado != blank %}
-                  {{ block.settings.texto_personalizado }}
+          {% if section.settings.mostrar_solo_seleccionados %}
+            {% for numero in section.settings.numeros_mostrar %}
+              {% if numero != blank %}
+                {% assign numero_int = numero | strip | plus: 0 %}
+                {% assign custom_texto = '' %}
+                {% assign es_disponible = true %}
+
+                {% if section.settings.numeros_no_disponibles contains numero_int %}
+                  {% assign es_disponible = false %}
+                {% endif %}
+
+                {% for personalizado in section.settings.numeros_personalizados %}
+                  {% assign partes = personalizado | split: ':' %}
+                  {% if partes.size >= 2 %}
+                    {% assign num_personalizado = partes[0] | strip | plus: 0 %}
+                    {% if num_personalizado == numero_int %}
+                      {% assign custom_texto = partes[1] | strip %}
+                      {% break %}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+
+                <div
+                  class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}"
+                  data-numero="{{ numero_int }}"
+                >
+                  {% if custom_texto != '' %}
+                    {{ custom_texto }}
+                  {% else %}
+                    {{ numero_int }}
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% assign rango_inicio = section.settings.rango_inicio | default: 0 | plus: 0 %}
+            {% assign rango_fin = section.settings.rango_fin | default: 99 | plus: 0 %}
+
+            {% for i in (rango_inicio..rango_fin) %}
+              {% assign es_disponible = true %}
+              {% assign custom_texto = '' %}
+
+              {% if section.settings.numeros_no_disponibles contains i %}
+                {% assign es_disponible = false %}
+              {% endif %}
+
+              {% for personalizado in section.settings.numeros_personalizados %}
+                {% assign partes = personalizado | split: ':' %}
+                {% if partes.size >= 2 %}
+                  {% assign num_personalizado = partes[0] | strip | plus: 0 %}
+                  {% if num_personalizado == i %}
+                    {% assign custom_texto = partes[1] | strip %}
+                    {% break %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+
+              <div
+                class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}"
+                data-numero="{{ i }}"
+              >
+                {% if custom_texto != '' %}
+                  {{ custom_texto }}
                 {% else %}
-                  {{ block.settings.numero }}
+                  {{ i }}
                 {% endif %}
               </div>
-            {% endif %}
-          {% endfor %}
+            {% endfor %}
+          {% endif %}
+        </div>
 
         <div class="leyenda">
           <div class="leyenda-item">
@@ -168,135 +322,136 @@
     color: #ffffff;
   }
 
-  /* Eliminada la línea pequeña */
-
-  /* Estilos de la información del premio */
-  .premio-info {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 50px;
-    gap: 30px;
-  }
-  
-  /* Estilos para los ganadores */
-  .ganadores-container {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #1a1a1a;
-    border-radius: 8px;
-  }
-  
-  .ganadores-titulo {
-    font-size: 24px;
-    margin-bottom: 15px;
-    color: #ffffff;
-    text-align: center;
-  }
-  
-  .ganadores-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .ganador-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #222222;
-    border-radius: 6px;
-  }
-  
-  .ganador-numero {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #25D366;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-right: 15px;
-    flex-shrink: 0;
-  }
-  
-  .ganador-info {
-    flex: 1;
-  }
-  
-  .ganador-nombre {
-    font-weight: bold;
-    color: #ffffff;
-    font-size: 16px;
-  }
-  
-  .ganador-premio-adicional {
-    font-size: 14px;
-    color: #cccccc;
-    margin-top: 3px;
+  /* Estilos para la sección de premios */
+  .premios-container {
+    margin-bottom: 30px;
   }
 
-  .premio-imagen-container {
-    flex: 1;
-    min-width: 300px;
-  }
-
-  .premio-imagen {
-    width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  .premio-imagen-placeholder {
-    width: 100%;
-    padding-bottom: 100%;
-    background-color: #333;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-    position: relative;
-  }
-
-  .premio-imagen-placeholder span {
-    position: absolute;
-    font-size: 18px;
-  }
-
-  .premio-detalles {
-    flex: 1;
-    min-width: 300px;
-  }
-
-  .premio-descripcion {
+  .sorteo-descripcion {
     font-size: 16px;
     line-height: 1.5;
     margin-bottom: 20px;
     color: #cccccc;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .premio-fecha,
-  .premio-valor {
+  .sorteo-fecha-container {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .sorteo-fecha {
     font-size: 18px;
+    color: #ffffff;
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .premios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  .premio-card {
+    background-color: #111111;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .premio-numero {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #25D366;
+    color: white;
+    padding: 8px 15px;
+    font-weight: bold;
+    border-bottom-left-radius: 8px;
+    z-index: 1;
+  }
+
+  .premio-imagen-container {
+    width: 100%;
+    padding-bottom: 60%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .premio-imagen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .premio-imagen-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+  }
+
+  .premio-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .premio-titulo {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    color: #ffffff;
+  }
+
+  .premio-descripcion {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #cccccc;
+    flex-grow: 1;
+  }
+
+  .premio-valor {
+    font-size: 16px;
     margin-bottom: 15px;
     color: #ffffff;
   }
 
   .premio-lista {
-    margin-top: 20px;
+    margin-top: auto;
   }
 
   .premio-caracteristica {
     display: flex;
-    align-items: center;
-    margin-bottom: 10px;
+    align-items: flex-start;
+    margin-bottom: 8px;
   }
 
   .caracteristica-icono {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     background-color: #25D366;
     border-radius: 50%;
     display: flex;
@@ -304,10 +459,11 @@
     justify-content: center;
     margin-right: 10px;
     flex-shrink: 0;
+    font-size: 12px;
   }
 
   .caracteristica-texto {
-    font-size: 16px;
+    font-size: 14px;
     color: #ffffff;
   }
 
@@ -329,7 +485,7 @@
     padding: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
-  
+
   /* Se eliminó el selector de rangos */
 
   .tabla-grid {
@@ -457,13 +613,13 @@
       height: 36px;
       font-size: 14px;
     }
-    
+
     .ganador-item {
       flex-direction: column;
       align-items: center;
       text-align: center;
     }
-    
+
     .ganador-numero {
       margin-right: 0;
       margin-bottom: 10px;
@@ -493,24 +649,19 @@
   "settings": [
     {
       "type": "header",
-      "content": "Información del Premio"
+      "content": "Información del Sorteo"
     },
     {
       "type": "text",
-      "id": "premio_titulo",
-      "label": "Título del premio",
-      "default": "¡Gran sorteo de motocicleta!"
+      "id": "sorteo_titulo",
+      "label": "Título del sorteo",
+      "default": "¡Gran sorteo con tres premios increíbles!"
     },
     {
       "type": "richtext",
-      "id": "premio_descripcion",
-      "label": "Descripción del premio",
-      "default": "<p>Participa en nuestro increíble sorteo y gana esta fabulosa motocicleta. ¡Una oportunidad única con altas probabilidades de ganar!</p>"
-    },
-    {
-      "type": "image_picker",
-      "id": "premio_imagen",
-      "label": "Imagen del premio"
+      "id": "sorteo_descripcion",
+      "label": "Descripción del sorteo",
+      "default": "<p>Participa en nuestro increíble sorteo y gana uno de estos fabulosos premios. ¡Una oportunidad única con altas probabilidades de ganar!</p>"
     },
     {
       "type": "checkbox",
@@ -527,20 +678,127 @@
     {
       "type": "checkbox",
       "id": "mostrar_valor",
-      "label": "Mostrar valor del premio",
+      "label": "Mostrar valor de los premios",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Primer Premio"
+    },
+    {
+      "type": "checkbox",
+      "id": "premio1_activo",
+      "label": "Mostrar primer premio",
       "default": true
     },
     {
       "type": "text",
-      "id": "valor_premio",
-      "label": "Valor del premio",
+      "id": "premio1_titulo",
+      "label": "Título del primer premio",
+      "default": "Motocicleta último modelo"
+    },
+    {
+      "type": "richtext",
+      "id": "premio1_descripcion",
+      "label": "Descripción del primer premio",
+      "default": "<p>Flamante motocicleta 0km, perfecta para la ciudad o para viajes.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "premio1_imagen",
+      "label": "Imagen del primer premio"
+    },
+    {
+      "type": "text",
+      "id": "premio1_valor",
+      "label": "Valor del primer premio",
       "default": "$5,000,000"
     },
     {
       "type": "textarea",
-      "id": "caracteristicas",
+      "id": "premio1_caracteristicas",
       "label": "Características (una por línea)",
       "default": "Premio garantizado al 100%\nDocumentación legal incluida\nEntrega a domicilio sin costo",
+      "info": "Escribe cada característica en una línea nueva"
+    },
+    {
+      "type": "header",
+      "content": "Segundo Premio"
+    },
+    {
+      "type": "checkbox",
+      "id": "premio2_activo",
+      "label": "Mostrar segundo premio",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "premio2_titulo",
+      "label": "Título del segundo premio",
+      "default": "Computador portátil"
+    },
+    {
+      "type": "richtext",
+      "id": "premio2_descripcion",
+      "label": "Descripción del segundo premio",
+      "default": "<p>Potente computador portátil con las mejores especificaciones para trabajo y entretenimiento.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "premio2_imagen",
+      "label": "Imagen del segundo premio"
+    },
+    {
+      "type": "text",
+      "id": "premio2_valor",
+      "label": "Valor del segundo premio",
+      "default": "$2,500,000"
+    },
+    {
+      "type": "textarea",
+      "id": "premio2_caracteristicas",
+      "label": "Características (una por línea)",
+      "default": "Último modelo del mercado\nGarantía de 1 año\nSoftware incluido",
+      "info": "Escribe cada característica en una línea nueva"
+    },
+    {
+      "type": "header",
+      "content": "Tercer Premio"
+    },
+    {
+      "type": "checkbox",
+      "id": "premio3_activo",
+      "label": "Mostrar tercer premio",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "premio3_titulo",
+      "label": "Título del tercer premio",
+      "default": "Smart TV 65 pulgadas"
+    },
+    {
+      "type": "richtext",
+      "id": "premio3_descripcion",
+      "label": "Descripción del tercer premio",
+      "default": "<p>Televisor Smart TV con la mejor calidad de imagen y sonido para disfrutar de tus películas y series favoritas.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "premio3_imagen",
+      "label": "Imagen del tercer premio"
+    },
+    {
+      "type": "text",
+      "id": "premio3_valor",
+      "label": "Valor del tercer premio",
+      "default": "$1,800,000"
+    },
+    {
+      "type": "textarea",
+      "id": "premio3_caracteristicas",
+      "label": "Características (una por línea)",
+      "default": "Resolución 4K\nConexión Wi-Fi y Bluetooth\nSistema operativo Android TV",
       "info": "Escribe cada característica en una línea nueva"
     },
     {
@@ -574,6 +832,48 @@
       "id": "tabla_subtitulo",
       "label": "Subtítulo de la tabla",
       "default": "Selecciona tu número de la suerte entre los puestos disponibles"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_solo_seleccionados",
+      "label": "Mostrar solo números seleccionados",
+      "default": true,
+      "info": "Si está activado, solo se mostrarán los números que especifiques. Si está desactivado, se mostrará un rango completo."
+    },
+    {
+      "type": "textarea",
+      "id": "numeros_mostrar",
+      "label": "Números a mostrar",
+      "default": "1,2,3,4,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,77,80,85,90,95,99",
+      "info": "Ingresa los números que deseas mostrar separados por comas (ejemplo: 1,2,3,10,20,30)"
+    },
+    {
+      "type": "number",
+      "id": "rango_inicio",
+      "label": "Inicio del rango de números",
+      "default": 0,
+      "info": "Solo se aplica si la opción 'Mostrar solo números seleccionados' está desactivada"
+    },
+    {
+      "type": "number",
+      "id": "rango_fin",
+      "label": "Fin del rango de números",
+      "default": 99,
+      "info": "Solo se aplica si la opción 'Mostrar solo números seleccionados' está desactivada"
+    },
+    {
+      "type": "textarea",
+      "id": "numeros_no_disponibles",
+      "label": "Números no disponibles",
+      "default": "5,15,25",
+      "info": "Ingresa los números no disponibles separados por comas (ejemplo: 5,10,15)"
+    },
+    {
+      "type": "textarea",
+      "id": "numeros_personalizados",
+      "label": "Números con texto personalizado",
+      "default": "77: SUERTE\n88: PROMO\n99: VIP",
+      "info": "Formato: número: texto (uno por línea, ejemplo: 77: SUERTE)"
     },
     {
       "type": "text",
@@ -612,31 +912,6 @@
   ],
   "blocks": [
     {
-      "type": "numero",
-      "name": "Número para la tabla",
-      "settings": [
-        {
-          "type": "text",
-          "id": "numero",
-          "label": "Número",
-          "info": "Ingresa un número para mostrar en la tabla"
-        },
-        {
-          "type": "checkbox",
-          "id": "disponible",
-          "label": "Disponible",
-          "default": true,
-          "info": "Marca para indicar que el número está disponible, desmarca para indicar que no está disponible"
-        },
-        {
-          "type": "text",
-          "id": "texto_personalizado",
-          "label": "Texto personalizado (opcional)",
-          "info": "Deja en blanco para mostrar solo el número, o ingresa un texto personalizado"
-        }
-      ]
-    },
-    {
       "type": "ganador",
       "name": "Ganador",
       "settings": [
@@ -653,10 +928,24 @@
           "default": "Juan Pérez"
         },
         {
-          "type": "text",
-          "id": "premio_adicional",
-          "label": "Premio adicional (opcional)",
-          "info": "Información adicional sobre el premio"
+          "type": "select",
+          "id": "premio",
+          "label": "Premio ganado",
+          "options": [
+            {
+              "value": "Primer Premio",
+              "label": "Primer Premio"
+            },
+            {
+              "value": "Segundo Premio",
+              "label": "Segundo Premio"
+            },
+            {
+              "value": "Tercer Premio",
+              "label": "Tercer Premio"
+            }
+          ],
+          "default": "Primer Premio"
         }
       ]
     }
@@ -664,46 +953,7 @@
   "presets": [
     {
       "name": "Premio y Tabla de Puestos",
-      "category": "Sorteos",
-      "blocks": [
-        {
-          "type": "numero",
-          "settings": {
-            "numero": "1",
-            "disponible": true
-          }
-        },
-        {
-          "type": "numero",
-          "settings": {
-            "numero": "2",
-            "disponible": true
-          }
-        },
-        {
-          "type": "numero",
-          "settings": {
-            "numero": "3",
-            "disponible": false
-          }
-        },
-        {
-          "type": "numero",
-          "settings": {
-            "numero": "7",
-            "disponible": true,
-            "texto_personalizado": "SUERTE"
-          }
-        },
-        {
-          "type": "ganador",
-          "settings": {
-            "numero": "88",
-            "nombre": "María García",
-            "premio_adicional": "Primer Premio"
-          }
-        }
-      ]
+      "category": "Sorteos"
     }
   ]
 }
