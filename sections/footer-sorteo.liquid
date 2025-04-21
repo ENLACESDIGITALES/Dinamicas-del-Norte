@@ -1,56 +1,533 @@
-<footer>
-  <div class="container">
+{% comment %}
+  Footer Personalizable - Versión Mejorada
+{% endcomment %}
+
+<style>
+  #shopify-section-{{ section.id }} {
+    {% if section.settings.mostrar_footer %}
+      display: block;
+    {% else %}
+      display: none;
+    {% endif %}
+  }
+
+  .footer {
+    background-color: {{ section.settings.color_fondo }};
+    color: {{ section.settings.color_texto }};
+    padding: 60px 0 20px;
+  }
+
+  .footer a {
+    color: {{ section.settings.color_enlaces }};
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer a:hover {
+    color: {{ section.settings.color_enlaces_hover }};
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .footer-column h3 {
+    font-size: {{ section.settings.tamano_titulos }}px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: {{ section.settings.color_titulos }};
+    position: relative;
+  }
+
+  .footer-column h3:after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    background-color: {{ section.settings.color_acento }};
+    margin-top: 10px;
+  }
+
+  .footer-column p {
+    font-size: {{ section.settings.tamano_texto }}px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+
+  .footer-column .contacto-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+
+  .footer-column .contacto-icono {
+    margin-right: 10px;
+    width: {{ section.settings.tamano_iconos }}px;
+    height: {{ section.settings.tamano_iconos }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: {{ section.settings.color_acento }};
+    flex-shrink: 0;
+  }
+
+  .footer-column .contacto-texto {
+    flex: 1;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: {{ section.settings.tamano_iconos_sociales }}px;
+    height: {{ section.settings.tamano_iconos_sociales }}px;
+    background-color: {{ section.settings.color_acento }};
+    border-radius: 50%;
+    color: {{ section.settings.color_fondo }} !important;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .social-icon:hover {
+    transform: translateY(-3px);
+    background-color: {{ section.settings.color_acento_hover }};
+  }
+
+  .social-icon svg {
+    width: calc({{ section.settings.tamano_iconos_sociales }}px * 0.5);
+    height: calc({{ section.settings.tamano_iconos_sociales }}px * 0.5);
+  }
+
+  .enlaces-rapidos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .enlaces-rapidos a {
+    position: relative;
+    padding-left: 15px;
+    font-size: {{ section.settings.tamano_texto }}px;
+  }
+
+  .enlaces-rapidos a:before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: {{ section.settings.color_acento }};
+    font-size: calc({{ section.settings.tamano_texto }}px * 1.2);
+  }
+
+  .copyright {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: calc({{ section.settings.tamano_texto }}px - 2px);
+  }
+
+  .copyright a {
+    font-weight: bold;
+  }
+
+  @media screen and (max-width: 768px) {
+    .footer {
+      padding: 40px 0 20px;
+    }
+
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .footer-column h3 {
+      font-size: calc({{ section.settings.tamano_titulos }}px - 2px);
+    }
+
+    .social-icons {
+      justify-content: flex-start;
+    }
+  }
+</style>
+
+<footer class="footer">
+  <div class="footer-container">
     <div class="footer-content">
-      <div class="footer-column">
-        <h3>Dinámicas del Norte</h3>
-        <p>{{ section.settings.footer_descripcion }}</p>
-        <div class="social-icons">
-          <a href="{{ section.settings.instagram_link }}" class="social-icon">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="{{ section.settings.facebook_link }}" class="social-icon">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="{{ section.settings.whatsapp_link }}" class="social-icon">
-            <i class="fab fa-whatsapp"></i>
-          </a>
+      <!-- Columna 1: Información de la empresa -->
+      {% if section.settings.mostrar_columna_info %}
+        <div class="footer-column">
+          <h3>{{ section.settings.titulo_columna_info }}</h3>
+          <p>{{ section.settings.footer_descripcion }}</p>
+          {% if section.settings.mostrar_redes %}
+            <div class="social-icons">
+              {% if section.settings.instagram_link != blank %}
+                <a
+                  href="{{ section.settings.instagram_link }}"
+                  class="social-icon"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Instagram"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.facebook_link != blank %}
+                <a
+                  href="{{ section.settings.facebook_link }}"
+                  class="social-icon"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Facebook"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.twitter_link != blank %}
+                <a
+                  href="{{ section.settings.twitter_link }}"
+                  class="social-icon"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Twitter"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.youtube_link != blank %}
+                <a
+                  href="{{ section.settings.youtube_link }}"
+                  class="social-icon"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="YouTube"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.tiktok_link != blank %}
+                <a
+                  href="{{ section.settings.tiktok_link }}"
+                  class="social-icon"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="TikTok"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                  </svg>
+                </a>
+              {% endif %}
+              {% if section.settings.whatsapp_link != blank %}
+                <a
+                  href="{{ section.settings.whatsapp_link }}"
+                  class="social-icon"
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="WhatsApp"
+                >
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
+                    <path d="M20.52 3.449c-2.189-2.189-5.096-3.396-8.196-3.396s-6.009 1.207-8.196 3.396c-2.189 2.189-3.396 5.096-3.396 8.196 0 1.513.296 2.976.87 4.359l-1.326 6.318 6.442-1.193c1.301.504 2.682.764 4.089.764 3.099 0 6.007-1.207 8.196-3.396 2.189-2.189 3.396-5.096 3.396-8.196s-1.207-6.009-3.396-8.196zm-1.882 14.327c-.945.944-2.201 1.466-3.536 1.466-.695 0-1.371-.139-2.021-.404l-1.426-.59-1.819.338.417-1.814-.568-1.389c-.321-.689-.479-1.406-.479-2.142 0-1.335.521-2.59 1.466-3.536.945-.945 2.201-1.466 3.536-1.466s2.591.521 3.536 1.466c.944.945 1.466 2.201 1.466 3.536s-.522 2.59-1.466 3.536z" fillRule="evenodd" clipRule="evenodd"/>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
         </div>
-      </div>
+      {% endif %}
 
-      <div class="footer-column">
-        <h3>Contacto</h3>
-        <p><i class="fas fa-map-marker-alt"></i> {{ section.settings.direccion }}</p>
-        <p><i class="fas fa-phone"></i> {{ section.settings.telefono }}</p>
-        <p><i class="fas fa-envelope"></i> {{ section.settings.email }}</p>
-      </div>
+      <!-- Columna 2: Información de contacto -->
+      {% if section.settings.mostrar_columna_contacto %}
+        <div class="footer-column">
+          <h3>{{ section.settings.titulo_columna_contacto }}</h3>
+          {% if section.settings.direccion != blank %}
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+                </svg>
+              </div>
+              <div class="contacto-texto">{{ section.settings.direccion }}</div>
+            </div>
+          {% endif %}
+          {% if section.settings.telefono != blank %}
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z"/>
+                </svg>
+              </div>
+              <div class="contacto-texto">{{ section.settings.telefono }}</div>
+            </div>
+          {% endif %}
+          {% if section.settings.email != blank %}
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
+                </svg>
+              </div>
+              <div class="contacto-texto">{{ section.settings.email }}</div>
+            </div>
+          {% endif %}
+          {% if section.settings.horario != blank %}
+            <div class="contacto-item">
+              <div class="contacto-icono">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 14h-7v-8h2v6h5v2z"/>
+                </svg>
+              </div>
+              <div class="contacto-texto">{{ section.settings.horario }}</div>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
 
-      <div class="footer-column">
-        <h3>Enlaces Rápidos</h3>
-        <a href="{{ section.settings.enlace_terminos }}">Términos y Condiciones</a>
-        <a href="{{ section.settings.enlace_privacidad }}">Política de Privacidad</a>
-        <a href="{{ section.settings.enlace_preguntas }}">Preguntas Frecuentes</a>
-      </div>
+      <!-- Columna 3: Enlaces rápidos -->
+      {% if section.settings.mostrar_columna_enlaces %}
+        <div class="footer-column">
+          <h3>{{ section.settings.titulo_columna_enlaces }}</h3>
+          <div class="enlaces-rapidos">
+            {% if section.settings.enlace1_texto != blank and section.settings.enlace1_url != blank %}
+              <a href="{{ section.settings.enlace1_url }}">{{ section.settings.enlace1_texto }}</a>
+            {% endif %}
+            {% if section.settings.enlace2_texto != blank and section.settings.enlace2_url != blank %}
+              <a href="{{ section.settings.enlace2_url }}">{{ section.settings.enlace2_texto }}</a>
+            {% endif %}
+            {% if section.settings.enlace3_texto != blank and section.settings.enlace3_url != blank %}
+              <a href="{{ section.settings.enlace3_url }}">{{ section.settings.enlace3_texto }}</a>
+            {% endif %}
+            {% if section.settings.enlace4_texto != blank and section.settings.enlace4_url != blank %}
+              <a href="{{ section.settings.enlace4_url }}">{{ section.settings.enlace4_texto }}</a>
+            {% endif %}
+            {% if section.settings.enlace5_texto != blank and section.settings.enlace5_url != blank %}
+              <a href="{{ section.settings.enlace5_url }}">{{ section.settings.enlace5_texto }}</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Columna 4: Personalizable -->
+      {% if section.settings.mostrar_columna_personalizada %}
+        <div class="footer-column">
+          <h3>{{ section.settings.titulo_columna_personalizada }}</h3>
+          <div class="columna-personalizada">
+            {{ section.settings.contenido_columna_personalizada }}
+          </div>
+        </div>
+      {% endif %}
     </div>
 
-    <div class="copyright">
-      <p>
-        © {{ 'now' | date: '%Y' }} Dinámicas del Norte. Desarrollado por
-        <a href="https://enlacesdigitales.com" target="_blank" rel="noopener">Enlaces Digitales</a>. Todos los derechos
-        reservados.
-      </p>
-    </div>
+    {% if section.settings.mostrar_copyright %}
+      <div class="copyright">
+        <p>
+          {{ section.settings.texto_copyright | replace: '[year]', 'now' | date: '%Y' }}
+          {% if section.settings.mostrar_creditos %}
+            {{ section.settings.texto_creditos | replace: '[developer]', section.settings.nombre_desarrollador }}
+          {% endif %}
+        </p>
+      </div>
+    {% endif %}
   </div>
 </footer>
 
 {% schema %}
 {
-  "name": "Footer",
+  "name": "Footer Mejorado",
+  "tag": "section",
+  "class": "section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Configuración General"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_footer",
+      "label": "Mostrar footer",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "color_fondo",
+      "label": "Color de fondo",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "color_texto",
+      "label": "Color de texto",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_titulos",
+      "label": "Color de títulos",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_enlaces",
+      "label": "Color de enlaces",
+      "default": "#CCCCCC"
+    },
+    {
+      "type": "color",
+      "id": "color_enlaces_hover",
+      "label": "Color de enlaces al pasar el cursor",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_acento",
+      "label": "Color de acento",
+      "default": "#25D366"
+    },
+    {
+      "type": "color",
+      "id": "color_acento_hover",
+      "label": "Color de acento al pasar el cursor",
+      "default": "#1aa954"
+    },
+    {
+      "type": "range",
+      "id": "tamano_titulos",
+      "label": "Tamaño de títulos (px)",
+      "min": 16,
+      "max": 32,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "tamano_texto",
+      "label": "Tamaño de texto (px)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tamano_iconos",
+      "label": "Tamaño de iconos de contacto (px)",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tamano_iconos_sociales",
+      "label": "Tamaño de iconos sociales (px)",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "default": 40
+    },
+
+    {
+      "type": "header",
+      "content": "Columna 1 - Información"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_columna_info",
+      "label": "Mostrar columna de información",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "titulo_columna_info",
+      "label": "Título",
+      "default": "Dinámicas del Norte"
+    },
     {
       "type": "textarea",
       "id": "footer_descripcion",
       "label": "Descripción",
       "default": "Somos una empresa de Norte de Santander Cúcuta dedicada a rifas y sorteos diarios, buscando la manera de ayudar a muchas personas a ganar dinero extra."
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_redes",
+      "label": "Mostrar redes sociales",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "instagram_link",
+      "label": "Enlace a Instagram",
+      "default": "https://www.instagram.com/dinamicadelnorte.24/"
+    },
+    {
+      "type": "text",
+      "id": "facebook_link",
+      "label": "Enlace a Facebook",
+      "default": "https://www.facebook.com/loteriadelnorte"
+    },
+    {
+      "type": "text",
+      "id": "twitter_link",
+      "label": "Enlace a Twitter/X",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "youtube_link",
+      "label": "Enlace a YouTube",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "tiktok_link",
+      "label": "Enlace a TikTok",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_link",
+      "label": "Enlace a WhatsApp",
+      "default": "https://wa.me/573000000000"
+    },
+
+    {
+      "type": "header",
+      "content": "Columna 2 - Contacto"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_columna_contacto",
+      "label": "Mostrar columna de contacto",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "titulo_columna_contacto",
+      "label": "Título",
+      "default": "Contacto"
     },
     {
       "type": "text",
@@ -72,45 +549,150 @@
     },
     {
       "type": "text",
-      "id": "instagram_link",
-      "label": "Enlace a Instagram",
-      "default": "https://www.instagram.com/dinamicadelnorte.24/"
+      "id": "horario",
+      "label": "Horario",
+      "default": "Lunes a Viernes: 9am - 6pm"
+    },
+
+    {
+      "type": "header",
+      "content": "Columna 3 - Enlaces Rápidos"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_columna_enlaces",
+      "label": "Mostrar columna de enlaces",
+      "default": true
     },
     {
       "type": "text",
-      "id": "facebook_link",
-      "label": "Enlace a Facebook",
-      "default": "https://www.facebook.com/loteriadelnorte"
+      "id": "titulo_columna_enlaces",
+      "label": "Título",
+      "default": "Enlaces Rápidos"
     },
     {
       "type": "text",
-      "id": "whatsapp_link",
-      "label": "Enlace a WhatsApp",
-      "default": "https://wa.me/573000000000"
+      "id": "enlace1_texto",
+      "label": "Texto del enlace 1",
+      "default": "Términos y Condiciones"
     },
     {
       "type": "text",
-      "id": "enlace_terminos",
-      "label": "Enlace a Términos y Condiciones",
+      "id": "enlace1_url",
+      "label": "URL del enlace 1",
       "default": "/pages/terminos"
     },
     {
       "type": "text",
-      "id": "enlace_privacidad",
-      "label": "Enlace a Política de Privacidad",
+      "id": "enlace2_texto",
+      "label": "Texto del enlace 2",
+      "default": "Política de Privacidad"
+    },
+    {
+      "type": "text",
+      "id": "enlace2_url",
+      "label": "URL del enlace 2",
       "default": "/pages/privacidad"
     },
     {
       "type": "text",
-      "id": "enlace_preguntas",
-      "label": "Enlace a Preguntas Frecuentes",
+      "id": "enlace3_texto",
+      "label": "Texto del enlace 3",
+      "default": "Preguntas Frecuentes"
+    },
+    {
+      "type": "text",
+      "id": "enlace3_url",
+      "label": "URL del enlace 3",
       "default": "/pages/preguntas-frecuentes"
+    },
+    {
+      "type": "text",
+      "id": "enlace4_texto",
+      "label": "Texto del enlace 4",
+      "default": "Sobre Nosotros"
+    },
+    {
+      "type": "text",
+      "id": "enlace4_url",
+      "label": "URL del enlace 4",
+      "default": "/pages/sobre-nosotros"
+    },
+    {
+      "type": "text",
+      "id": "enlace5_texto",
+      "label": "Texto del enlace 5",
+      "default": "Contáctanos"
+    },
+    {
+      "type": "text",
+      "id": "enlace5_url",
+      "label": "URL del enlace 5",
+      "default": "/pages/contacto"
+    },
+
+    {
+      "type": "header",
+      "content": "Columna 4 - Personalizada"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_columna_personalizada",
+      "label": "Mostrar columna personalizada",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "titulo_columna_personalizada",
+      "label": "Título",
+      "default": "Información Adicional"
+    },
+    {
+      "type": "richtext",
+      "id": "contenido_columna_personalizada",
+      "label": "Contenido personalizado",
+      "default": "<p>Agrega aquí cualquier información adicional que quieras mostrar en el footer.</p>"
+    },
+
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_copyright",
+      "label": "Mostrar copyright",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "texto_copyright",
+      "label": "Texto de copyright",
+      "default": "© [year] Dinámicas del Norte. Todos los derechos reservados."
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_creditos",
+      "label": "Mostrar créditos de desarrollo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "texto_creditos",
+      "label": "Texto de créditos",
+      "default": "Desarrollado por [developer]."
+    },
+    {
+      "type": "text",
+      "id": "nombre_desarrollador",
+      "label": "Nombre del desarrollador",
+      "default": "Enlaces Digitales"
     }
   ],
   "presets": [
     {
-      "name": "Footer Sorteo",
-      "category": "Sorteos"
+      "name": "Footer Mejorado",
+      "category": "Footer"
     }
   ]
 }
