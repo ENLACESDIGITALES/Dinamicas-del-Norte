@@ -1,45 +1,978 @@
-<section class="sobre-nosotros">
-  <div class="container">
-    <div class="section-title">
-      <h2>{{ section.settings.nosotros_title }}</h2>
-    </div>
+{% comment %}
+  Sobre Nosotros - Sección Totalmente Personalizable
+{% endcomment %}
 
-    <div class="sobre-nosotros-container">
-      <div class="sobre-nosotros-image">
-        {% if section.settings.nosotros_image != blank %}
-          <img
-            src="{{ section.settings.nosotros_image | img_url: 'master' }}"
-            alt="{{ section.settings.nosotros_title }}"
-          >
+{% if section.settings.mostrar_seccion %}
+  <style>
+    .sobre-nosotros-{{ section.id }} {
+      padding: {{ section.settings.padding_y }}px 0;
+      background-color: {{ section.settings.color_fondo }};
+      {% if section.settings.imagen_fondo != blank %}
+        background-image: url({{ section.settings.imagen_fondo | img_url: 'master' }});
+        background-size: {{ section.settings.imagen_fondo_tamano }};
+        background-position: {{ section.settings.imagen_fondo_posicion }};
+        background-repeat: {{ section.settings.imagen_fondo_repetir }};
+        {% if section.settings.overlay_fondo %}
+          position: relative;
         {% endif %}
-      </div>
+      {% endif %}
+    }
 
-      <div class="sobre-nosotros-content">
-        <h3>{{ section.settings.nosotros_subtitle }}</h3>
-        <p>{{ section.settings.nosotros_descripcion }}</p>
+    {% if section.settings.overlay_fondo and section.settings.imagen_fondo != blank %}
+    .sobre-nosotros-{{ section.id }}::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: {{ section.settings.overlay_color }};
+      opacity: {{ section.settings.overlay_opacidad }};
+      z-index: 1;
+    }
 
-        <div style="margin-top: 30px;">
-          <a href="{{ section.settings.button_link }}" class="button">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
-              <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
-            </svg>
-            {{ section.settings.button_text }}
-          </a>
+    .sobre-nosotros-{{ section.id }} .container-{{ section.id }} {
+      position: relative;
+      z-index: 2;
+    }
+    {% endif %}
+
+    .container-{{ section.id }} {
+      max-width: {{ section.settings.ancho_maximo }}px;
+      margin: 0 auto;
+      padding: 0 {{ section.settings.padding_x }}px;
+    }
+
+    .section-title-{{ section.id }} {
+      text-align: {{ section.settings.alineacion_titulo }};
+      margin-bottom: {{ section.settings.espacio_despues_titulo }}px;
+    }
+
+    .section-title-{{ section.id }} h2 {
+      font-size: {{ section.settings.tamano_titulo }}px;
+      font-weight: {{ section.settings.peso_titulo }};
+      margin: 0;
+      padding: 0;
+      color: {{ section.settings.color_titulo }};
+      {% if section.settings.texto_titulo_mayusculas %}
+        text-transform: uppercase;
+      {% endif %}
+      {% if section.settings.texto_titulo_espaciado %}
+        letter-spacing: {{ section.settings.texto_titulo_espaciado_valor }}px;
+      {% endif %}
+    }
+
+    {% if section.settings.mostrar_linea_titulo %}
+    .section-title-{{ section.id }} .linea-titulo {
+      display: block;
+      height: {{ section.settings.linea_titulo_alto }}px;
+      width: {{ section.settings.linea_titulo_ancho }}px;
+      background-color: {{ section.settings.linea_titulo_color }};
+      margin: {{ section.settings.linea_titulo_espacio }}px {% if section.settings.alineacion_titulo == 'center' %}auto{% else %}0{% endif %};
+      {% if section.settings.alineacion_titulo == 'right' %}
+        margin-left: auto;
+      {% endif %}
+    }
+    {% endif %}
+
+    .sobre-nosotros-container-{{ section.id }} {
+      display: flex;
+      flex-direction: {{ section.settings.direccion_layout }};
+      gap: {{ section.settings.espacio_entre_elementos }}px;
+      align-items: {{ section.settings.alineacion_vertical }};
+    }
+
+    .sobre-nosotros-image-{{ section.id }} {
+      flex: {{ section.settings.proporcion_imagen }};
+      {% if section.settings.direccion_layout == 'column' or section.settings.direccion_layout == 'column-reverse' %}
+        width: 100%;
+        text-align: {{ section.settings.alineacion_imagen }};
+      {% endif %}
+    }
+
+    .sobre-nosotros-image-{{ section.id }} img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: {{ section.settings.imagen_radio }}px;
+      {% if section.settings.imagen_sombra %}
+        box-shadow: {{ section.settings.imagen_sombra_x }}px {{ section.settings.imagen_sombra_y }}px {{ section.settings.imagen_sombra_difusion }}px {{ section.settings.imagen_sombra_color }};
+      {% endif %}
+      {% if section.settings.imagen_borde %}
+        border: {{ section.settings.imagen_borde_ancho }}px solid {{ section.settings.imagen_borde_color }};
+      {% endif %}
+      object-fit: {{ section.settings.imagen_ajuste }};
+      {% if section.settings.imagen_ajuste == 'cover' or section.settings.imagen_ajuste == 'contain' %}
+        aspect-ratio: {{ section.settings.imagen_proporcion }};
+      {% endif %}
+    }
+
+    .sobre-nosotros-content-{{ section.id }} {
+      flex: {{ section.settings.proporcion_contenido }};
+      color: {{ section.settings.color_texto }};
+      {% if section.settings.contenido_padding %}
+        padding: {{ section.settings.contenido_padding_y }}px {{ section.settings.contenido_padding_x }}px;
+      {% endif %}
+      {% if section.settings.contenido_fondo_color != "transparent" %}
+        background-color: {{ section.settings.contenido_fondo_color }};
+        border-radius: {{ section.settings.contenido_radio }}px;
+      {% endif %}
+    }
+
+    .sobre-nosotros-content-{{ section.id }} h3 {
+      font-size: {{ section.settings.tamano_subtitulo }}px;
+      font-weight: {{ section.settings.peso_subtitulo }};
+      color: {{ section.settings.color_subtitulo }};
+      margin-top: 0;
+      margin-bottom: {{ section.settings.espacio_despues_subtitulo }}px;
+      {% if section.settings.texto_subtitulo_mayusculas %}
+        text-transform: uppercase;
+      {% endif %}
+      {% if section.settings.texto_subtitulo_espaciado %}
+        letter-spacing: {{ section.settings.texto_subtitulo_espaciado_valor }}px;
+      {% endif %}
+    }
+
+    .sobre-nosotros-content-{{ section.id }} p {
+      font-size: {{ section.settings.tamano_texto }}px;
+      line-height: {{ section.settings.altura_linea }};
+      margin-bottom: {{ section.settings.espacio_parrafos }}px;
+    }
+
+    .boton-container-{{ section.id }} {
+      margin-top: {{ section.settings.espacio_antes_boton }}px;
+      text-align: {{ section.settings.alineacion_boton }};
+    }
+
+    .boton-{{ section.id }} {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: {{ section.settings.boton_color_fondo }};
+      color: {{ section.settings.boton_color_texto }};
+      text-decoration: none;
+      font-weight: {{ section.settings.boton_peso_texto }};
+      font-size: {{ section.settings.boton_tamano_texto }}px;
+      padding: {{ section.settings.boton_padding_y }}px {{ section.settings.boton_padding_x }}px;
+      border-radius: {{ section.settings.boton_radio }}px;
+      border: {{ section.settings.boton_borde_ancho }}px solid {{ section.settings.boton_borde_color }};
+      transition: all {{ section.settings.boton_velocidad_transicion }}s ease;
+      {% if section.settings.boton_sombra %}
+        box-shadow: {{ section.settings.boton_sombra_x }}px {{ section.settings.boton_sombra_y }}px {{ section.settings.boton_sombra_difusion }}px {{ section.settings.boton_sombra_color }};
+      {% endif %}
+      {% if section.settings.boton_texto_mayusculas %}
+        text-transform: uppercase;
+      {% endif %}
+    }
+
+    .boton-{{ section.id }}:hover {
+      background-color: {{ section.settings.boton_color_fondo_hover }};
+      color: {{ section.settings.boton_color_texto_hover }};
+      {% if section.settings.boton_efecto_hover == 'scale' %}
+        transform: scale(1.05);
+      {% elsif section.settings.boton_efecto_hover == 'lift' %}
+        transform: translateY(-3px);
+      {% endif %}
+    }
+
+    .boton-{{ section.id }} svg {
+      width: {{ section.settings.boton_icono_tamano }}px;
+      height: {{ section.settings.boton_icono_tamano }}px;
+      margin-right: {{ section.settings.boton_icono_espacio }}px;
+      fill: currentColor;
+    }
+
+    {% if section.settings.boton_efecto_sacudida %}
+    @keyframes sacudida {
+      0% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-{{ section.settings.boton_sacudida_intensidad }}px); }
+      20%, 40%, 60%, 80% { transform: translateX({{ section.settings.boton_sacudida_intensidad }}px); }
+      100% { transform: translateX(0); }
+    }
+
+    .boton-{{ section.id }}.con-sacudida {
+      animation: sacudida 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+    }
+
+    .boton-{{ section.id }}.con-sacudida:hover {
+      animation: none;
+    }
+    {% endif %}
+
+    @media screen and (max-width: 991px) {
+      .sobre-nosotros-container-{{ section.id }} {
+        {% if section.settings.tablet_cambiar_direccion %}
+          flex-direction: {{ section.settings.tablet_direccion }};
+        {% endif %}
+        gap: {{ section.settings.tablet_espacio_entre_elementos }}px;
+      }
+
+      .section-title-{{ section.id }} h2 {
+        font-size: {{ section.settings.tamano_titulo_tablet }}px;
+      }
+
+      .sobre-nosotros-content-{{ section.id }} h3 {
+        font-size: {{ section.settings.tamano_subtitulo_tablet }}px;
+      }
+
+      .sobre-nosotros-content-{{ section.id }} p {
+        font-size: {{ section.settings.tamano_texto_tablet }}px;
+      }
+
+      .boton-{{ section.id }} {
+        font-size: {{ section.settings.boton_tamano_texto_tablet }}px;
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      .sobre-nosotros-container-{{ section.id }} {
+        {% if section.settings.mobile_cambiar_direccion %}
+          flex-direction: {{ section.settings.mobile_direccion }};
+        {% endif %}
+        gap: {{ section.settings.mobile_espacio_entre_elementos }}px;
+      }
+
+      .section-title-{{ section.id }} h2 {
+        font-size: {{ section.settings.tamano_titulo_mobile }}px;
+      }
+
+      .sobre-nosotros-content-{{ section.id }} h3 {
+        font-size: {{ section.settings.tamano_subtitulo_mobile }}px;
+      }
+
+      .sobre-nosotros-content-{{ section.id }} p {
+        font-size: {{ section.settings.tamano_texto_mobile }}px;
+      }
+
+      .boton-{{ section.id }} {
+        font-size: {{ section.settings.boton_tamano_texto_mobile }}px;
+        padding: {{ section.settings.boton_padding_y_mobile }}px {{ section.settings.boton_padding_x_mobile }}px;
+      }
+
+      .boton-{{ section.id }} svg {
+        width: {{ section.settings.boton_icono_tamano_mobile }}px;
+        height: {{ section.settings.boton_icono_tamano_mobile }}px;
+      }
+    }
+  </style>
+
+  <section class="sobre-nosotros-{{ section.id }}">
+    <div class="container-{{ section.id }}">
+      {% if section.settings.mostrar_titulo %}
+        <div class="section-title-{{ section.id }}">
+          <h2>{{ section.settings.nosotros_title }}</h2>
+          {% if section.settings.mostrar_linea_titulo %}
+            <span class="linea-titulo"></span>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="sobre-nosotros-container-{{ section.id }}">
+        {% if section.settings.mostrar_imagen %}
+          <div class="sobre-nosotros-image-{{ section.id }}">
+            {% if section.settings.nosotros_image != blank %}
+              <img
+                src="{{ section.settings.nosotros_image | img_url: 'master' }}"
+                alt="{{ section.settings.nosotros_title }}"
+                {% if section.settings.imagen_lazy_load %}
+                  loading="lazy"
+                {% endif %}
+              >
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="sobre-nosotros-content-{{ section.id }}">
+          {% if section.settings.mostrar_subtitulo %}
+            <h3>{{ section.settings.nosotros_subtitle }}</h3>
+          {% endif %}
+
+          {% if section.settings.mostrar_descripcion %}
+            <p>{{ section.settings.nosotros_descripcion }}</p>
+          {% endif %}
+
+          {% if section.settings.mostrar_boton %}
+            <div class="boton-container-{{ section.id }}">
+              <a
+                href="{{ section.settings.button_link }}"
+                class="boton-{{ section.id }} {% if section.settings.boton_efecto_sacudida %}con-sacudida{% endif %}"
+              >
+                {% if section.settings.mostrar_icono_boton %}
+                  {% case section.settings.icono_boton %}
+                    {% when 'whatsapp' %}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.15-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.198.296-.767.966-.94 1.164-.173.199-.345.223-.643.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                    {% when 'flecha' %}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M21.883 12l-7.527 6.235.644.765 9-7.521-9-7.479-.645.764 7.529 6.236h-21.884v1h21.883z"/>
+                      </svg>
+                    {% when 'telefono' %}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z"/>
+                      </svg>
+                    {% when 'usuario' %}
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.579 2 2 6.579 2 12s4.579 10 10 10 10-4.579 10-10S17.421 2 12 2zm0 5c1.727 0 3 1.272 3 3s-1.273 3-3 3c-1.726 0-3-1.272-3-3s1.274-3 3-3zm-5.106 9.772c.897-1.32 2.393-2.2 4.106-2.2h2c1.714 0 3.209.88 4.106 2.2C15.828 18.14 14.015 19 12 19s-3.828-.86-5.106-2.228z"/>
+                      </svg>
+                  {% endcase %}
+                {% endif %}
+                {{ section.settings.button_text }}
+              </a>
+            </div>
+          {% endif %}
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{% endif %}
 
 {% schema %}
 {
   "name": "Sobre Nosotros",
+  "tag": "section",
+  "class": "section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Configuración General"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_seccion",
+      "label": "Mostrar sección",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "color_fondo",
+      "label": "Color de fondo",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "ancho_maximo",
+      "label": "Ancho máximo (px)",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Padding vertical (px)",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Padding horizontal (px)",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Imagen de Fondo (Opcional)"
+    },
+    {
+      "type": "image_picker",
+      "id": "imagen_fondo",
+      "label": "Imagen de fondo"
+    },
+    {
+      "type": "select",
+      "id": "imagen_fondo_tamano",
+      "label": "Tamaño de la imagen de fondo",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cubrir"
+        },
+        {
+          "value": "contain",
+          "label": "Contener"
+        },
+        {
+          "value": "auto",
+          "label": "Original"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "imagen_fondo_posicion",
+      "label": "Posición de la imagen de fondo",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Centro"
+        },
+        {
+          "value": "top center",
+          "label": "Superior"
+        },
+        {
+          "value": "bottom center",
+          "label": "Inferior"
+        },
+        {
+          "value": "left center",
+          "label": "Izquierda"
+        },
+        {
+          "value": "right center",
+          "label": "Derecha"
+        }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "select",
+      "id": "imagen_fondo_repetir",
+      "label": "Repetición de la imagen de fondo",
+      "options": [
+        {
+          "value": "no-repeat",
+          "label": "Sin repetición"
+        },
+        {
+          "value": "repeat",
+          "label": "Repetir"
+        },
+        {
+          "value": "repeat-x",
+          "label": "Repetir horizontalmente"
+        },
+        {
+          "value": "repeat-y",
+          "label": "Repetir verticalmente"
+        }
+      ],
+      "default": "no-repeat"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_fondo",
+      "label": "Añadir overlay sobre imagen de fondo",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Color del overlay",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacidad",
+      "label": "Opacidad del overlay",
+      "min": 0.1,
+      "max": 0.9,
+      "step": 0.1,
+      "default": 0.5
+    },
+    {
+      "type": "header",
+      "content": "Diseño y Layout"
+    },
+    {
+      "type": "select",
+      "id": "direccion_layout",
+      "label": "Dirección del layout",
+      "options": [
+        {
+          "value": "row",
+          "label": "Imagen a la izquierda, texto a la derecha"
+        },
+        {
+          "value": "row-reverse",
+          "label": "Texto a la izquierda, imagen a la derecha"
+        },
+        {
+          "value": "column",
+          "label": "Imagen arriba, texto abajo"
+        },
+        {
+          "value": "column-reverse",
+          "label": "Texto arriba, imagen abajo"
+        }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "alineacion_vertical",
+      "label": "Alineación vertical",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Arriba"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "flex-end",
+          "label": "Abajo"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "espacio_entre_elementos",
+      "label": "Espacio entre elementos (px)",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "proporcion_imagen",
+      "label": "Proporción de la imagen (%)",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "default": 45,
+      "info": "Define qué porcentaje del ancho ocupa la imagen"
+    },
+    {
+      "type": "range",
+      "id": "proporcion_contenido",
+      "label": "Proporción del contenido (%)",
+      "min": 30,
+      "max": 70,
+      "step": 5,
+      "default": 55,
+      "info": "Define qué porcentaje del ancho ocupa el contenido"
+    },
+    {
+      "type": "header",
+      "content": "Título Principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_titulo",
+      "label": "Mostrar título",
+      "default": true
+    },
     {
       "type": "text",
       "id": "nosotros_title",
-      "label": "Título de la sección",
+      "label": "Título",
       "default": "Quién es Cesar & Jonathan"
+    },
+    {
+      "type": "range",
+      "id": "tamano_titulo",
+      "label": "Tamaño del título (px)",
+      "min": 18,
+      "max": 60,
+      "step": 1,
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "tamano_titulo_tablet",
+      "label": "Tamaño del título en tablet (px)",
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "tamano_titulo_mobile",
+      "label": "Tamaño del título en móvil (px)",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "peso_titulo",
+      "label": "Peso del título",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Negrita"
+        }
+      ],
+      "default": "bold"
+    },
+    {
+      "type": "color",
+      "id": "color_titulo",
+      "label": "Color del título",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "texto_titulo_mayusculas",
+      "label": "Título en mayúsculas",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "texto_titulo_espaciado",
+      "label": "Espaciado de letras en título",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "texto_titulo_espaciado_valor",
+      "label": "Valor de espaciado (px)",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "alineacion_titulo",
+      "label": "Alineación del título",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "espacio_despues_titulo",
+      "label": "Espacio después del título (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_linea_titulo",
+      "label": "Mostrar línea debajo del título",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "linea_titulo_color",
+      "label": "Color de la línea",
+      "default": "#FF0000"
+    },
+    {
+      "type": "range",
+      "id": "linea_titulo_ancho",
+      "label": "Ancho de la línea (px)",
+      "min": 30,
+      "max": 200,
+      "step": 10,
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "linea_titulo_alto",
+      "label": "Alto de la línea (px)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "linea_titulo_espacio",
+      "label": "Espacio antes de la línea (px)",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Imagen"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_imagen",
+      "label": "Mostrar imagen",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "nosotros_image",
+      "label": "Imagen"
+    },
+    {
+      "type": "select",
+      "id": "alineacion_imagen",
+      "label": "Alineación de la imagen (en móvil)",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ],
+      "default": "center",
+      "info": "Aplica cuando la imagen está arriba o abajo del texto"
+    },
+    {
+      "type": "range",
+      "id": "imagen_radio",
+      "label": "Radio de bordes de la imagen (px)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "imagen_sombra",
+      "label": "Añadir sombra a la imagen",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "imagen_sombra_x",
+      "label": "Posición X de la sombra (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "imagen_sombra_y",
+      "label": "Posición Y de la sombra (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "imagen_sombra_difusion",
+      "label": "Difusión de la sombra (px)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "color",
+      "id": "imagen_sombra_color",
+      "label": "Color de la sombra",
+      "default": "rgba(0, 0, 0, 0.3)"
+    },
+    {
+      "type": "checkbox",
+      "id": "imagen_borde",
+      "label": "Añadir borde a la imagen",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "imagen_borde_ancho",
+      "label": "Ancho del borde (px)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "imagen_borde_color",
+      "label": "Color del borde",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "imagen_lazy_load",
+      "label": "Cargar imagen de forma progresiva",
+      "default": true,
+      "info": "Mejora la velocidad de carga de la página"
+    },
+    {
+      "type": "select",
+      "id": "imagen_ajuste",
+      "label": "Ajuste de la imagen",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cubrir (recorta si es necesario)"
+        },
+        {
+          "value": "contain",
+          "label": "Contener (muestra completa)"
+        },
+        {
+          "value": "fill",
+          "label": "Rellenar (estira)"
+        },
+        {
+          "value": "none",
+          "label": "Original"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "imagen_proporcion",
+      "label": "Proporción de la imagen",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "1:1 (Cuadrada)"
+        },
+        {
+          "value": "4/3",
+          "label": "4:3 (Estándar)"
+        },
+        {
+          "value": "16/9",
+          "label": "16:9 (Panorámica)"
+        },
+        {
+          "value": "3/4",
+          "label": "3:4 (Vertical)"
+        },
+        {
+          "value": "2/3",
+          "label": "2:3 (Vertical)"
+        }
+      ],
+      "default": "4/3",
+      "info": "Solo aplica si el ajuste es 'Cubrir' o 'Contener'"
+    },
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "checkbox",
+      "id": "contenido_padding",
+      "label": "Añadir padding al contenido",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "contenido_padding_y",
+      "label": "Padding vertical (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "contenido_padding_x",
+      "label": "Padding horizontal (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "contenido_fondo_color",
+      "label": "Color de fondo del contenido",
+      "default": "transparent"
+    },
+    {
+      "type": "range",
+      "id": "contenido_radio",
+      "label": "Radio de bordes del contenido (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "color_texto",
+      "label": "Color de texto principal",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "tamano_texto",
+      "label": "Tamaño de texto (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "tamano_texto_tablet",
+      "label": "Tamaño de texto en tablet (px)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tamano_texto_mobile",
+      "label": "Tamaño de texto en móvil (px)",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "altura_linea",
+      "label": "Altura de línea",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "espacio_parrafos",
+      "label": "Espacio después de párrafos (px)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_subtitulo",
+      "label": "Mostrar subtítulo",
+      "default": true
     },
     {
       "type": "text",
@@ -48,15 +981,105 @@
       "default": "Cesar & Jonathan"
     },
     {
+      "type": "range",
+      "id": "tamano_subtitulo",
+      "label": "Tamaño del subtítulo (px)",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "tamano_subtitulo_tablet",
+      "label": "Tamaño del subtítulo en tablet (px)",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "tamano_subtitulo_mobile",
+      "label": "Tamaño del subtítulo en móvil (px)",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "peso_subtitulo",
+      "label": "Peso del subtítulo",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Negrita"
+        }
+      ],
+      "default": "bold"
+    },
+    {
+      "type": "color",
+      "id": "color_subtitulo",
+      "label": "Color del subtítulo",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "texto_subtitulo_mayusculas",
+      "label": "Subtítulo en mayúsculas",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "texto_subtitulo_espaciado",
+      "label": "Espaciado de letras en subtítulo",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "texto_subtitulo_espaciado_valor",
+      "label": "Valor de espaciado (px)",
+      "min": 1,
+      "max": 5,
+      "step": 0.5,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "espacio_despues_subtitulo",
+      "label": "Espacio después del subtítulo (px)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 15
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_descripcion",
+      "label": "Mostrar descripción",
+      "default": true
+    },
+    {
       "type": "textarea",
       "id": "nosotros_descripcion",
       "label": "Descripción",
       "default": "Son los creadores de la marca SORTEOS J&C un proyecto de padre e hijo quienes buscan la manera de poder ayudar a muchas personas de Colombia a ganar un dinero extra con sus dinámicas diarias."
     },
     {
-      "type": "image_picker",
-      "id": "nosotros_image",
-      "label": "Imagen"
+      "type": "header",
+      "content": "Botón"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_boton",
+      "label": "Mostrar botón",
+      "default": true
     },
     {
       "type": "text",
@@ -69,12 +1092,380 @@
       "id": "button_link",
       "label": "Enlace del botón",
       "default": "https://wa.me/573000000000"
+    },
+    {
+      "type": "select",
+      "id": "alineacion_boton",
+      "label": "Alineación del botón",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "espacio_antes_boton",
+      "label": "Espacio antes del botón (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "boton_color_fondo",
+      "label": "Color de fondo del botón",
+      "default": "#25D366"
+    },
+    {
+      "type": "color",
+      "id": "boton_color_texto",
+      "label": "Color de texto del botón",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "boton_color_fondo_hover",
+      "label": "Color de fondo al pasar el cursor",
+      "default": "#1aa954"
+    },
+    {
+      "type": "color",
+      "id": "boton_color_texto_hover",
+      "label": "Color de texto al pasar el cursor",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "boton_tamano_texto",
+      "label": "Tamaño de texto del botón (px)",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "boton_tamano_texto_tablet",
+      "label": "Tamaño de texto en tablet (px)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "boton_tamano_texto_mobile",
+      "label": "Tamaño de texto en móvil (px)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "boton_peso_texto",
+      "label": "Peso del texto del botón",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Negrita"
+        }
+      ],
+      "default": "bold"
+    },
+    {
+      "type": "checkbox",
+      "id": "boton_texto_mayusculas",
+      "label": "Texto del botón en mayúsculas",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "boton_padding_y",
+      "label": "Padding vertical del botón (px)",
+      "min": 5,
+      "max": 30,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "boton_padding_x",
+      "label": "Padding horizontal del botón (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "boton_padding_y_mobile",
+      "label": "Padding vertical en móvil (px)",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "boton_padding_x_mobile",
+      "label": "Padding horizontal en móvil (px)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "boton_radio",
+      "label": "Radio de bordes del botón (px)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "boton_borde_ancho",
+      "label": "Ancho del borde del botón (px)",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "boton_borde_color",
+      "label": "Color del borde del botón",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "boton_sombra",
+      "label": "Añadir sombra al botón",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "boton_sombra_x",
+      "label": "Posición X de la sombra (px)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "boton_sombra_y",
+      "label": "Posición Y de la sombra (px)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "boton_sombra_difusion",
+      "label": "Difusión de la sombra (px)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "boton_sombra_color",
+      "label": "Color de la sombra",
+      "default": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "type": "select",
+      "id": "boton_efecto_hover",
+      "label": "Efecto al pasar el cursor",
+      "options": [
+        {
+          "value": "none",
+          "label": "Ninguno"
+        },
+        {
+          "value": "scale",
+          "label": "Escala"
+        },
+        {
+          "value": "lift",
+          "label": "Elevación"
+        }
+      ],
+      "default": "lift"
+    },
+    {
+      "type": "range",
+      "id": "boton_velocidad_transicion",
+      "label": "Velocidad de transición (segundos)",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3
+    },
+    {
+      "type": "checkbox",
+      "id": "boton_efecto_sacudida",
+      "label": "Añadir efecto de sacudida",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "boton_sacudida_intensidad",
+      "label": "Intensidad de sacudida (px)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_icono_boton",
+      "label": "Mostrar icono en el botón",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "icono_boton",
+      "label": "Icono para el botón",
+      "options": [
+        {
+          "value": "whatsapp",
+          "label": "WhatsApp"
+        },
+        {
+          "value": "flecha",
+          "label": "Flecha"
+        },
+        {
+          "value": "telefono",
+          "label": "Teléfono"
+        },
+        {
+          "value": "usuario",
+          "label": "Usuario"
+        }
+      ],
+      "default": "whatsapp"
+    },
+    {
+      "type": "range",
+      "id": "boton_icono_tamano",
+      "label": "Tamaño del icono (px)",
+      "min": 12,
+      "max": 36,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "boton_icono_tamano_mobile",
+      "label": "Tamaño del icono en móvil (px)",
+      "min": 12,
+      "max": 28,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "boton_icono_espacio",
+      "label": "Espacio después del icono (px)",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Responsive"
+    },
+    {
+      "type": "checkbox",
+      "id": "tablet_cambiar_direccion",
+      "label": "Cambiar dirección en tablet",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "tablet_direccion",
+      "label": "Dirección en tablet",
+      "options": [
+        {
+          "value": "column",
+          "label": "Imagen arriba, texto abajo"
+        },
+        {
+          "value": "column-reverse",
+          "label": "Texto arriba, imagen abajo"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "tablet_espacio_entre_elementos",
+      "label": "Espacio entre elementos en tablet (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_cambiar_direccion",
+      "label": "Cambiar dirección en móvil",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "mobile_direccion",
+      "label": "Dirección en móvil",
+      "options": [
+        {
+          "value": "column",
+          "label": "Imagen arriba, texto abajo"
+        },
+        {
+          "value": "column-reverse",
+          "label": "Texto arriba, imagen abajo"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "mobile_espacio_entre_elementos",
+      "label": "Espacio entre elementos en móvil (px)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 15
     }
   ],
   "presets": [
     {
-      "name": "Sobre Nosotros",
-      "category": "Sorteos"
+      "name": "Sobre Nosotros Personalizable",
+      "category": "Contenido"
     }
   ]
 }
