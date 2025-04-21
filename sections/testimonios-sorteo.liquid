@@ -1,3 +1,15 @@
+/* Contenedor para el video */ .review-video-wrapper { width: 100%; position: relative;
+{% if section.settings.video_format == 'vertical' %}
+  padding-bottom: 177.78%; /* Aspect ratio 9:16 (vertical como Instagram Stories) */
+{% elsif section.settings.video_format == 'square' %}
+  padding-bottom: 100%; /* Aspect ratio 1:1 (cuadrado) */
+{% else %}
+  padding-bottom: 56.25%; /* Aspect ratio 16:9 (horizontal estándar) */
+{% endif %}
+height: 0; overflow: visible; margin-bottom: 10px; border-radius: {{ section.settings.video_border_radius }}px;
+background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper iframe { position: absolute; top: 0; left:
+0; width: 100%; height: 100%; border-radius: {{ section.settings.video_border_radius }}px; object-fit: cover; z-index:
+1; }
 {% comment %}
   Testimonios Reviews - Tarjetas compactas con deslizamiento horizontal
 {% endcomment %}
