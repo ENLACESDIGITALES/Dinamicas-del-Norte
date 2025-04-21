@@ -1,361 +1,452 @@
 {% comment %}
-  Footer Personalizable - Versión Mejorada
+  Footer Completo - Con Control Total desde el Personalizador
 {% endcomment %}
 
-<style>
-  #shopify-section-{{ section.id }} {
-    {% if section.settings.mostrar_footer %}
+{% if section.settings.mostrar_footer %}
+  <style>
+    .footer-{{ section.id }} {
+      background-color: {{ section.settings.color_fondo }};
+      color: {{ section.settings.color_texto }};
+      padding: {{ section.settings.padding_y }}px 0 {{ section.settings.padding_y_bottom }}px;
+      {% if section.settings.borde_superior %}
+        border-top: {{ section.settings.borde_superior_grosor }}px solid {{ section.settings.borde_superior_color }};
+      {% endif %}
+    }
+
+    .footer-{{ section.id }} a {
+      color: {{ section.settings.color_enlaces }};
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-{{ section.id }} a:hover {
+      color: {{ section.settings.color_enlaces_hover }};
+    }
+
+    .footer-container-{{ section.id }} {
+      max-width: {{ section.settings.ancho_maximo }}px;
+      margin: 0 auto;
+      padding: 0 {{ section.settings.padding_x }}px;
+    }
+
+    .footer-content-{{ section.id }} {
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.columnas_escritorio }}, 1fr);
+      gap: {{ section.settings.espacio_entre_columnas }}px;
+      margin-bottom: {{ section.settings.espacio_antes_copyright }}px;
+    }
+
+    .footer-column-{{ section.id }} h3 {
+      font-size: {{ section.settings.tamano_titulos }}px;
+      font-weight: {{ section.settings.peso_titulos }};
+      margin-bottom: {{ section.settings.espacio_despues_titulos }}px;
+      color: {{ section.settings.color_titulos }};
+      position: relative;
+    }
+
+    {% if section.settings.mostrar_linea_titulo %}
+    .footer-column-{{ section.id }} h3:after {
+      content: '';
       display: block;
-    {% else %}
-      display: none;
+      width: {{ section.settings.linea_titulo_ancho }}px;
+      height: {{ section.settings.linea_titulo_alto }}px;
+      background-color: {{ section.settings.color_acento }};
+      margin-top: {{ section.settings.linea_titulo_espacio }}px;
+    }
     {% endif %}
-  }
 
-  .footer {
-    background-color: {{ section.settings.color_fondo }};
-    color: {{ section.settings.color_texto }};
-    padding: 60px 0 20px;
-  }
-
-  .footer a {
-    color: {{ section.settings.color_enlaces }};
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-
-  .footer a:hover {
-    color: {{ section.settings.color_enlaces_hover }};
-  }
-
-  .footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  .footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
-    margin-bottom: 40px;
-  }
-
-  .footer-column h3 {
-    font-size: {{ section.settings.tamano_titulos }}px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: {{ section.settings.color_titulos }};
-    position: relative;
-  }
-
-  .footer-column h3:after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 3px;
-    background-color: {{ section.settings.color_acento }};
-    margin-top: 10px;
-  }
-
-  .footer-column p {
-    font-size: {{ section.settings.tamano_texto }}px;
-    line-height: 1.5;
-    margin-bottom: 15px;
-  }
-
-  .footer-column .contacto-item {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 15px;
-  }
-
-  .footer-column .contacto-icono {
-    margin-right: 10px;
-    width: {{ section.settings.tamano_iconos }}px;
-    height: {{ section.settings.tamano_iconos }}px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: {{ section.settings.color_acento }};
-    flex-shrink: 0;
-  }
-
-  .footer-column .contacto-texto {
-    flex: 1;
-  }
-
-  .social-icons {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-  }
-
-  .social-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: {{ section.settings.tamano_iconos_sociales }}px;
-    height: {{ section.settings.tamano_iconos_sociales }}px;
-    background-color: {{ section.settings.color_acento }};
-    border-radius: 50%;
-    color: {{ section.settings.color_fondo }} !important;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-  }
-
-  .social-icon:hover {
-    transform: translateY(-3px);
-    background-color: {{ section.settings.color_acento_hover }};
-  }
-
-  .social-icon svg {
-    width: calc({{ section.settings.tamano_iconos_sociales }}px * 0.5);
-    height: calc({{ section.settings.tamano_iconos_sociales }}px * 0.5);
-  }
-
-  .enlaces-rapidos {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .enlaces-rapidos a {
-    position: relative;
-    padding-left: 15px;
-    font-size: {{ section.settings.tamano_texto }}px;
-  }
-
-  .enlaces-rapidos a:before {
-    content: '›';
-    position: absolute;
-    left: 0;
-    color: {{ section.settings.color_acento }};
-    font-size: calc({{ section.settings.tamano_texto }}px * 1.2);
-  }
-
-  .copyright {
-    text-align: center;
-    padding-top: 30px;
-    margin-top: 30px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: calc({{ section.settings.tamano_texto }}px - 2px);
-  }
-
-  .copyright a {
-    font-weight: bold;
-  }
-
-  @media screen and (max-width: 768px) {
-    .footer {
-      padding: 40px 0 20px;
+    .footer-column-{{ section.id }} p {
+      font-size: {{ section.settings.tamano_texto }}px;
+      line-height: {{ section.settings.altura_linea }};
+      margin-bottom: {{ section.settings.espacio_parrafos }}px;
     }
 
-    .footer-content {
-      grid-template-columns: 1fr;
-      gap: 30px;
+    .footer-column-{{ section.id }} .contacto-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: {{ section.settings.espacio_contacto_items }}px;
     }
 
-    .footer-column h3 {
-      font-size: calc({{ section.settings.tamano_titulos }}px - 2px);
+    .footer-column-{{ section.id }} .contacto-icono {
+      margin-right: 10px;
+      width: {{ section.settings.tamano_iconos }}px;
+      height: {{ section.settings.tamano_iconos }}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: {{ section.settings.color_iconos }};
+      flex-shrink: 0;
     }
 
-    .social-icons {
+    .footer-column-{{ section.id }} .contacto-texto {
+      flex: 1;
+    }
+
+    .social-icons-{{ section.id }} {
+      display: flex;
+      gap: {{ section.settings.espacio_entre_iconos }}px;
+      margin-top: {{ section.settings.espacio_antes_iconos }}px;
+      {% if section.settings.alineacion_iconos == 'center' %}
+      justify-content: center;
+      {% elsif section.settings.alineacion_iconos == 'right' %}
+      justify-content: flex-end;
+      {% else %}
       justify-content: flex-start;
+      {% endif %}
     }
-  }
-</style>
 
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-content">
-      <!-- Columna 1: Información de la empresa -->
-      {% if section.settings.mostrar_columna_info %}
-        <div class="footer-column">
-          <h3>{{ section.settings.titulo_columna_info }}</h3>
-          <p>{{ section.settings.footer_descripcion }}</p>
-          {% if section.settings.mostrar_redes %}
-            <div class="social-icons">
-              {% if section.settings.instagram_link != blank %}
-                <a
-                  href="{{ section.settings.instagram_link }}"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="Instagram"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                  </svg>
-                </a>
-              {% endif %}
-              {% if section.settings.facebook_link != blank %}
-                <a
-                  href="{{ section.settings.facebook_link }}"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="Facebook"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                  </svg>
-                </a>
-              {% endif %}
-              {% if section.settings.twitter_link != blank %}
-                <a
-                  href="{{ section.settings.twitter_link }}"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="Twitter"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                  </svg>
-                </a>
-              {% endif %}
-              {% if section.settings.youtube_link != blank %}
-                <a
-                  href="{{ section.settings.youtube_link }}"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="YouTube"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
-                  </svg>
-                </a>
-              {% endif %}
-              {% if section.settings.tiktok_link != blank %}
-                <a
-                  href="{{ section.settings.tiktok_link }}"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="TikTok"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                  </svg>
-                </a>
-              {% endif %}
-              {% if section.settings.whatsapp_link != blank %}
-                <a
-                  href="{{ section.settings.whatsapp_link }}"
-                  class="social-icon"
-                  target="_blank"
-                  rel="noopener"
-                  aria-label="WhatsApp"
-                >
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
-                    <path d="M20.52 3.449c-2.189-2.189-5.096-3.396-8.196-3.396s-6.009 1.207-8.196 3.396c-2.189 2.189-3.396 5.096-3.396 8.196 0 1.513.296 2.976.87 4.359l-1.326 6.318 6.442-1.193c1.301.504 2.682.764 4.089.764 3.099 0 6.007-1.207 8.196-3.396 2.189-2.189 3.396-5.096 3.396-8.196s-1.207-6.009-3.396-8.196zm-1.882 14.327c-.945.944-2.201 1.466-3.536 1.466-.695 0-1.371-.139-2.021-.404l-1.426-.59-1.819.338.417-1.814-.568-1.389c-.321-.689-.479-1.406-.479-2.142 0-1.335.521-2.59 1.466-3.536.945-.945 2.201-1.466 3.536-1.466s2.591.521 3.536 1.466c.944.945 1.466 2.201 1.466 3.536s-.522 2.59-1.466 3.536z" fillRule="evenodd" clipRule="evenodd"/>
-                  </svg>
-                </a>
-              {% endif %}
-            </div>
-          {% endif %}
-        </div>
+    .social-icon-{{ section.id }} {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: {{ section.settings.tamano_iconos_sociales }}px;
+      height: {{ section.settings.tamano_iconos_sociales }}px;
+      background-color: {{ section.settings.color_fondo_iconos }};
+      border-radius: {{ section.settings.iconos_redondez }}%;
+      color: {{ section.settings.color_iconos_sociales }} !important;
+      transition: transform {{ section.settings.velocidad_transicion }}s ease, background-color {{ section.settings.velocidad_transicion }}s ease;
+      position: relative;
+      overflow: hidden;
+      {% if section.settings.borde_iconos %}
+      border: {{ section.settings.borde_iconos_grosor }}px solid {{ section.settings.borde_iconos_color }};
       {% endif %}
+    }
 
-      <!-- Columna 2: Información de contacto -->
-      {% if section.settings.mostrar_columna_contacto %}
-        <div class="footer-column">
-          <h3>{{ section.settings.titulo_columna_contacto }}</h3>
-          {% if section.settings.direccion != blank %}
-            <div class="contacto-item">
-              <div class="contacto-icono">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
-                </svg>
-              </div>
-              <div class="contacto-texto">{{ section.settings.direccion }}</div>
-            </div>
-          {% endif %}
-          {% if section.settings.telefono != blank %}
-            <div class="contacto-item">
-              <div class="contacto-icono">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z"/>
-                </svg>
-              </div>
-              <div class="contacto-texto">{{ section.settings.telefono }}</div>
-            </div>
-          {% endif %}
-          {% if section.settings.email != blank %}
-            <div class="contacto-item">
-              <div class="contacto-icono">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
-                </svg>
-              </div>
-              <div class="contacto-texto">{{ section.settings.email }}</div>
-            </div>
-          {% endif %}
-          {% if section.settings.horario != blank %}
-            <div class="contacto-item">
-              <div class="contacto-icono">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 14h-7v-8h2v6h5v2z"/>
-                </svg>
-              </div>
-              <div class="contacto-texto">{{ section.settings.horario }}</div>
-            </div>
-          {% endif %}
-        </div>
+    .social-icon-{{ section.id }}:hover {
+      transform: {{ section.settings.efecto_hover }};
+      background-color: {{ section.settings.color_fondo_iconos_hover }};
+      color: {{ section.settings.color_iconos_sociales_hover }} !important;
+    }
+
+    .social-icon-{{ section.id }} svg {
+      width: calc({{ section.settings.tamano_iconos_sociales }}px * {{ section.settings.proporcion_iconos }});
+      height: calc({{ section.settings.tamano_iconos_sociales }}px * {{ section.settings.proporcion_iconos }});
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      fill: currentColor;
+    }
+
+    .enlaces-rapidos-{{ section.id }} {
+      display: flex;
+      flex-direction: column;
+      gap: {{ section.settings.espacio_entre_enlaces }}px;
+    }
+
+    .enlaces-rapidos-{{ section.id }} a {
+      position: relative;
+      padding-left: {{ section.settings.padding_enlaces }}px;
+      font-size: {{ section.settings.tamano_texto }}px;
+    }
+
+    {% if section.settings.mostrar_flecha_enlaces %}
+    .enlaces-rapidos-{{ section.id }} a:before {
+      content: '{{ section.settings.flecha_enlaces }}';
+      position: absolute;
+      left: 0;
+      color: {{ section.settings.color_acento }};
+      font-size: calc({{ section.settings.tamano_texto }}px * 1.2);
+    }
+    {% endif %}
+
+    .copyright-{{ section.id }} {
+      text-align: {{ section.settings.alineacion_copyright }};
+      padding-top: {{ section.settings.padding_copyright }}px;
+      {% if section.settings.borde_copyright %}
+      border-top: {{ section.settings.borde_copyright_grosor }}px solid {{ section.settings.borde_copyright_color }};
       {% endif %}
+      font-size: {{ section.settings.tamano_copyright }}px;
+    }
 
-      <!-- Columna 3: Enlaces rápidos -->
-      {% if section.settings.mostrar_columna_enlaces %}
-        <div class="footer-column">
-          <h3>{{ section.settings.titulo_columna_enlaces }}</h3>
-          <div class="enlaces-rapidos">
-            {% if section.settings.enlace1_texto != blank and section.settings.enlace1_url != blank %}
-              <a href="{{ section.settings.enlace1_url }}">{{ section.settings.enlace1_texto }}</a>
+    .copyright-{{ section.id }} a {
+      font-weight: {{ section.settings.peso_enlaces_copyright }};
+    }
+
+    @media screen and (max-width: 768px) {
+      .footer-content-{{ section.id }} {
+        grid-template-columns: repeat({{ section.settings.columnas_tablet }}, 1fr);
+        gap: {{ section.settings.espacio_entre_columnas_mobile }}px;
+      }
+
+      .footer-column-{{ section.id }} h3 {
+        font-size: {{ section.settings.tamano_titulos_mobile }}px;
+      }
+
+      .footer-column-{{ section.id }} p {
+        font-size: {{ section.settings.tamano_texto_mobile }}px;
+      }
+
+      .enlaces-rapidos-{{ section.id }} a {
+        font-size: {{ section.settings.tamano_texto_mobile }}px;
+      }
+
+      .copyright-{{ section.id }} {
+        font-size: {{ section.settings.tamano_copyright_mobile }}px;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .footer-content-{{ section.id }} {
+        grid-template-columns: repeat({{ section.settings.columnas_mobile }}, 1fr);
+      }
+    }
+  </style>
+
+  <footer class="footer-{{ section.id }}">
+    <div class="footer-container-{{ section.id }}">
+      <div class="footer-content-{{ section.id }}">
+        <!-- Columna 1: Información de la empresa -->
+        {% if section.settings.mostrar_columna_info %}
+          <div class="footer-column-{{ section.id }}">
+            {% if section.settings.mostrar_titulo_columna_info %}
+              <h3>{{ section.settings.titulo_columna_info }}</h3>
             {% endif %}
-            {% if section.settings.enlace2_texto != blank and section.settings.enlace2_url != blank %}
-              <a href="{{ section.settings.enlace2_url }}">{{ section.settings.enlace2_texto }}</a>
+
+            {% if section.settings.mostrar_descripcion %}
+              <p>{{ section.settings.footer_descripcion }}</p>
             {% endif %}
-            {% if section.settings.enlace3_texto != blank and section.settings.enlace3_url != blank %}
-              <a href="{{ section.settings.enlace3_url }}">{{ section.settings.enlace3_texto }}</a>
-            {% endif %}
-            {% if section.settings.enlace4_texto != blank and section.settings.enlace4_url != blank %}
-              <a href="{{ section.settings.enlace4_url }}">{{ section.settings.enlace4_texto }}</a>
-            {% endif %}
-            {% if section.settings.enlace5_texto != blank and section.settings.enlace5_url != blank %}
-              <a href="{{ section.settings.enlace5_url }}">{{ section.settings.enlace5_texto }}</a>
+
+            {% if section.settings.mostrar_redes %}
+              <div class="social-icons-{{ section.id }}">
+                {% if section.settings.instagram_link != blank
+                  and section.settings.instagram_link != '#'
+                  and section.settings.mostrar_instagram
+                %}
+                  <a
+                    href="{{ section.settings.instagram_link }}"
+                    class="social-icon-{{ section.id }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Instagram"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                      <path d="M18 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                      <path d="M17.1 2H6.9C4.2 2 2 4.2 2 6.9v10.2C2 19.8 4.2 22 6.9 22h10.2c2.7 0 4.9-2.2 4.9-4.9V6.9C22 4.2 19.8 2 17.1 2zm2.9 15.1c0 1.6-1.3 2.9-2.9 2.9H6.9C5.3 20 4 18.7 4 17.1V6.9C4 5.3 5.3 4 6.9 4h10.2c1.6 0 2.9 1.3 2.9 2.9v10.2z"/>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                {% if section.settings.facebook_link != blank
+                  and section.settings.facebook_link != '#'
+                  and section.settings.mostrar_facebook
+                %}
+                  <a
+                    href="{{ section.settings.facebook_link }}"
+                    class="social-icon-{{ section.id }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Facebook"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127c-.82-.088-1.643-.13-2.467-.129-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"/>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                {% if section.settings.twitter_link != blank
+                  and section.settings.twitter_link != '#'
+                  and section.settings.mostrar_twitter
+                %}
+                  <a
+                    href="{{ section.settings.twitter_link }}"
+                    class="social-icon-{{ section.id }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Twitter"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                {% if section.settings.youtube_link != blank
+                  and section.settings.youtube_link != '#'
+                  and section.settings.mostrar_youtube
+                %}
+                  <a
+                    href="{{ section.settings.youtube_link }}"
+                    class="social-icon-{{ section.id }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="YouTube"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M21.543 6.498C22 8.28 22 12 22 12s0 3.72-.457 5.502c-.254.985-.997 1.76-1.938 2.022C17.896 20 12 20 12 20s-5.893 0-7.605-.476c-.945-.266-1.687-1.04-1.938-2.022C2 15.72 2 12 2 12s0-3.72.457-5.502c.254-.985.997-1.76 1.938-2.022C6.107 4 12 4 12 4s5.896 0 7.605.476c.945.266 1.687 1.04 1.938 2.022zM10 15.5l6-3.5-6-3.5v7z"/>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                {% if section.settings.tiktok_link != blank
+                  and section.settings.tiktok_link != '#'
+                  and section.settings.mostrar_tiktok
+                %}
+                  <a
+                    href="{{ section.settings.tiktok_link }}"
+                    class="social-icon-{{ section.id }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="TikTok"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.24 0 .47.03.7.08V9.39c-.23-.03-.46-.06-.7-.06a6.35 6.35 0 0 0-6.35 6.35A6.34 6.34 0 0 0 9.5 22a6.34 6.34 0 0 0 6.34-6.35v-3.49a8.16 8.16 0 0 0 3.75.9V9.59a4.85 4.85 0 0 1-3.75-.9c.02 0 .02 0 0 0z"/>
+                    </svg>
+                  </a>
+                {% endif %}
+
+                {% if section.settings.whatsapp_link != blank
+                  and section.settings.whatsapp_link != '#'
+                  and section.settings.mostrar_whatsapp
+                %}
+                  <a
+                    href="{{ section.settings.whatsapp_link }}"
+                    class="social-icon-{{ section.id }}"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="WhatsApp"
+                  >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.15-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.198.296-.767.966-.94 1.164-.173.199-.345.223-.643.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                  </a>
+                {% endif %}
+              </div>
             {% endif %}
           </div>
-        </div>
-      {% endif %}
+        {% endif %}
 
-      <!-- Columna 4: Personalizable -->
-      {% if section.settings.mostrar_columna_personalizada %}
-        <div class="footer-column">
-          <h3>{{ section.settings.titulo_columna_personalizada }}</h3>
-          <div class="columna-personalizada">
-            {{ section.settings.contenido_columna_personalizada }}
+        <!-- Columna 2: Información de contacto -->
+        {% if section.settings.mostrar_columna_contacto %}
+          <div class="footer-column-{{ section.id }}">
+            {% if section.settings.mostrar_titulo_columna_contacto %}
+              <h3>{{ section.settings.titulo_columna_contacto }}</h3>
+            {% endif %}
+
+            {% if section.settings.mostrar_direccion and section.settings.direccion != blank %}
+              <div class="contacto-item">
+                <div class="contacto-icono">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-4.198 0-8 3.403-8 7.602 0 4.198 3.469 9.21 8 16.398 4.531-7.188 8-12.2 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+                  </svg>
+                </div>
+                <div class="contacto-texto">{{ section.settings.direccion }}</div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.mostrar_telefono and section.settings.telefono != blank %}
+              <div class="contacto-item">
+                <div class="contacto-icono">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 22.621l-3.521-6.795c-.008.004-1.974.97-2.064 1.011-2.24 1.086-6.799-7.82-4.609-8.994l2.083-1.026-3.493-6.817-2.106 1.039c-7.202 3.755 4.233 25.982 11.6 22.615.121-.055 2.102-1.029 2.11-1.033z"/>
+                  </svg>
+                </div>
+                <div class="contacto-texto">{{ section.settings.telefono }}</div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.mostrar_email and section.settings.email != blank %}
+              <div class="contacto-item">
+                <div class="contacto-icono">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
+                  </svg>
+                </div>
+                <div class="contacto-texto">{{ section.settings.email }}</div>
+              </div>
+            {% endif %}
+
+            {% if section.settings.mostrar_horario and section.settings.horario != blank %}
+              <div class="contacto-item">
+                <div class="contacto-icono">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 14h-7v-8h2v6h5v2z"/>
+                  </svg>
+                </div>
+                <div class="contacto-texto">{{ section.settings.horario }}</div>
+              </div>
+            {% endif %}
           </div>
+        {% endif %}
+
+        <!-- Columna 3: Enlaces rápidos -->
+        {% if section.settings.mostrar_columna_enlaces %}
+          <div class="footer-column-{{ section.id }}">
+            {% if section.settings.mostrar_titulo_columna_enlaces %}
+              <h3>{{ section.settings.titulo_columna_enlaces }}</h3>
+            {% endif %}
+
+            <div class="enlaces-rapidos-{{ section.id }}">
+              {% if section.settings.mostrar_enlace1
+                and section.settings.enlace1_texto != blank
+                and section.settings.enlace1_url != blank
+              %}
+                <a href="{{ section.settings.enlace1_url }}">{{ section.settings.enlace1_texto }}</a>
+              {% endif %}
+
+              {% if section.settings.mostrar_enlace2
+                and section.settings.enlace2_texto != blank
+                and section.settings.enlace2_url != blank
+              %}
+                <a href="{{ section.settings.enlace2_url }}">{{ section.settings.enlace2_texto }}</a>
+              {% endif %}
+
+              {% if section.settings.mostrar_enlace3
+                and section.settings.enlace3_texto != blank
+                and section.settings.enlace3_url != blank
+              %}
+                <a href="{{ section.settings.enlace3_url }}">{{ section.settings.enlace3_texto }}</a>
+              {% endif %}
+
+              {% if section.settings.mostrar_enlace4
+                and section.settings.enlace4_texto != blank
+                and section.settings.enlace4_url != blank
+              %}
+                <a href="{{ section.settings.enlace4_url }}">{{ section.settings.enlace4_texto }}</a>
+              {% endif %}
+
+              {% if section.settings.mostrar_enlace5
+                and section.settings.enlace5_texto != blank
+                and section.settings.enlace5_url != blank
+              %}
+                <a href="{{ section.settings.enlace5_url }}">{{ section.settings.enlace5_texto }}</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Columna 4: Personalizable -->
+        {% if section.settings.mostrar_columna_personalizada %}
+          <div class="footer-column-{{ section.id }}">
+            {% if section.settings.mostrar_titulo_columna_personalizada %}
+              <h3>{{ section.settings.titulo_columna_personalizada }}</h3>
+            {% endif %}
+
+            <div class="columna-personalizada">
+              {{ section.settings.contenido_columna_personalizada }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.mostrar_copyright %}
+        <div class="copyright-{{ section.id }}">
+          <p>
+            {{ section.settings.texto_copyright | replace: '[year]', 'now' | date: '%Y' }}
+            {% if section.settings.mostrar_creditos %}
+              {{ section.settings.texto_creditos | replace: '[developer]', section.settings.nombre_desarrollador }}
+            {% endif %}
+          </p>
         </div>
       {% endif %}
     </div>
-
-    {% if section.settings.mostrar_copyright %}
-      <div class="copyright">
-        <p>
-          {{ section.settings.texto_copyright | replace: '[year]', 'now' | date: '%Y' }}
-          {% if section.settings.mostrar_creditos %}
-            {{ section.settings.texto_creditos | replace: '[developer]', section.settings.nombre_desarrollador }}
-          {% endif %}
-        </p>
-      </div>
-    {% endif %}
-  </div>
-</footer>
+  </footer>
+{% endif %}
 
 {% schema %}
 {
-  "name": "Footer Mejorado",
+  "name": "Footer Personalizable",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -406,12 +497,6 @@
       "default": "#25D366"
     },
     {
-      "type": "color",
-      "id": "color_acento_hover",
-      "label": "Color de acento al pasar el cursor",
-      "default": "#1aa954"
-    },
-    {
       "type": "range",
       "id": "tamano_titulos",
       "label": "Tamaño de títulos (px)",
@@ -419,6 +504,64 @@
       "max": 32,
       "step": 1,
       "default": 22
+    },
+    {
+      "type": "range",
+      "id": "tamano_titulos_mobile",
+      "label": "Tamaño de títulos en móvil (px)",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "peso_titulos",
+      "label": "Peso de títulos",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Negrita"
+        }
+      ],
+      "default": "bold"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_linea_titulo",
+      "label": "Mostrar línea decorativa bajo títulos",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "linea_titulo_ancho",
+      "label": "Ancho de línea decorativa (px)",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "linea_titulo_alto",
+      "label": "Alto de línea decorativa (px)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "linea_titulo_espacio",
+      "label": "Espacio antes de línea decorativa (px)",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 10
     },
     {
       "type": "range",
@@ -431,21 +574,141 @@
     },
     {
       "type": "range",
-      "id": "tamano_iconos",
-      "label": "Tamaño de iconos de contacto (px)",
-      "min": 16,
-      "max": 36,
+      "id": "tamano_texto_mobile",
+      "label": "Tamaño de texto en móvil (px)",
+      "min": 12,
+      "max": 18,
       "step": 1,
-      "default": 24
+      "default": 14
     },
     {
       "type": "range",
-      "id": "tamano_iconos_sociales",
-      "label": "Tamaño de iconos sociales (px)",
-      "min": 24,
+      "id": "altura_linea",
+      "label": "Altura de línea",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "ancho_maximo",
+      "label": "Ancho máximo (px)",
+      "min": 800,
+      "max": 1600,
+      "step": 50,
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Padding superior (px)",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_y_bottom",
+      "label": "Padding inferior (px)",
+      "min": 10,
       "max": 60,
-      "step": 2,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Padding lateral (px)",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "columnas_escritorio",
+      "label": "Número de columnas (escritorio)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columnas_tablet",
+      "label": "Número de columnas (tablet)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "columnas_mobile",
+      "label": "Número de columnas (móvil)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "espacio_entre_columnas",
+      "label": "Espacio entre columnas (px)",
+      "min": 10,
+      "max": 60,
+      "step": 5,
       "default": 40
+    },
+    {
+      "type": "range",
+      "id": "espacio_entre_columnas_mobile",
+      "label": "Espacio entre columnas en móvil (px)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "espacio_parrafos",
+      "label": "Espacio después de párrafos (px)",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "espacio_despues_titulos",
+      "label": "Espacio después de títulos (px)",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "borde_superior",
+      "label": "Mostrar borde superior",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "borde_superior_grosor",
+      "label": "Grosor del borde superior (px)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "borde_superior_color",
+      "label": "Color del borde superior",
+      "default": "#333333"
     },
 
     {
@@ -459,10 +722,22 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_titulo_columna_info",
+      "label": "Mostrar título de columna",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "titulo_columna_info",
       "label": "Título",
       "default": "Dinámicas del Norte"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_descripcion",
+      "label": "Mostrar descripción",
+      "default": true
     },
     {
       "type": "textarea",
@@ -477,10 +752,60 @@
       "default": true
     },
     {
+      "type": "select",
+      "id": "alineacion_iconos",
+      "label": "Alineación de iconos",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "espacio_antes_iconos",
+      "label": "Espacio antes de iconos (px)",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "espacio_entre_iconos",
+      "label": "Espacio entre iconos (px)",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "default": 15
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_instagram",
+      "label": "Mostrar Instagram",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "instagram_link",
       "label": "Enlace a Instagram",
       "default": "https://www.instagram.com/dinamicadelnorte.24/"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_facebook",
+      "label": "Mostrar Facebook",
+      "default": true
     },
     {
       "type": "text",
@@ -489,10 +814,22 @@
       "default": "https://www.facebook.com/loteriadelnorte"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_twitter",
+      "label": "Mostrar Twitter/X",
+      "default": false
+    },
+    {
       "type": "text",
       "id": "twitter_link",
       "label": "Enlace a Twitter/X",
       "default": "#"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_youtube",
+      "label": "Mostrar YouTube",
+      "default": false
     },
     {
       "type": "text",
@@ -501,16 +838,138 @@
       "default": "#"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_tiktok",
+      "label": "Mostrar TikTok",
+      "default": false
+    },
+    {
       "type": "text",
       "id": "tiktok_link",
       "label": "Enlace a TikTok",
       "default": "#"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_whatsapp",
+      "label": "Mostrar WhatsApp",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "whatsapp_link",
       "label": "Enlace a WhatsApp",
       "default": "https://wa.me/573000000000"
+    },
+
+    {
+      "type": "header",
+      "content": "Iconos de Redes Sociales"
+    },
+    {
+      "type": "range",
+      "id": "tamano_iconos_sociales",
+      "label": "Tamaño de iconos sociales (px)",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "iconos_redondez",
+      "label": "Redondez de iconos (%)",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "proporcion_iconos",
+      "label": "Proporción del icono interior",
+      "min": 0.3,
+      "max": 0.8,
+      "step": 0.1,
+      "default": 0.6
+    },
+    {
+      "type": "color",
+      "id": "color_fondo_iconos",
+      "label": "Color de fondo de iconos",
+      "default": "#25D366"
+    },
+    {
+      "type": "color",
+      "id": "color_fondo_iconos_hover",
+      "label": "Color de fondo de iconos (hover)",
+      "default": "#1aa954"
+    },
+    {
+      "type": "color",
+      "id": "color_iconos_sociales",
+      "label": "Color de iconos",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "color_iconos_sociales_hover",
+      "label": "Color de iconos (hover)",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "borde_iconos",
+      "label": "Mostrar borde en iconos",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "borde_iconos_grosor",
+      "label": "Grosor del borde (px)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "borde_iconos_color",
+      "label": "Color del borde",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "select",
+      "id": "efecto_hover",
+      "label": "Efecto al pasar el cursor",
+      "options": [
+        {
+          "value": "scale(1.1)",
+          "label": "Agrandar"
+        },
+        {
+          "value": "translateY(-3px)",
+          "label": "Elevar"
+        },
+        {
+          "value": "rotate(10deg)",
+          "label": "Rotar"
+        },
+        {
+          "value": "none",
+          "label": "Ninguno"
+        }
+      ],
+      "default": "translateY(-3px)"
+    },
+    {
+      "type": "range",
+      "id": "velocidad_transicion",
+      "label": "Velocidad de transición (segundos)",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3
     },
 
     {
@@ -524,10 +983,46 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_titulo_columna_contacto",
+      "label": "Mostrar título de columna",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "titulo_columna_contacto",
       "label": "Título",
       "default": "Contacto"
+    },
+    {
+      "type": "range",
+      "id": "espacio_contacto_items",
+      "label": "Espacio entre elementos (px)",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "tamano_iconos",
+      "label": "Tamaño de iconos de contacto (px)",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "color_iconos",
+      "label": "Color de iconos de contacto",
+      "default": "#25D366"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_direccion",
+      "label": "Mostrar dirección",
+      "default": true
     },
     {
       "type": "text",
@@ -536,16 +1031,34 @@
       "default": "Cúcuta, Norte de Santander, Colombia"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_telefono",
+      "label": "Mostrar teléfono",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "telefono",
       "label": "Teléfono",
       "default": "+57 300 000 0000"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_email",
+      "label": "Mostrar email",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "email",
       "label": "Email",
       "default": "contacto@dinamicasdelnorte.com"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_horario",
+      "label": "Mostrar horario",
+      "default": true
     },
     {
       "type": "text",
@@ -565,10 +1078,52 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_titulo_columna_enlaces",
+      "label": "Mostrar título de columna",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "titulo_columna_enlaces",
       "label": "Título",
       "default": "Enlaces Rápidos"
+    },
+    {
+      "type": "range",
+      "id": "espacio_entre_enlaces",
+      "label": "Espacio entre enlaces (px)",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_enlaces",
+      "label": "Padding izquierdo de enlaces (px)",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_flecha_enlaces",
+      "label": "Mostrar flecha en enlaces",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "flecha_enlaces",
+      "label": "Carácter de flecha",
+      "default": "›"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_enlace1",
+      "label": "Mostrar enlace 1",
+      "default": true
     },
     {
       "type": "text",
@@ -583,6 +1138,12 @@
       "default": "/pages/terminos"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_enlace2",
+      "label": "Mostrar enlace 2",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "enlace2_texto",
       "label": "Texto del enlace 2",
@@ -593,6 +1154,12 @@
       "id": "enlace2_url",
       "label": "URL del enlace 2",
       "default": "/pages/privacidad"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_enlace3",
+      "label": "Mostrar enlace 3",
+      "default": true
     },
     {
       "type": "text",
@@ -607,6 +1174,12 @@
       "default": "/pages/preguntas-frecuentes"
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_enlace4",
+      "label": "Mostrar enlace 4",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "enlace4_texto",
       "label": "Texto del enlace 4",
@@ -617,6 +1190,12 @@
       "id": "enlace4_url",
       "label": "URL del enlace 4",
       "default": "/pages/sobre-nosotros"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_enlace5",
+      "label": "Mostrar enlace 5",
+      "default": true
     },
     {
       "type": "text",
@@ -642,6 +1221,12 @@
       "default": false
     },
     {
+      "type": "checkbox",
+      "id": "mostrar_titulo_columna_personalizada",
+      "label": "Mostrar título de columna",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "titulo_columna_personalizada",
       "label": "Título",
@@ -665,6 +1250,74 @@
       "default": true
     },
     {
+      "type": "select",
+      "id": "alineacion_copyright",
+      "label": "Alineación de copyright",
+      "options": [
+        {
+          "value": "left",
+          "label": "Izquierda"
+        },
+        {
+          "value": "center",
+          "label": "Centro"
+        },
+        {
+          "value": "right",
+          "label": "Derecha"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "padding_copyright",
+      "label": "Padding superior de copyright (px)",
+      "min": 10,
+      "max": 50,
+      "step": 5,
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "borde_copyright",
+      "label": "Mostrar borde superior en copyright",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "borde_copyright_grosor",
+      "label": "Grosor del borde (px)",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "borde_copyright_color",
+      "label": "Color del borde",
+      "default": "rgba(255, 255, 255, 0.1)"
+    },
+    {
+      "type": "range",
+      "id": "tamano_copyright",
+      "label": "Tamaño de texto de copyright (px)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tamano_copyright_mobile",
+      "label": "Tamaño de texto de copyright en móvil (px)",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "default": 12
+    },
+    {
       "type": "text",
       "id": "texto_copyright",
       "label": "Texto de copyright",
@@ -683,6 +1336,22 @@
       "default": "Desarrollado por [developer]."
     },
     {
+      "type": "select",
+      "id": "peso_enlaces_copyright",
+      "label": "Peso de enlaces en copyright",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Negrita"
+        }
+      ],
+      "default": "bold"
+    },
+    {
       "type": "text",
       "id": "nombre_desarrollador",
       "label": "Nombre del desarrollador",
@@ -691,7 +1360,7 @@
   ],
   "presets": [
     {
-      "name": "Footer Mejorado",
+      "name": "Footer Personalizable",
       "category": "Footer"
     }
   ]
