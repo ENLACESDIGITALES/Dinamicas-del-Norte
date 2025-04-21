@@ -254,15 +254,6 @@
 
   <section class="sobre-nosotros-{{ section.id }}">
     <div class="container-{{ section.id }}">
-      {% if section.settings.mostrar_titulo %}
-        <div class="section-title-{{ section.id }}">
-          <h2>{{ section.settings.nosotros_title }}</h2>
-          {% if section.settings.mostrar_linea_titulo %}
-            <span class="linea-titulo"></span>
-          {% endif %}
-        </div>
-      {% endif %}
-
       <div class="sobre-nosotros-container-{{ section.id }}">
         {% if section.settings.mostrar_imagen %}
           <div class="sobre-nosotros-image-{{ section.id }}">
@@ -279,6 +270,15 @@
         {% endif %}
 
         <div class="sobre-nosotros-content-{{ section.id }}">
+          {% if section.settings.mostrar_titulo %}
+            <div class="section-title-{{ section.id }}">
+              <h2>{{ section.settings.nosotros_title }}</h2>
+              {% if section.settings.mostrar_linea_titulo %}
+                <span class="linea-titulo"></span>
+              {% endif %}
+            </div>
+          {% endif %}
+
           {% if section.settings.mostrar_subtitulo %}
             <h3>{{ section.settings.nosotros_subtitle }}</h3>
           {% endif %}
