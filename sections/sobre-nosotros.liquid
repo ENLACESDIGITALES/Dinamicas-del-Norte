@@ -91,7 +91,6 @@
     }
 
     .sobre-nosotros-image-{{ section.id }} img {
-      width: 100%;
       max-width: 100%;
       height: auto;
       border-radius: {{ section.settings.imagen_radio }}px;
@@ -101,10 +100,7 @@
       {% if section.settings.imagen_borde %}
         border: {{ section.settings.imagen_borde_ancho }}px solid {{ section.settings.imagen_borde_color }};
       {% endif %}
-      object-fit: {{ section.settings.imagen_ajuste }};
-      {% if section.settings.imagen_ajuste == 'cover' or section.settings.imagen_ajuste == 'contain' %}
-        aspect-ratio: {{ section.settings.imagen_proporcion }};
-      {% endif %}
+      display: block;
     }
 
     .sobre-nosotros-content-{{ section.id }} {
@@ -822,57 +818,11 @@
       "info": "Mejora la velocidad de carga de la página"
     },
     {
-      "type": "select",
-      "id": "imagen_ajuste",
-      "label": "Ajuste de la imagen",
-      "options": [
-        {
-          "value": "cover",
-          "label": "Cubrir (recorta si es necesario)"
-        },
-        {
-          "value": "contain",
-          "label": "Contener (muestra completa)"
-        },
-        {
-          "value": "fill",
-          "label": "Rellenar (estira)"
-        },
-        {
-          "value": "none",
-          "label": "Original"
-        }
-      ],
-      "default": "cover"
-    },
-    {
-      "type": "select",
-      "id": "imagen_proporcion",
-      "label": "Proporción de la imagen",
-      "options": [
-        {
-          "value": "1/1",
-          "label": "1:1 (Cuadrada)"
-        },
-        {
-          "value": "4/3",
-          "label": "4:3 (Estándar)"
-        },
-        {
-          "value": "16/9",
-          "label": "16:9 (Panorámica)"
-        },
-        {
-          "value": "3/4",
-          "label": "3:4 (Vertical)"
-        },
-        {
-          "value": "2/3",
-          "label": "2:3 (Vertical)"
-        }
-      ],
-      "default": "4/3",
-      "info": "Solo aplica si el ajuste es 'Cubrir' o 'Contener'"
+      "type": "checkbox",
+      "id": "imagen_mantener_proporcion",
+      "label": "Mantener proporción original",
+      "default": true,
+      "info": "Conserva la relación de aspecto original de la imagen"
     },
     {
       "type": "header",
