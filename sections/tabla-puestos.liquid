@@ -1,65 +1,120 @@
-<section class="tabla-puestos">
+{% comment %}
+  Premio y Tabla de Puestos - Para páginas de sorteos
+{% endcomment %}
+
+<section class="premio-sorteo">
   <div class="container">
-    <div class="section-title">
-      <h2>{{ section.settings.tabla_title }}</h2>
-    </div>
-
-    <div class="tabla-container">
-      <div class="tabla-grid">
-        {% for i in (0..99) %}
-          {% assign mod = i | modulo: 10 %}
-          {% if mod == 0
-            or mod == 1
-            or i == 29
-            or i == 30
-            or i == 31
-            or i == 32
-            or i == 34
-            or i == 37
-            or i == 38
-            or i == 40
-            or i == 41
-            or i == 44
-            or i == 49
-            or i == 50
-            or i == 52
-            or i == 59
-            or i == 68
-            or i == 70
-            or i == 72
-            or i == 75
-            or i == 76
-            or i == 78
-            or i == 81
-            or i == 87
-            or i == 90
-            or i == 91
-            or i == 93
-            or i == 94
-            or i == 97
-            or i == 99
-          %}
-            <div class="tabla-item disponible">{{ i }}</div>
-          {% else %}
-            <div class="tabla-item no-disponible"></div>
-          {% endif %}
-        {% endfor %}
+    <!-- Información del premio -->
+    <div class="premio-info">
+      <div class="premio-imagen-container">
+        {% if section.settings.premio_imagen != blank %}
+          <img
+            src="{{ section.settings.premio_imagen | img_url: 'large' }}"
+            alt="{{ section.settings.premio_titulo }}"
+            class="premio-imagen"
+          >
+        {% else %}
+          <div class="premio-imagen-placeholder">
+            <span>Imagen del premio</span>
+          </div>
+        {% endif %}
       </div>
 
-      <div class="leyenda">
-        <div class="leyenda-item">
-          <div class="leyenda-color disponible"></div>
-          <span>Disponible</span>
+      <div class="premio-detalles">
+        <div class="section-title">
+          <h2>{{ section.settings.premio_titulo }}</h2>
+          <div class="linea-titulo"></div>
         </div>
-        <div class="leyenda-item">
-          <div class="leyenda-color no-disponible"></div>
-          <span>No disponible</span>
+
+        <div class="premio-descripcion">
+          {{ section.settings.premio_descripcion }}
+        </div>
+
+        {% if section.settings.mostrar_fecha_sorteo %}
+          <div class="premio-fecha"><strong>Fecha del sorteo:</strong> {{ section.settings.fecha_sorteo }}</div>
+        {% endif %}
+
+        {% if section.settings.mostrar_valor %}
+          <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.valor_premio }}</div>
+        {% endif %}
+
+        <div class="premio-lista">
+          {% for block in section.blocks %}
+            {% if block.type == 'caracteristica' %}
+              <div class="premio-caracteristica" {{ block.shopify_attributes }}>
+                <div class="caracteristica-icono">✓</div>
+                <div class="caracteristica-texto">{{ block.settings.texto }}</div>
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
       </div>
     </div>
 
-    <div class="text-center" style="margin-top: 40px;">
-      <a href="{{ section.settings.button_link }}" class="button">
+    <!-- Tabla de puestos -->
+    <div class="tabla-puestos-container">
+      <div class="section-title">
+        <h2>{{ section.settings.tabla_titulo }}</h2>
+        <div class="linea-titulo"></div>
+      </div>
+
+      <div class="tabla-subtitle">
+        {{ section.settings.tabla_subtitulo }}
+      </div>
+
+      <div class="tabla-container">
+        <div class="tabla-grid">
+          {% for i in (0..99) %}
+            {% assign puesto_disponible = true %}
+            {% assign custom_texto = '' %}
+
+            {% for block in section.blocks %}
+              {% if block.type == 'puesto_no_disponible' %}
+                {% if block.settings.numero == i %}
+                  {% assign puesto_disponible = false %}
+                  {% break %}
+                {% endif %}
+              {% elsif block.type == 'puesto_personalizado' %}
+                {% if block.settings.numero == i %}
+                  {% assign custom_texto = block.settings.texto %}
+                  {% break %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if puesto_disponible %}
+              <div class="tabla-item disponible">
+                {% if custom_texto != '' %}
+                  {{ custom_texto }}
+                {% else %}
+                  {{ i }}
+                {% endif %}
+              </div>
+            {% else %}
+              <div class="tabla-item no-disponible"></div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="leyenda">
+          <div class="leyenda-item">
+            <div class="leyenda-color disponible"></div>
+            <span>{{ section.settings.texto_disponible }}</span>
+          </div>
+          <div class="leyenda-item">
+            <div class="leyenda-color no-disponible"></div>
+            <span>{{ section.settings.texto_no_disponible }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de WhatsApp -->
+    <div class="text-center whatsapp-button-container">
+      <a
+        href="{{ section.settings.button_link }}"
+        class="whatsapp-button {% if section.settings.button_shake_effect %}con-sacudida{% endif %}"
+      >
         <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
           <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
         </svg>
@@ -69,15 +124,365 @@
   </div>
 </section>
 
+<style>
+  /* Estilos generales */
+  .premio-sorteo {
+    padding: 40px 0;
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .section-title h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+  }
+
+  .linea-titulo {
+    height: 3px;
+    width: 100px;
+    background-color: #FF0000;
+    margin: 10px auto 0;
+  }
+
+  /* Estilos de la información del premio */
+  .premio-info {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+    gap: 30px;
+  }
+
+  .premio-imagen-container {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .premio-imagen {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .premio-imagen-placeholder {
+    width: 100%;
+    padding-bottom: 100%;
+    background-color: #333;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    position: relative;
+  }
+
+  .premio-imagen-placeholder span {
+    position: absolute;
+    font-size: 18px;
+  }
+
+  .premio-detalles {
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .premio-descripcion {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #cccccc;
+  }
+
+  .premio-fecha,
+  .premio-valor {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #ffffff;
+  }
+
+  .premio-lista {
+    margin-top: 20px;
+  }
+
+  .premio-caracteristica {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .caracteristica-icono {
+    width: 24px;
+    height: 24px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  .caracteristica-texto {
+    font-size: 16px;
+    color: #ffffff;
+  }
+
+  /* Estilos de la tabla de puestos */
+  .tabla-puestos-container {
+    margin-bottom: 50px;
+  }
+
+  .tabla-subtitle {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #cccccc;
+  }
+
+  .tabla-container {
+    background-color: #111111;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .tabla-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .tabla-item {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+
+  .tabla-item.disponible {
+    background-color: #25D366;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tabla-item.disponible:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.5);
+  }
+
+  .tabla-item.no-disponible {
+    background-color: #444444;
+  }
+
+  .leyenda {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+  }
+
+  .leyenda-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .leyenda-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+
+  .leyenda-color.disponible {
+    background-color: #25D366;
+  }
+
+  .leyenda-color.no-disponible {
+    background-color: #444444;
+  }
+
+  /* Estilos del botón de WhatsApp */
+  .whatsapp-button-container {
+    text-align: center;
+  }
+
+  .whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #25D366;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
+    text-transform: uppercase;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .whatsapp-button svg {
+    margin-right: 10px;
+  }
+
+  .whatsapp-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
+  }
+
+  /* Efecto de sacudida para el botón */
+  @keyframes sacudida {
+    0% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+
+  .whatsapp-button.con-sacudida {
+    animation: sacudida 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  }
+
+  .whatsapp-button.con-sacudida:hover {
+    animation: none;
+    transform: translateY(-2px);
+  }
+
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+    .tabla-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .premio-info {
+      flex-direction: column;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+    }
+
+    .tabla-item {
+      height: 36px;
+      font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .tabla-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .leyenda {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title h2 {
+      font-size: 24px;
+    }
+  }
+</style>
+
 {% schema %}
 {
-  "name": "Tabla de Puestos",
+  "name": "Premio y Tabla de Puestos",
   "settings": [
     {
+      "type": "header",
+      "content": "Información del Premio"
+    },
+    {
       "type": "text",
-      "id": "tabla_title",
+      "id": "premio_titulo",
+      "label": "Título del premio",
+      "default": "¡Gran sorteo de motocicleta!"
+    },
+    {
+      "type": "richtext",
+      "id": "premio_descripcion",
+      "label": "Descripción del premio",
+      "default": "<p>Participa en nuestro increíble sorteo y gana esta fabulosa motocicleta. ¡Una oportunidad única con altas probabilidades de ganar!</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "premio_imagen",
+      "label": "Imagen del premio"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_fecha_sorteo",
+      "label": "Mostrar fecha del sorteo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "fecha_sorteo",
+      "label": "Fecha del sorteo",
+      "default": "30 de Junio, 2025"
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_valor",
+      "label": "Mostrar valor del premio",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "valor_premio",
+      "label": "Valor del premio",
+      "default": "$5,000,000"
+    },
+    {
+      "type": "header",
+      "content": "Tabla de Puestos"
+    },
+    {
+      "type": "text",
+      "id": "tabla_titulo",
       "label": "Título de la tabla",
-      "default": "Tabla de puestos"
+      "default": "Tabla de puestos disponibles"
+    },
+    {
+      "type": "text",
+      "id": "tabla_subtitulo",
+      "label": "Subtítulo de la tabla",
+      "default": "Selecciona tu número de la suerte entre los puestos disponibles"
+    },
+    {
+      "type": "text",
+      "id": "texto_disponible",
+      "label": "Texto para puestos disponibles",
+      "default": "Disponible"
+    },
+    {
+      "type": "text",
+      "id": "texto_no_disponible",
+      "label": "Texto para puestos no disponibles",
+      "default": "No disponible"
+    },
+    {
+      "type": "header",
+      "content": "Botón de WhatsApp"
     },
     {
       "type": "text",
@@ -90,12 +495,101 @@
       "id": "button_link",
       "label": "Enlace del botón",
       "default": "https://wa.me/573000000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_shake_effect",
+      "label": "Efecto de sacudida",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "caracteristica",
+      "name": "Característica del premio",
+      "settings": [
+        {
+          "type": "text",
+          "id": "texto",
+          "label": "Texto de la característica",
+          "default": "Premio entregado directamente en tu casa"
+        }
+      ]
+    },
+    {
+      "type": "puesto_no_disponible",
+      "name": "Puesto no disponible",
+      "settings": [
+        {
+          "type": "number",
+          "id": "numero",
+          "label": "Número de puesto (0-99)",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "puesto_personalizado",
+      "name": "Puesto con texto",
+      "settings": [
+        {
+          "type": "number",
+          "id": "numero",
+          "label": "Número de puesto (0-99)",
+          "default": 0
+        },
+        {
+          "type": "text",
+          "id": "texto",
+          "label": "Texto personalizado",
+          "default": "PROMO"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Tabla de Puestos",
-      "category": "Sorteos"
+      "name": "Premio y Tabla de Puestos",
+      "category": "Sorteos",
+      "blocks": [
+        {
+          "type": "caracteristica",
+          "settings": {
+            "texto": "Premio garantizado al 100%"
+          }
+        },
+        {
+          "type": "caracteristica",
+          "settings": {
+            "texto": "Documentación legal incluida"
+          }
+        },
+        {
+          "type": "caracteristica",
+          "settings": {
+            "texto": "Entrega a domicilio sin costo"
+          }
+        },
+        {
+          "type": "puesto_no_disponible",
+          "settings": {
+            "numero": 5
+          }
+        },
+        {
+          "type": "puesto_no_disponible",
+          "settings": {
+            "numero": 10
+          }
+        },
+        {
+          "type": "puesto_personalizado",
+          "settings": {
+            "numero": 77,
+            "texto": "SUERTE"
+          }
+        }
+      ]
     }
   ]
 }
