@@ -1,17 +1,5 @@
-/* Contenedor para el video */ .review-video-wrapper { width: 100%; position: relative;
-{% if section.settings.video_format == 'vertical' %}
-  padding-bottom: 177.78%; /* Aspect ratio 9:16 (vertical como Instagram Stories) */
-{% elsif section.settings.video_format == 'square' %}
-  padding-bottom: 100%; /* Aspect ratio 1:1 (cuadrado) */
-{% else %}
-  padding-bottom: 56.25%; /* Aspect ratio 16:9 (horizontal estándar) */
-{% endif %}
-height: 0; overflow: visible; margin-bottom: 10px; border-radius: {{ section.settings.video_border_radius }}px;
-background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper iframe { position: absolute; top: 0; left:
-0; width: 100%; height: 100%; border-radius: {{ section.settings.video_border_radius }}px; object-fit: cover; z-index:
-1; }
 {% comment %}
-  Testimonios Reviews - Tarjetas compactas con deslizamiento horizontal
+  Testimonios Reviews - Tarjetas compactas con reproducción de video mejorada
 {% endcomment %}
 
 <section class="testimonios-reviews">
@@ -80,7 +68,7 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
             {% elsif block.type == 'testimonio_video' %}
               <div class="review-slide video-slide" {{ block.shopify_attributes }}>
                 <div class="review-card">
-                  <div class="review-video-container">
+                  <div class="review-video-wrapper">
                     {% if block.settings.video_url != blank %}
                       {% if block.settings.video_url contains 'youtube.com'
                         or block.settings.video_url contains 'youtu.be'
@@ -102,17 +90,22 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
                         </iframe>
                       {% endif %}
                     {% elsif block.settings.video_file != blank %}
-                      <video
-                        controls
-                        playsinline
-                        preload="auto"
-                        poster="{{ block.settings.video_thumbnail | img_url: 'master' }}"
-                      >
-                        <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
-                        Tu navegador no soporta videos HTML5.
-                      </video>
+                      <div class="video-container-mp4">
+                        <video controls playsinline preload="auto">
+                          <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
+                          Tu navegador no soporta videos HTML5.
+                        </video>
+                        <div class="play-button-overlay">
+                          <button class="play-button">
+                            <svg viewBox="0 0 24 24" width="48" height="48">
+                              <path d="M8 5v14l11-7z" fill="#ffffff"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                     {% endif %}
                   </div>
+
                   <div class="review-header video-header">
                     {% if block.settings.imagen_perfil != blank %}
                       <div class="review-avatar">
@@ -292,7 +285,7 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
 
   /* Slides individuales */
   .review-slide {
-    width: {{ section.settings.slide_width }}%; /* Ancho configurable para el efecto infinito */
+    width: {{ section.settings.slide_width_mobile }}%; /* Ancho configurable para móvil */
     flex: 0 0 auto;
     padding: 0 10px;
     box-sizing: border-box;
@@ -307,14 +300,6 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
     height: 100%;
     display: flex;
     flex-direction: column;
-  }
-
-  /* Estilos específicos para tarjetas con video */
-  .video-slide .review-card {
-    padding-top: {{ section.settings.card_padding }}px;
-    padding-left: {{ section.settings.card_padding }}px;
-    padding-right: {{ section.settings.card_padding }}px;
-    padding-bottom: {{ section.settings.card_padding }}px;
   }
 
   /* Cabecera de la review */
@@ -399,8 +384,8 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
     -webkit-box-orient: vertical;
   }
 
-  /* Contenedor de video */
-  .review-video-container {
+  /* Contenedor para el video */
+  .review-video-wrapper {
     width: 100%;
     position: relative;
     {% if section.settings.video_format == 'vertical' %}
@@ -411,12 +396,13 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
     padding-bottom: 56.25%; /* Aspect ratio 16:9 (horizontal estándar) */
     {% endif %}
     height: 0;
-    overflow: hidden;
+    overflow: visible;
     margin-bottom: 10px;
+    border-radius: {{ section.settings.video_border_radius }}px;
+    background-color: #000; /* Fondo negro para videos */
   }
 
-  .review-video-container iframe,
-  .review-video-container video {
+  .review-video-wrapper iframe {
     position: absolute;
     top: 0;
     left: 0;
@@ -424,9 +410,75 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
     height: 100%;
     border-radius: {{ section.settings.video_border_radius }}px;
     object-fit: cover;
+    z-index: 1;
   }
 
-  /* Indicadores de posición */
+  /* Nuevo contenedor de reproducción de video MP4 */
+  .video-container-mp4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: {{ section.settings.video_border_radius }}px;
+    overflow: hidden;
+  }
+
+  .video-container-mp4 video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  /* Overlay del botón de reproducción */
+  .play-button-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Botón de reproducción */
+  .play-button {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: rgba(255, 0, 0, 0.8);
+    border: 3px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    padding: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  }
+
+  .play-button:hover {
+    transform: scale(1.1);
+    background-color: rgba(255, 0, 0, 1);
+  }
+
+  /* Ocultar overlay cuando el video está reproduciéndose */
+  .playing .play-button-overlay {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Indicadores de posición (dots) */
   .slider-dots {
     display: flex;
     justify-content: center;
@@ -514,7 +566,11 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
     }
 
     .review-slide {
-      width: calc(100% / {{ section.settings.slides_per_view_desktop }});
+      width: calc(100% / {{ section.settings.slides_per_view_desktop }}); /* Mostrar múltiples por vista en escritorio */
+    }
+
+    .reviews-track {
+      margin-left: 0; /* Sin offset en escritorio */
     }
 
     .review-author-name {
@@ -559,13 +615,98 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
       
       if (!track || !slides.length) return;
       
+      // CONFIGURACIÓN DE VIDEOS
+      setupVideos();
+      
+      function setupVideos() {
+        // Buscar todos los videos y overlays de botón
+        const videos = slider.querySelectorAll('.video-container-mp4 video');
+        const playButtons = slider.querySelectorAll('.play-button-overlay');
+        
+        // Para cada video, configurar la reproducción
+        videos.forEach((video, index) => {
+          if (!video) return;
+          
+          // Asegurarse de que los videos estén precargados correctamente
+          video.preload = 'metadata';
+          
+          // Evento para cuando los metadatos estén cargados
+          video.addEventListener('loadedmetadata', function() {
+            console.log('Video metadatos cargados:', video.duration);
+          });
+          
+          // Obtener el botón correspondiente
+          const overlay = playButtons[index];
+          if (!overlay) return;
+          
+          // Hacer clic en el overlay inicia el video
+          overlay.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Intentar reproducir el video
+            try {
+              video.controls = true;
+              
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise
+                  .then(() => {
+                    // Video empezó a reproducirse, ocultar overlay
+                    overlay.parentElement.classList.add('playing');
+                  })
+                  .catch(error => {
+                    console.error('Error reproduciendo video:', error);
+                    // Mantener visible el overlay si hay error
+                  });
+              }
+            } catch(e) {
+              console.error('Error al reproducir:', e);
+            }
+          });
+          
+          // Cuando el video termine, mostrar nuevamente el overlay
+          video.addEventListener('ended', function() {
+            overlay.parentElement.classList.remove('playing');
+          });
+          
+          // Cuando el video se pause, mostrar nuevamente el overlay
+          video.addEventListener('pause', function() {
+            overlay.parentElement.classList.remove('playing');
+          });
+          
+          // Evitar que el clic en el video se propague al slider
+          video.addEventListener('click', function(e) {
+            e.stopPropagation();
+          });
+        });
+        
+        // Pausar videos al cambiar de slide
+        function pauseAllVideos() {
+          videos.forEach(video => {
+            try {
+              if (!video.paused) {
+                video.pause();
+              }
+            } catch(e) {
+              console.error('Error al pausar:', e);
+            }
+          });
+        }
+        
+        // Conectar eventos de navegación para pausar videos
+        if (prevBtn) prevBtn.addEventListener('click', pauseAllVideos);
+        if (nextBtn) nextBtn.addEventListener('click', pauseAllVideos);
+        dots.forEach(dot => dot.addEventListener('click', pauseAllVideos));
+      }
+      
+      // CONFIGURACIÓN DEL SLIDER
       let currentIndex = 0;
       let startX, endX;
       let isAutoplay = {{ section.settings.autoplay }};
       let autoplayInterval;
       let slidesPerView;
       
-      // Determinar slides por vista basado en el tamaño de pantalla
       function updateSlidesPerView() {
         if (window.innerWidth >= 769) {
           // En escritorio, usar la configuración elegida
@@ -594,7 +735,6 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         goToSlide(currentIndex);
       }
       
-      // Ir a un slide específico
       function goToSlide(index) {
         const isMobile = window.innerWidth < 769;
         
@@ -642,16 +782,28 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         });
       }
       
-      // Iniciar/detener autoplay
       function toggleAutoplay() {
         if (isAutoplay) {
           if (autoplayInterval) clearInterval(autoplayInterval);
           autoplayInterval = setInterval(() => {
-            // Si estamos en el último slide, volver al primero
-            if (currentIndex >= slides.length - slidesPerView) {
-              goToSlide(0);
+            const isMobile = window.innerWidth < 769;
+            
+            if (isMobile) {
+              // En móvil, navegación uno a uno
+              if (currentIndex >= slides.length - 1) {
+                goToSlide(0);
+              } else {
+                goToSlide(currentIndex + 1);
+              }
             } else {
-              goToSlide(currentIndex + 1);
+              // En escritorio, considerar cuántos slides se muestran a la vez
+              const maxVisibleIndex = Math.max(0, slides.length - slidesPerView);
+              
+              if (currentIndex >= maxVisibleIndex) {
+                goToSlide(0);
+              } else {
+                goToSlide(currentIndex + 1);
+              }
             }
           }, {{ section.settings.autoplay_speed }});
         } else {
@@ -659,7 +811,7 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         }
       }
       
-      // Event listeners para botones
+      // Eventos para botones de navegación
       if (prevBtn) {
         prevBtn.addEventListener('click', () => {
           goToSlide(currentIndex - 1);
@@ -676,7 +828,7 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         });
       }
       
-      // Event listeners para dots
+      // Eventos para dots
       dots.forEach((dot, i) => {
         dot.addEventListener('click', () => {
           goToSlide(i);
@@ -685,62 +837,26 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         });
       });
       
-      // Soporte táctil (swipe)
+      // Soporte para deslizamiento (swipe)
       const trackWrapper = slider.querySelector('.reviews-track-wrapper');
       
-      // Variable para detectar si estamos interactuando con un elemento de video
-      let isInteractingWithVideo = false;
-      
-      // Función para verificar si el toque comenzó en un elemento de video
-      function checkIfTouchingVideo(e) {
-        const touch = e.touches[0];
-        const touchTarget = document.elementFromPoint(touch.clientX, touch.clientY);
-        
-        // Verificar si tocamos algún elemento de video o sus controles
-        return touchTarget.tagName.toLowerCase() === 'video' || 
-               touchTarget.closest('.video-poster') !== null ||
-               touchTarget.closest('.play-button') !== null ||
-               touchTarget.closest('.shopify-video-container') !== null;
-      }
-      
       trackWrapper.addEventListener('touchstart', e => {
-        // Comprobar si estamos tocando un elemento de video
-        isInteractingWithVideo = checkIfTouchingVideo(e);
+        // Verificar si estamos haciendo clic en un video o botón
+        const touch = e.touches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
-        // Solo procesar deslizamiento si no estamos en un elemento de video
-        if (!isInteractingWithVideo) {
-          startX = e.touches[0].clientX;
-          if (autoplayInterval) clearInterval(autoplayInterval);
-        }
-      }, { passive: true });
-      
-      trackWrapper.addEventListener('touchmove', e => {
-        // No hacer nada si estamos interactuando con un elemento de video
-        if (isInteractingWithVideo) return;
-        
-        // Procesar deslizamiento normalmente
-        if (!startX) return;
-        const currentX = e.touches[0].clientX;
-        const diffX = startX - currentX;
-        
-        // Si el deslizamiento es significativo, intentar prevenir scroll vertical
-        if (Math.abs(diffX) > 10) {
-          try {
-            e.preventDefault();
-          } catch (err) {
-            // Algunos navegadores no permiten preventDefault en eventos pasivos
-          }
-        }
-      }, { passive: false });
-      
-      trackWrapper.addEventListener('touchend', e => {
-        // No hacer nada si estamos interactuando con un elemento de video
-        if (isInteractingWithVideo) {
-          isInteractingWithVideo = false;
+        // No iniciar deslizamiento si tocamos un video o botón
+        if (element.tagName === 'VIDEO' || 
+            element.closest('.play-button') || 
+            element.closest('.play-button-overlay')) {
           return;
         }
         
-        // Procesar fin de deslizamiento normalmente
+        startX = e.touches[0].clientX;
+        if (autoplayInterval) clearInterval(autoplayInterval);
+      }, { passive: true });
+      
+      trackWrapper.addEventListener('touchend', e => {
         if (!startX) return;
         
         endX = e.changedTouches[0].clientX;
@@ -759,12 +875,16 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         toggleAutoplay();
       }, { passive: true });
       
-      // Inicializar
+      // Inicialización
       updateSlidesPerView();
       toggleAutoplay();
       
-      // Actualizar en resize
-      window.addEventListener('resize', updateSlidesPerView);
+      // Ajustes en cambio de tamaño de ventana
+      window.addEventListener('resize', function() {
+        updateSlidesPerView();
+        if (autoplayInterval) clearInterval(autoplayInterval);
+        toggleAutoplay();
+      });
     });
   });
 </script>
@@ -1109,13 +1229,6 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
       "default": 4
     },
     {
-      "type": "checkbox",
-      "id": "video_autoplay",
-      "label": "Reproducción automática de videos (cuando sea posible)",
-      "default": false,
-      "info": "La reproducción automática puede no funcionar en todos los navegadores móviles debido a las políticas de los mismos"
-    },
-    {
       "type": "select",
       "id": "video_format",
       "label": "Formato de video",
@@ -1261,13 +1374,13 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
       "type": "color",
       "id": "background_color_start",
       "label": "Color de fondo inicial",
-      "default": "#F8F8F8"
+      "default": "#000000"
     },
     {
       "type": "color",
       "id": "background_color_end",
       "label": "Color de fondo final",
-      "default": "#F8F8F8"
+      "default": "#000000"
     },
     {
       "type": "range",
@@ -1288,16 +1401,6 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
       "unit": "px",
       "label": "Ancho máximo del contenedor",
       "default": 1200
-    },
-    {
-      "type": "range",
-      "id": "container_padding",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "label": "Padding horizontal",
-      "default": 15
     },
     {
       "type": "range",
@@ -1424,12 +1527,6 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
         },
         {
           "type": "image_picker",
-          "id": "video_thumbnail",
-          "label": "Imagen de portada del video (opcional)",
-          "info": "Se mostrará antes de reproducir el video"
-        },
-        {
-          "type": "image_picker",
           "id": "imagen_perfil",
           "label": "Imagen de perfil (opcional)"
         }
@@ -1448,10 +1545,10 @@ background-color: #000; /* Fondo negro para videos */ } .review-video-wrapper if
           "type": "testimonio_texto"
         },
         {
-          "type": "testimonio_texto"
+          "type": "testimonio_video"
         },
         {
-          "type": "testimonio_texto"
+          "type": "testimonio_video"
         }
       ]
     }
