@@ -1,5 +1,5 @@
 {% comment %}
-  Testimonios Reviews - Con reproducción de video en modal
+  Testimonios Reviews - Con enlace directo al MP4
 {% endcomment %}
 
 <section class="testimonios-reviews">
@@ -68,12 +68,8 @@
             {% elsif block.type == 'testimonio_video' %}
               <div class="review-slide video-slide" {{ block.shopify_attributes }}>
                 <div class="review-card">
-                  <!-- Miniatura con botón de reproducción que abre el modal -->
-                  <div
-                    class="video-thumbnail-container"
-                    data-video-url="{% if block.settings.video_url != blank %}{{ block.settings.video_url }}{% else %}{{ block.settings.video_file | file_url }}{% endif %}"
-                    data-video-type="{% if block.settings.video_url != blank %}{% if block.settings.video_url contains 'youtube' %}youtube{% elsif block.settings.video_url contains 'vimeo' %}vimeo{% endif %}{% else %}mp4{% endif %}"
-                  >
+                  <!-- ENLACE DIRECTO AL VIDEO -->
+                  <div class="direct-video-link-container">
                     {% if block.settings.video_thumbnail != blank %}
                       <img
                         src="{{ block.settings.video_thumbnail | img_url: 'master' }}"
@@ -86,10 +82,12 @@
                       </div>
                     {% endif %}
 
-                    <div class="play-button-big">
-                      <svg viewBox="0 0 24 24" width="48" height="48">
-                        <path d="M8 5v14l11-7z" fill="#ffffff"/>
-                      </svg>
+                    <div class="play-button-direct">
+                      <a href="{{ block.settings.video_file | file_url }}" target="_blank" class="direct-video-link">
+                        <svg viewBox="0 0 24 24" width="48" height="48">
+                          <path d="M8 5v14l11-7z" fill="#ffffff"/>
+                        </svg>
+                      </a>
                     </div>
                   </div>
 
@@ -150,17 +148,6 @@
     </div>
   </div>
 </section>
-
-<!-- Modal para reproducción de video -->
-<div class="video-modal" id="videoModal">
-  <div class="modal-overlay"></div>
-  <div class="modal-content">
-    <div class="modal-video-container">
-      <!-- El contenido del video se insertará aquí dinámicamente -->
-    </div>
-    <button class="modal-close">×</button>
-  </div>
-</div>
 
 <style>
   /* Reset de estilos */
@@ -382,8 +369,8 @@
     -webkit-box-orient: vertical;
   }
 
-  /* Contenedor de thumbnail de video */
-  .video-thumbnail-container {
+  /* NUEVO - Enlace directo al video */
+  .direct-video-link-container {
     position: relative;
     width: 100%;
     {% if section.settings.video_format == 'vertical' %}
@@ -396,7 +383,6 @@
     border-radius: {{ section.settings.video_border_radius }}px;
     overflow: hidden;
     margin-bottom: 10px;
-    cursor: pointer;
     background-color: #000000;
   }
 
@@ -423,98 +409,30 @@
     font-weight: bold;
   }
 
-  .play-button-big {
+  .play-button-direct {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .direct-video-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 70px;
     height: 70px;
     background-color: rgba(255, 0, 0, 0.8);
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     border: 3px solid white;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
   }
 
-  .video-thumbnail-container:hover .play-button-big {
-    transform: translate(-50%, -50%) scale(1.1);
+  .direct-video-link:hover {
+    transform: scale(1.1);
     background-color: rgba(255, 0, 0, 1);
-  }
-
-  /* Estilos del modal de video */
-  .video-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    display: none;
-  }
-
-  .video-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 1;
-  }
-
-  .modal-content {
-    position: relative;
-    z-index: 2;
-    width: 90%;
-    max-width: 1000px;
-  }
-
-  .modal-video-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    overflow: hidden;
-    background-color: #000;
-  }
-
-  .modal-video-container iframe,
-  .modal-video-container video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: white;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    font-weight: bold;
   }
 
   /* Indicadores de posición (dots) */
@@ -644,123 +562,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const sliders = document.querySelectorAll('.testimonios-reviews');
-    const videoModal = document.getElementById('videoModal');
-    const modalContainer = videoModal.querySelector('.modal-video-container');
-    const modalClose = videoModal.querySelector('.modal-close');
-    const modalOverlay = videoModal.querySelector('.modal-overlay');
     
-    // Configuración del modal de video
-    function setupVideoModal() {
-      // Obtener todos los contenedores de miniaturas de video
-      const videoThumbnails = document.querySelectorAll('.video-thumbnail-container');
-      
-      videoThumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', function() {
-          const videoUrl = this.getAttribute('data-video-url');
-          const videoType = this.getAttribute('data-video-type');
-          
-          // Limpiar el contenedor modal
-          modalContainer.innerHTML = '';
-          
-          // Crear el elemento adecuado según el tipo de video
-          if (videoType === 'youtube') {
-            // YouTube video
-            const videoId = videoUrl.includes('watch?v=')
-              ? videoUrl.split('watch?v=')[1].split('&')[0]
-              : videoUrl.split('/').pop();
-            
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-            iframe.setAttribute('allowfullscreen', '');
-            modalContainer.appendChild(iframe);
-          } else if (videoType === 'vimeo') {
-            // Vimeo video
-            const videoId = videoUrl.split('/').pop();
-            
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
-            iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-            iframe.setAttribute('allowfullscreen', '');
-            modalContainer.appendChild(iframe);
-          } else {
-            // MP4 video
-            const video = document.createElement('video');
-            video.setAttribute('controls', '');
-            video.setAttribute('autoplay', '');
-            video.style.width = '100%';
-            video.style.height = '100%';
-            
-            const source = document.createElement('source');
-            source.src = videoUrl;
-            source.type = 'video/mp4';
-            
-            video.appendChild(source);
-            modalContainer.appendChild(video);
-            
-            // Intentar reproducir el video con manejo de errores
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-              playPromise.catch(error => {
-                console.log('Error en reproducción automática:', error);
-                // Si falla la reproducción automática, asegurarse de que se muestren los controles
-                video.controls = true;
-              });
-            }
-          }
-          
-          // Mostrar el modal
-          videoModal.classList.add('active');
-          
-          // Evitar scroll en el body mientras el modal está abierto
-          document.body.style.overflow = 'hidden';
-        });
-      });
-      
-      // Cerrar modal al hacer clic en botón X
-      modalClose.addEventListener('click', closeModal);
-      
-      // Cerrar modal al hacer clic en overlay
-      modalOverlay.addEventListener('click', closeModal);
-      
-      // Cerrar modal con tecla ESC
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && videoModal.classList.contains('active')) {
-          closeModal();
-        }
-      });
-      
-      function closeModal() {
-        // Detener todos los videos al cerrar el modal
-        const videos = modalContainer.querySelectorAll('video');
-        videos.forEach(video => {
-          try {
-            if (!video.paused) {
-              video.pause();
-            }
-          } catch(e) {}
-        });
-        
-        // Limpiar iframes
-        const iframes = modalContainer.querySelectorAll('iframe');
-        iframes.forEach(iframe => {
-          iframe.src = '';
-        });
-        
-        // Ocultar modal
-        videoModal.classList.remove('active');
-        
-        // Restaurar scroll
-        document.body.style.overflow = '';
-        
-        // Limpiar contenedor
-        setTimeout(() => {
-          modalContainer.innerHTML = '';
-        }, 300);
-      }
-    }
-    
-    // Configuración del slider
     sliders.forEach(slider => {
       const track = slider.querySelector('.reviews-track');
       const slides = slider.querySelectorAll('.review-slide');
@@ -915,7 +717,8 @@
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
         // No iniciar deslizamiento si tocamos un elemento de video
-        if (element.closest('.video-thumbnail-container')) {
+        if (element.closest('.direct-video-link-container') || 
+            element.closest('.direct-video-link')) {
           return;
         }
         
@@ -953,9 +756,6 @@
         toggleAutoplay();
       });
     });
-    
-    // Inicializar el modal de video
-    setupVideoModal();
   });
 </script>
 
