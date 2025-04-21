@@ -1,5 +1,5 @@
 {% comment %}
-  Testimonios Reviews - Tarjetas compactas con reproducción de video mejorada
+  Testimonios Reviews - Tarjetas compactas con reproducción de video simplificada
 {% endcomment %}
 
 <section class="testimonios-reviews">
@@ -90,18 +90,17 @@
                         </iframe>
                       {% endif %}
                     {% elsif block.settings.video_file != blank %}
-                      <div class="video-container-mp4">
-                        <video controls playsinline preload="auto">
+                      <div class="video-container-simple">
+                        <!-- Video nativo con controles nativos -->
+                        <video
+                          controls
+                          playsinline
+                          preload="auto"
+                          style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; border-radius: 4px;"
+                        >
                           <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
                           Tu navegador no soporta videos HTML5.
                         </video>
-                        <div class="play-button-overlay">
-                          <button class="play-button">
-                            <svg viewBox="0 0 24 24" width="48" height="48">
-                              <path d="M8 5v14l11-7z" fill="#ffffff"/>
-                            </svg>
-                          </button>
-                        </div>
                       </div>
                     {% endif %}
                   </div>
@@ -413,69 +412,17 @@
     z-index: 1;
   }
 
-  /* Nuevo contenedor de reproducción de video MP4 */
-  .video-container-mp4 {
+  /* Nuevo contenedor de reproducción de video MP4 simplificado */
+  .video-container-simple {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    overflow: visible;
     border-radius: {{ section.settings.video_border_radius }}px;
-    overflow: hidden;
-  }
-
-  .video-container-mp4 video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-  }
-
-  /* Overlay del botón de reproducción */
-  .play-button-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #000;
     z-index: 2;
-    cursor: pointer;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-  }
-
-  /* Botón de reproducción */
-  .play-button {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: rgba(255, 0, 0, 0.8);
-    border: 3px solid white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    padding: 0;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  }
-
-  .play-button:hover {
-    transform: scale(1.1);
-    background-color: rgba(255, 0, 0, 1);
-  }
-
-  /* Ocultar overlay cuando el video está reproduciéndose */
-  .playing .play-button-overlay {
-    opacity: 0;
-    pointer-events: none;
   }
 
   /* Indicadores de posición (dots) */
@@ -615,91 +562,6 @@
       
       if (!track || !slides.length) return;
       
-      // CONFIGURACIÓN DE VIDEOS
-      setupVideos();
-      
-      function setupVideos() {
-        // Buscar todos los videos y overlays de botón
-        const videos = slider.querySelectorAll('.video-container-mp4 video');
-        const playButtons = slider.querySelectorAll('.play-button-overlay');
-        
-        // Para cada video, configurar la reproducción
-        videos.forEach((video, index) => {
-          if (!video) return;
-          
-          // Asegurarse de que los videos estén precargados correctamente
-          video.preload = 'metadata';
-          
-          // Evento para cuando los metadatos estén cargados
-          video.addEventListener('loadedmetadata', function() {
-            console.log('Video metadatos cargados:', video.duration);
-          });
-          
-          // Obtener el botón correspondiente
-          const overlay = playButtons[index];
-          if (!overlay) return;
-          
-          // Hacer clic en el overlay inicia el video
-          overlay.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Intentar reproducir el video
-            try {
-              video.controls = true;
-              
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise
-                  .then(() => {
-                    // Video empezó a reproducirse, ocultar overlay
-                    overlay.parentElement.classList.add('playing');
-                  })
-                  .catch(error => {
-                    console.error('Error reproduciendo video:', error);
-                    // Mantener visible el overlay si hay error
-                  });
-              }
-            } catch(e) {
-              console.error('Error al reproducir:', e);
-            }
-          });
-          
-          // Cuando el video termine, mostrar nuevamente el overlay
-          video.addEventListener('ended', function() {
-            overlay.parentElement.classList.remove('playing');
-          });
-          
-          // Cuando el video se pause, mostrar nuevamente el overlay
-          video.addEventListener('pause', function() {
-            overlay.parentElement.classList.remove('playing');
-          });
-          
-          // Evitar que el clic en el video se propague al slider
-          video.addEventListener('click', function(e) {
-            e.stopPropagation();
-          });
-        });
-        
-        // Pausar videos al cambiar de slide
-        function pauseAllVideos() {
-          videos.forEach(video => {
-            try {
-              if (!video.paused) {
-                video.pause();
-              }
-            } catch(e) {
-              console.error('Error al pausar:', e);
-            }
-          });
-        }
-        
-        // Conectar eventos de navegación para pausar videos
-        if (prevBtn) prevBtn.addEventListener('click', pauseAllVideos);
-        if (nextBtn) nextBtn.addEventListener('click', pauseAllVideos);
-        dots.forEach(dot => dot.addEventListener('click', pauseAllVideos));
-      }
-      
       // CONFIGURACIÓN DEL SLIDER
       let currentIndex = 0;
       let startX, endX;
@@ -780,6 +642,23 @@
         dots.forEach((dot, i) => {
           dot.classList.toggle('active', i === currentIndex);
         });
+        
+        // Pausar todos los videos cuando cambia el slide
+        pauseAllVideos();
+      }
+      
+      function pauseAllVideos() {
+        // Buscar todos los videos y pausarlos
+        const videos = slider.querySelectorAll('video');
+        videos.forEach(video => {
+          if (video && !video.paused) {
+            try {
+              video.pause();
+            } catch(e) {
+              console.error('Error pausando video:', e);
+            }
+          }
+        });
       }
       
       function toggleAutoplay() {
@@ -841,14 +720,12 @@
       const trackWrapper = slider.querySelector('.reviews-track-wrapper');
       
       trackWrapper.addEventListener('touchstart', e => {
-        // Verificar si estamos haciendo clic en un video o botón
+        // Verificar si estamos haciendo clic en un video
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
-        // No iniciar deslizamiento si tocamos un video o botón
-        if (element.tagName === 'VIDEO' || 
-            element.closest('.play-button') || 
-            element.closest('.play-button-overlay')) {
+        // No iniciar deslizamiento si tocamos un video
+        if (element.tagName === 'VIDEO') {
           return;
         }
         
