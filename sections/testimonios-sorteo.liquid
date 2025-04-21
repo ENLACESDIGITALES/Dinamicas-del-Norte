@@ -118,10 +118,22 @@
                   <div class="popup-video-wrapper">
                     {% if block.settings.video_mp4_url != blank %}
                       <div class="popup-video-inner">
-                        <video controls playsinline preload="metadata" class="popup-video">
+                        <video
+                          controls
+                          playsinline
+                          preload="metadata"
+                          class="popup-video"
+                          controlsList="nodownload"
+                          poster="{% if block.settings.video_thumbnail != blank %}{{ block.settings.video_thumbnail | img_url: 'master' }}{% endif %}"
+                          onerror="this.parentNode.innerHTML = '<div class=\'video-error-message\'>Error al cargar el video. Por favor, verifica la URL.</div>'"
+                        >
                           <source src="{{ block.settings.video_mp4_url }}" type="video/mp4">
-                          Tu navegador no soporta videos HTML5.
+                          <p>Tu navegador no soporta videos HTML5. Actualiza tu navegador para ver este contenido.</p>
                         </video>
+                      </div>
+                    {% else %}
+                      <div class="popup-video-inner">
+                        <div class="video-error-message">No se ha configurado una URL de video válida.</div>
                       </div>
                     {% endif %}
                   </div>
@@ -571,8 +583,8 @@
     z-index: 10;
   }
 
-  /* Mensaje de error si no se pudo cargar el video */
-  .video-error {
+  /* Mensaje de error cuando no se puede cargar el video */
+  .video-error-message {
     position: absolute;
     top: 0;
     left: 0;
@@ -581,12 +593,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: #000;
     color: white;
     font-size: 16px;
     padding: 20px;
     text-align: center;
-    border-radius: 4px;
+    z-index: 2;
+  }
+
+  /* Mejoras para la compatibilidad de video */
+  video::-webkit-media-controls {
+    display: flex !important;
+    visibility: visible !important;
   }
 
   /* Indicadores de posición (dots) */
@@ -846,11 +864,33 @@
           // Asegurarse de que los controles sean visibles
           video.controls = true;
           
-          // Reiniciar el video (en caso de que ya se haya reproducido antes)
-          video.currentTime = 0;
+          // Comprobar si la URL del video es válida
+          if (!video.querySelector('source').src || video.querySelector('source').src === 'null' || video.querySelector('source').src === '') {
+            const videoWrapper = popup.querySelector('.popup-video-wrapper');
+            if (videoWrapper) {
+              videoWrapper.innerHTML = '<div class="video-error-message">No se ha configurado una URL de video válida.</div>';
+            }
+            return;
+          }
           
-          // Cargar el video explícitamente antes de reproducirlo
+          // Intentar la carga manual del video para verificar que funciona
           video.load();
+          
+          // Agregar evento para detectar errores de carga
+          video.onerror = function() {
+            console.error('Error al cargar el video');
+            const videoWrapper = popup.querySelector('.popup-video-wrapper');
+            if (videoWrapper) {
+              videoWrapper.innerHTML = '<div class="video-error-message">Error al cargar el video. Verifica la URL o el formato.</div>';
+            }
+          };
+          
+          // Reiniciar el video (en caso de que ya se haya reproducido antes)
+          try {
+            video.currentTime = 0;
+          } catch (e) {
+            console.warn('No se pudo reiniciar el video:', e);
+          }
           
           // Dar un poco de tiempo para que el navegador procese el video
           setTimeout(function() {
@@ -872,7 +912,9 @@
                     messageElement.className = 'video-play-message';
                     messageElement.innerHTML = '<p>Haz clic para reproducir</p>';
                     messageElement.addEventListener('click', function() {
-                      video.play();
+                      video.play().catch(e => {
+                        console.error('Error al reproducir después del clic:', e);
+                      });
                       this.remove();
                     });
                     videoWrapper.appendChild(messageElement);
@@ -886,6 +928,10 @@
           }, 300); // Dar tiempo suficiente para que el navegador cargue el video
         } else {
           console.error('No se encontró el elemento video dentro del popup');
+          const videoWrapper = popup.querySelector('.popup-video-wrapper');
+          if (videoWrapper) {
+            videoWrapper.innerHTML = '<div class="video-error-message">No se ha configurado correctamente el reproductor de video.</div>';
+          }
         }
         
         // Detener autoplay del slider si está activo
