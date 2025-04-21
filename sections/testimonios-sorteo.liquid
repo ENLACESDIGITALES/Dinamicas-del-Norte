@@ -118,7 +118,7 @@
                   <div class="popup-video-wrapper">
                     {% if block.settings.video_file != blank %}
                       <div class="popup-video-inner">
-                        <video controls playsinline muted preload="metadata" class="popup-video">
+                        <video controls playsinline preload="metadata" class="popup-video">
                           <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
                           Tu navegador no soporta videos HTML5.
                         </video>
@@ -487,9 +487,13 @@
 
   .popup-content {
     position: relative;
-    z-index: 2;
+    z-index: 1001;
     width: 90%;
     max-width: {% if section.settings.video_format == 'vertical' %}500px{% else %}1000px{% endif %};
+    margin: 0 auto;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .popup-video-wrapper {
@@ -513,20 +517,27 @@
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .popup-video {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .popup-close {
     position: absolute;
     top: -40px;
     right: 0;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background-color: white;
     color: black;
@@ -538,6 +549,44 @@
     line-height: 1;
     cursor: pointer;
     font-weight: bold;
+    z-index: 1002;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  /* Mensaje para reproducir manualmente cuando autoplay falla */
+  .video-play-message {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  /* Mensaje de error si no se pudo cargar el video */
+  .video-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 16px;
+    padding: 20px;
+    text-align: center;
+    border-radius: 4px;
   }
 
   /* Indicadores de posición (dots) */
@@ -610,6 +659,26 @@
   .whatsapp-button.con-sacudida:hover {
     animation: none;
     transform: translateY(-2px);
+  }
+
+  /* Mejorar la experiencia táctil en dispositivos móviles */
+  @media (hover: none) {
+    .play-button {
+      transform: scale(1.2);
+    }
+
+    .popup-close {
+      width: 44px;
+      height: 44px;
+      font-size: 28px;
+    }
+
+    .video-play-message p {
+      padding: 15px 30px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 30px;
+      border: 2px solid white;
+    }
   }
 
   /* Responsive para escritorio */
@@ -688,25 +757,62 @@
           const videoId = container.getAttribute('data-video-id');
           const popup = document.getElementById(`video-popup-${videoId}`);
           
-          if (!popup) return;
+          if (!popup) {
+            console.error(`No se encontró el popup con ID: video-popup-${videoId}`);
+            return;
+          }
           
-          // Añadir evento al botón de play y al contenedor
-          container.addEventListener('click', function() {
+          // Verificar si el video existe antes de configurar eventos
+          const videoElement = popup.querySelector('video');
+          if (!videoElement) {
+            console.error(`No se encontró el elemento video en el popup: ${videoId}`);
+            // Mostrar un mensaje de error en el contenedor
+            container.innerHTML = '<div class="video-error">No se pudo cargar el video</div>';
+            return;
+          }
+          
+          // Precargar el video cuando se pasa el mouse por encima (para escritorio)
+          container.addEventListener('mouseenter', function() {
+            if (videoElement.getAttribute('preload') === 'none' || 
+                videoElement.getAttribute('preload') === 'metadata') {
+              videoElement.setAttribute('preload', 'auto');
+              videoElement.load();
+            }
+          });
+          
+          // Añadir evento al contenedor del video
+          container.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             openVideoPopup(videoId);
           });
           
+          // Añadir evento explícitamente al botón de play
+          const playButton = container.querySelector('.play-button');
+          if (playButton) {
+            playButton.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              openVideoPopup(videoId);
+            });
+          }
+          
           // Añadir evento para cerrar el popup
           const closeBtn = popup.querySelector('.popup-close');
-          const overlay = popup.querySelector('.popup-overlay');
-          
           if (closeBtn) {
-            closeBtn.addEventListener('click', function() {
+            closeBtn.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
               closeVideoPopup(videoId);
             });
           }
           
+          // Cerrar cuando se hace clic en el overlay
+          const overlay = popup.querySelector('.popup-overlay');
           if (overlay) {
-            overlay.addEventListener('click', function() {
+            overlay.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
               closeVideoPopup(videoId);
             });
           }
@@ -726,37 +832,66 @@
       
       function openVideoPopup(videoId) {
         const popup = document.getElementById(`video-popup-${videoId}`);
-        if (!popup) return;
+        if (!popup) {
+          console.error(`No se encontró el popup con ID: video-popup-${videoId}`);
+          return;
+        }
         
         // Mostrar el popup
         popup.classList.add('active');
         
-        // Reproducir el video
+        // Encontrar el video dentro del popup
         const video = popup.querySelector('video');
         if (video) {
-          // Forzar la carga del video
+          // Asegurarse de que los controles sean visibles
+          video.controls = true;
+          
+          // Reiniciar el video (en caso de que ya se haya reproducido antes)
+          video.currentTime = 0;
+          
+          // Cargar el video explícitamente antes de reproducirlo
           video.load();
           
-          // Intentar reproducir con manejo de excepciones
-          try {
-            // Este timeout ayuda a que el navegador procese el video antes de intentar reproducirlo
-            setTimeout(function() {
+          // Dar un poco de tiempo para que el navegador procese el video
+          setTimeout(function() {
+            try {
+              // Intentar reproducir el video
               const playPromise = video.play();
+              
               if (playPromise !== undefined) {
-                playPromise.catch(error => {
+                playPromise.then(() => {
+                  console.log('Video reproducido correctamente');
+                }).catch(error => {
                   console.error('Error reproduciendo el video:', error);
-                  // Asegurar que se muestran los controles si falla la reproducción
+                  // Si falla la reproducción automática, asegurarse de que los controles sean visibles
                   video.controls = true;
+                  // Mostramos un mensaje para que el usuario sepa que debe hacer clic
+                  const videoWrapper = popup.querySelector('.popup-video-wrapper');
+                  if (videoWrapper) {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'video-play-message';
+                    messageElement.innerHTML = '<p>Haz clic para reproducir</p>';
+                    messageElement.addEventListener('click', function() {
+                      video.play();
+                      this.remove();
+                    });
+                    videoWrapper.appendChild(messageElement);
+                  }
                 });
               }
-            }, 100);
-          } catch(e) {
-            console.error('Error al intentar reproducir el video:', e);
-          }
+            } catch (e) {
+              console.error('Error al intentar reproducir el video:', e);
+              video.controls = true;
+            }
+          }, 300); // Dar tiempo suficiente para que el navegador cargue el video
+        } else {
+          console.error('No se encontró el elemento video dentro del popup');
         }
         
-        // Detener autoplay del slider
-        if (autoplayInterval) clearInterval(autoplayInterval);
+        // Detener autoplay del slider si está activo
+        if (typeof autoplayInterval !== 'undefined' && autoplayInterval) {
+          clearInterval(autoplayInterval);
+        }
         
         // Evitar scroll en el body
         document.body.style.overflow = 'hidden';
@@ -766,22 +901,33 @@
         const popup = document.getElementById(`video-popup-${videoId}`);
         if (!popup) return;
         
-        // Pausar el video
+        // Pausar el video y asegurarse de que se detenga completamente
         const video = popup.querySelector('video');
-        if (video && !video.paused) {
-          video.pause();
+        if (video) {
+          try {
+            video.pause();
+            video.currentTime = 0; // Rebobinar el video
+            
+            // Eliminar cualquier mensaje de error que pudiera haberse mostrado
+            const errorMessage = popup.querySelector('.video-play-message');
+            if (errorMessage) {
+              errorMessage.remove();
+            }
+          } catch (e) {
+            console.error('Error al intentar detener el video:', e);
+          }
         }
         
         // Ocultar el popup
         popup.classList.remove('active');
         
-        // Restaurar autoplay si estaba activo
-        if (isAutoplay) {
-          toggleAutoplay();
-        }
-        
         // Restaurar scroll
         document.body.style.overflow = '';
+        
+        // Restaurar autoplay si estaba activo
+        if (typeof isAutoplay !== 'undefined' && isAutoplay && typeof toggleAutoplay === 'function') {
+          toggleAutoplay();
+        }
       }
       
       // CONFIGURACIÓN DEL SLIDER
@@ -981,6 +1127,13 @@
         updateSlidesPerView();
         if (autoplayInterval) clearInterval(autoplayInterval);
         toggleAutoplay();
+        
+        // Cerrar cualquier popup abierto al cambiar el tamaño de la ventana
+        const activePopups = document.querySelectorAll('.video-popup.active');
+        activePopups.forEach(popup => {
+          const videoId = popup.id.replace('video-popup-', '');
+          closeVideoPopup(videoId);
+        });
       });
     });
   });
