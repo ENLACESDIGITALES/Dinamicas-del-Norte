@@ -1,4 +1,239 @@
-/* Estilos de la tabla de puestos */
+{% comment %}
+  Premio y Tabla de Puestos - Para páginas de sorteos - Versión con Tres Premios
+{% endcomment %}
+
+<style>
+  /* Estilos generales */
+  .premio-sorteo {
+    padding: 40px 0;
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .section-title h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+  }
+
+  /* Estilos para la sección de premios */
+  .premios-container {
+    margin-bottom: 30px;
+  }
+
+  .sorteo-descripcion {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #cccccc;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sorteo-fecha-container {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .sorteo-fecha {
+    font-size: 18px;
+    color: #ffffff;
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+
+  .premios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  .premio-card {
+    background-color: #111111;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .premio-numero {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #25D366;
+    color: white;
+    padding: 8px 15px;
+    font-weight: bold;
+    border-bottom-left-radius: 8px;
+    z-index: 1;
+  }
+
+  .premio-imagen-container {
+    width: 100%;
+    padding-bottom: 60%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .premio-imagen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .premio-imagen-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+  }
+
+  .premio-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .premio-titulo {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 15px 0;
+    color: #ffffff;
+  }
+
+  .premio-descripcion {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    color: #cccccc;
+    flex-grow: 1;
+  }
+
+  .premio-valor {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #ffffff;
+  }
+
+  .premio-lista {
+    margin-top: auto;
+  }
+
+  .premio-caracteristica {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .caracteristica-icono {
+    width: 20px;
+    height: 20px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+
+  .caracteristica-texto {
+    font-size: 14px;
+    color: #ffffff;
+  }
+
+  /* Ganadores */
+  .ganadores-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+  }
+
+  .ganadores-titulo {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .ganadores-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ganador-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #222222;
+    border-radius: 6px;
+  }
+
+  .ganador-numero {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #25D366;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+
+  .ganador-info {
+    flex: 1;
+  }
+
+  .ganador-nombre {
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 16px;
+  }
+
+  .ganador-premio {
+    font-size: 14px;
+    color: #cccccc;
+    margin-top: 3px;
+  }
+
+  /* Estilos de la tabla de puestos */
   .tabla-puestos-container {
     margin-bottom: 50px;
   }
@@ -75,66 +310,102 @@
 
   .leyenda-color.no-disponible {
     background-color: #444444;
-  }/* Ganadores */
-  .ganadores-container {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #1a1a1a;
-    border-radius: 8px;
   }
-  
-  .ganadores-titulo {
-    font-size: 24px;
-    margin-bottom: 15px;
-    color: #ffffff;
+
+  /* Estilos del botón de WhatsApp */
+  .whatsapp-button-container {
     text-align: center;
   }
-  
-  .ganadores-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .ganador-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #222222;
-    border-radius: 6px;
-  }
-  
-  .ganador-numero {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #25D366;
-    color: white;
-    display: flex;
+
+  .whatsapp-button {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background-color: #25D366;
+    color: white;
+    text-decoration: none;
     font-weight: bold;
-    margin-right: 15px;
-    flex-shrink: 0;
-  }
-  
-  .ganador-info {
-    flex: 1;
-  }
-  
-  .ganador-nombre {
-    font-weight: bold;
-    color: #ffffff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
+    text-transform: uppercase;
     font-size: 16px;
+    transition: all 0.3s ease;
   }
-  
-  .ganador-premio {
-    font-size: 14px;
-    color: #cccccc;
-    margin-top: 3px;
-  }{% comment %}
-  Premio y Tabla de Puestos - Para páginas de sorteos - Versión con Tres Premios
-{% endcomment %}
+
+  .whatsapp-button svg {
+    margin-right: 10px;
+  }
+
+  .whatsapp-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
+  }
+
+  /* Efecto de sacudida para el botón */
+  @keyframes sacudida {
+    0% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+
+  .whatsapp-button.con-sacudida {
+    animation: sacudida 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  }
+
+  .whatsapp-button.con-sacudida:hover {
+    animation: none;
+    transform: translateY(-2px);
+  }
+
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+    .tabla-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .premio-info {
+      flex-direction: column;
+    }
+
+    .section-title h2 {
+      font-size: 28px;
+    }
+
+    .tabla-item {
+      height: 36px;
+      font-size: 14px;
+    }
+
+    .ganador-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ganador-numero {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .tabla-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .leyenda {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title h2 {
+      font-size: 24px;
+    }
+  }
+</style>
 
 <section class="premio-sorteo">
   <div class="container">
@@ -143,17 +414,17 @@
       <div class="section-title">
         <h2>{{ section.settings.sorteo_titulo }}</h2>
       </div>
-      
+
       <div class="sorteo-descripcion">
         {{ section.settings.sorteo_descripcion }}
       </div>
-      
+
       {% if section.settings.mostrar_fecha_sorteo %}
         <div class="sorteo-fecha-container">
           <div class="sorteo-fecha"><strong>Fecha del sorteo:</strong> {{ section.settings.fecha_sorteo }}</div>
         </div>
       {% endif %}
-      
+
       <div class="premios-grid">
         <!-- Premio 1 -->
         {% if section.settings.premio1_activo %}
@@ -181,7 +452,10 @@
                 <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio1_valor }}</div>
               {% endif %}
               <div class="premio-lista">
-                {% assign caracteristicas1 = section.settings.premio1_caracteristicas | newline_to_br | split: '<br />' %}
+                {% assign caracteristicas1 = section.settings.premio1_caracteristicas
+                  | newline_to_br
+                  | split: '<br />'
+                %}
                 {% for caracteristica in caracteristicas1 %}
                   {% if caracteristica != blank %}
                     <div class="premio-caracteristica">
@@ -194,7 +468,7 @@
             </div>
           </div>
         {% endif %}
-        
+
         <!-- Premio 2 -->
         {% if section.settings.premio2_activo %}
           <div class="premio-card">
@@ -221,7 +495,10 @@
                 <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio2_valor }}</div>
               {% endif %}
               <div class="premio-lista">
-                {% assign caracteristicas2 = section.settings.premio2_caracteristicas | newline_to_br | split: '<br />' %}
+                {% assign caracteristicas2 = section.settings.premio2_caracteristicas
+                  | newline_to_br
+                  | split: '<br />'
+                %}
                 {% for caracteristica in caracteristicas2 %}
                   {% if caracteristica != blank %}
                     <div class="premio-caracteristica">
@@ -234,7 +511,7 @@
             </div>
           </div>
         {% endif %}
-        
+
         <!-- Premio 3 -->
         {% if section.settings.premio3_activo %}
           <div class="premio-card">
@@ -261,7 +538,10 @@
                 <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio3_valor }}</div>
               {% endif %}
               <div class="premio-lista">
-                {% assign caracteristicas3 = section.settings.premio3_caracteristicas | newline_to_br | split: '<br />' %}
+                {% assign caracteristicas3 = section.settings.premio3_caracteristicas
+                  | newline_to_br
+                  | split: '<br />'
+                %}
                 {% for caracteristica in caracteristicas3 %}
                   {% if caracteristica != blank %}
                     <div class="premio-caracteristica">
@@ -275,7 +555,7 @@
           </div>
         {% endif %}
       </div>
-      
+
       <!-- Ganadores -->
       {% if section.settings.mostrar_ganadores and section.blocks.size > 0 %}
         <div class="ganadores-container">
@@ -312,13 +592,13 @@
           {% if section.settings.mostrar_solo_seleccionados %}
             {% assign numeros_array = section.settings.numeros_mostrar | split: ',' %}
             {% assign no_disponibles_array = section.settings.numeros_no_disponibles | split: ',' %}
-            
+
             {% for numero in numeros_array %}
               {% if numero != blank %}
                 {% assign numero_int = numero | strip | plus: 0 %}
                 {% assign custom_texto = '' %}
                 {% assign es_disponible = true %}
-                
+
                 {% for no_disp in no_disponibles_array %}
                   {% assign no_disp_int = no_disp | strip | plus: 0 %}
                   {% if no_disp_int == numero_int %}
@@ -326,8 +606,11 @@
                     {% break %}
                   {% endif %}
                 {% endfor %}
-                
-                {% assign numeros_personalizados_array = section.settings.numeros_personalizados | newline_to_br | split: '<br />' %}
+
+                {% assign numeros_personalizados_array = section.settings.numeros_personalizados
+                  | newline_to_br
+                  | split: '<br />'
+                %}
                 {% for personalizado in numeros_personalizados_array %}
                   {% if personalizado contains ':' %}
                     {% assign partes = personalizado | split: ':' %}
@@ -340,8 +623,11 @@
                     {% endif %}
                   {% endif %}
                 {% endfor %}
-                
-                <div class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}" data-numero="{{ numero_int }}">
+
+                <div
+                  class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}"
+                  data-numero="{{ numero_int }}"
+                >
                   {% if custom_texto != '' %}
                     {{ custom_texto }}
                   {% else %}
@@ -354,12 +640,15 @@
             {% assign rango_inicio = section.settings.rango_inicio | default: 0 | plus: 0 %}
             {% assign rango_fin = section.settings.rango_fin | default: 99 | plus: 0 %}
             {% assign no_disponibles_array = section.settings.numeros_no_disponibles | split: ',' %}
-            {% assign numeros_personalizados_array = section.settings.numeros_personalizados | newline_to_br | split: '<br />' %}
-            
+            {% assign numeros_personalizados_array = section.settings.numeros_personalizados
+              | newline_to_br
+              | split: '<br />'
+            %}
+
             {% for i in (rango_inicio..rango_fin) %}
               {% assign es_disponible = true %}
               {% assign custom_texto = '' %}
-              
+
               {% for no_disp in no_disponibles_array %}
                 {% assign no_disp_int = no_disp | strip | plus: 0 %}
                 {% if no_disp_int == i %}
@@ -367,7 +656,7 @@
                   {% break %}
                 {% endif %}
               {% endfor %}
-              
+
               {% for personalizado in numeros_personalizados_array %}
                 {% if personalizado contains ':' %}
                   {% assign partes = personalizado | split: ':' %}
@@ -380,8 +669,11 @@
                   {% endif %}
                 {% endif %}
               {% endfor %}
-              
-              <div class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}" data-numero="{{ i }}">
+
+              <div
+                class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}"
+                data-numero="{{ i }}"
+              >
                 {% if custom_texto != '' %}
                   {{ custom_texto }}
                 {% else %}
@@ -435,712 +727,12 @@
     });
   });
 </script>
-
-    <!-- Tabla de puestos personalizable -->
-    <div class="tabla-puestos-container">
-      <div class="section-title">
-        <h2>{{ section.settings.tabla_titulo }}</h2>
-      </div>
-
-      <div class="tabla-subtitle">
-        {{ section.settings.tabla_subtitulo }}
-      </div>
-
-      <div class="tabla-container">
-        <div class="tabla-grid">
-          {% if section.settings.mostrar_solo_seleccionados %}
-            {% for numero in section.settings.numeros_mostrar %}
-              {% if numero != blank %}
-                {% assign numero_int = numero | strip | plus: 0 %}
-                {% assign custom_texto = '' %}
-                {% assign es_disponible = true %}
-                
-                {% if section.settings.numeros_no_disponibles contains numero_int %}
-                  {% assign es_disponible = false %}
-                {% endif %}
-                
-                {% for personalizado in section.settings.numeros_personalizados %}
-                  {% assign partes = personalizado | split: ':' %}
-                  {% if partes.size >= 2 %}
-                    {% assign num_personalizado = partes[0] | strip | plus: 0 %}
-                    {% if num_personalizado == numero_int %}
-                      {% assign custom_texto = partes[1] | strip %}
-                      {% break %}
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-                
-                <div class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}" data-numero="{{ numero_int }}">
-                  {% if custom_texto != '' %}
-                    {{ custom_texto }}
-                  {% else %}
-                    {{ numero_int }}
-                  {% endif %}
-                </div>
-              {% endif %}
-            {% endfor %}
-          {% else %}
-            {% assign rango_inicio = section.settings.rango_inicio | default: 0 | plus: 0 %}
-            {% assign rango_fin = section.settings.rango_fin | default: 99 | plus: 0 %}
-            
-            {% for i in (rango_inicio..rango_fin) %}
-              {% assign es_disponible = true %}
-              {% assign custom_texto = '' %}
-              
-              {% if section.settings.numeros_no_disponibles contains i %}
-                {% assign es_disponible = false %}
-              {% endif %}
-              
-              {% for personalizado in section.settings.numeros_personalizados %}
-                {% assign partes = personalizado | split: ':' %}
-                {% if partes.size >= 2 %}
-                  {% assign num_personalizado = partes[0] | strip | plus: 0 %}
-                  {% if num_personalizado == i %}
-                    {% assign custom_texto = partes[1] | strip %}
-                    {% break %}
-                  {% endif %}
-                {% endif %}
-              {% endfor %}
-              
-              <div class="tabla-item {% if es_disponible %}disponible{% else %}no-disponible{% endif %}" data-numero="{{ i }}">
-                {% if custom_texto != '' %}
-                  {{ custom_texto }}
-                {% else %}
-                  {{ i }}
-                {% endif %}
-              </div>
-            {% endfor %}
-          {% endif %}
-        </div>
-
-        <div class="leyenda">
-          <div class="leyenda-item">
-            <div class="leyenda-color disponible"></div>
-            <span>{{ section.settings.texto_disponible }}</span>
-          </div>
-          <div class="leyenda-item">
-            <div class="leyenda-color no-disponible"></div>
-            <span>{{ section.settings.texto_no_disponible }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Botón de WhatsApp -->
-    <div class="text-center whatsapp-button-container">
-      <a
-        href="{{ section.settings.button_link }}"
-        class="whatsapp-button {% if section.settings.button_shake_effect %}con-sacudida{% endif %}"
-      >
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="white">
-          <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345z"/>
-        </svg>
-        {{ section.settings.button_text }}
-      </a>
-    </div>
-  </div>
-</section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Hacer clic en números disponibles para seleccionarlos
-    const numerosDisponibles = document.querySelectorAll('.tabla-item.disponible');
-    numerosDisponibles.forEach(num => {
-      num.addEventListener('click', function() {
-        const numero = this.getAttribute('data-numero');
-        // Redirigir a WhatsApp con el número seleccionado
-        const whatsappLink = '{{ section.settings.button_link }}';
-        const mensaje = encodeURIComponent('Me interesa el número ' + numero + ' para el sorteo');
-        window.open(whatsappLink + (whatsappLink.includes('?') ? '&' : '?') + 'text=' + mensaje, '_blank');
-      });
-    });
-  });
-</script>
-
-<style>
-  /* Estilos generales */
-  .premio-sorteo {
-    padding: 40px 0;
-    background-color: #000000;
-    color: #ffffff;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-  }
-
-  .section-title {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-
-  .section-title h2 {
-    font-size: 32px;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
-    color: #ffffff;
-  }
-  
-  /* Estilos para la sección de premios */
-  .premios-container {
-    margin-bottom: 30px;
-  }
-  
-  .sorteo-descripcion {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 20px;
-    color: #cccccc;
-    text-align: center;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .sorteo-fecha-container {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .sorteo-fecha {
-    font-size: 18px;
-    color: #ffffff;
-    display: inline-block;
-    padding: 8px 15px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-  }
-  
-  .premios-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-bottom: 40px;
-  }
-  
-  .premio-card {
-    background-color: #111111;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .premio-numero {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #25D366;
-    color: white;
-    padding: 8px 15px;
-    font-weight: bold;
-    border-bottom-left-radius: 8px;
-    z-index: 1;
-  }
-  
-  .premio-imagen-container {
-    width: 100%;
-    padding-bottom: 60%;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .premio-imagen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .premio-imagen-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-  }
-  
-  .premio-info {
-    padding: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .premio-titulo {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0 0 15px 0;
-    color: #ffffff;
-  }
-  
-  .premio-descripcion {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 15px;
-    color: #cccccc;
-    flex-grow: 1;
-  }
-  
-  .premio-valor {
-    font-size: 16px;
-    margin-bottom: 15px;
-    color: #ffffff;
-  }
-  
-  .premio-lista {
-    margin-top: auto;
-  }
-  
-  .premio-caracteristica {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 8px;
-  }
-  
-  .caracteristica-icono {
-    width: 20px;
-    height: 20px;
-    background-color: #25D366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-    flex-shrink: 0;
-    font-size: 12px;
-  }
-  
-  .caracteristica-texto {
-    font-size: 14px;
-    color: #ffffff;
-  }
-  
-  /* Ganadores */
-  .ganadores-container {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #1a1a1a;
-    border-radius: 8px;
-  }
-  
-  .ganadores-titulo {
-    font-size: 24px;
-    margin-bottom: 15px;
-    color: #ffffff;
-    text-align: center;
-  }
-  
-  .ganadores-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .ganador-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background-color: #222222;
-    border-radius: 6px;
-  }
-  
-  .ganador-numero {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #25D366;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-right: 15px;
-    flex-shrink: 0;
-  }
-  
-  .ganador-info {
-    flex: 1;
-  }
-  
-  .ganador-nombre {
-    font-weight: bold;
-    color: #ffffff;
-    font-size: 16px;
-  }
-  
-  .ganador-premio {
-    font-size: 14px;
-    color: #cccccc;
-    margin-top: 3px;
-  }
-  
-  /* Estilos de la tabla de puestos */
-  .tabla-puestos-container {
-    margin-bottom: 50px;
-  }
-
-  .tabla-subtitle {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #cccccc;
-  }
-
-  .tabla-container {
-    background-color: #111111;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  .tabla-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .tabla-item {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 4px;
-  }
-
-  .tabla-item.disponible {
-    background-color: #25D366;
-    color: #FFFFFF;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .tabla-item.disponible:hover {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.5);
-  }
-
-  .tabla-item.no-disponible {
-    background-color: #444444;
-  }
-
-  .leyenda {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 20px;
-  }
-
-  .leyenda-item {
-    display: flex;
-    align-items: center;
-  }
-
-  .leyenda-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    margin-right: 8px;
-  }
-
-  .leyenda-color.disponible {
-    background-color: #25D366;
-  }
-
-  .leyenda-color.no-disponible {
-    background-color: #444444;
-  }
-
-  /* Estilos del botón de WhatsApp */
-  .whatsapp-button-container {
-    text-align: center;
-  }
-
-  .whatsapp-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #25D366;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 15px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
-    text-transform: uppercase;
-    font-size: 16px;
-    transition: all 0.3s ease;
-  }
-
-  .whatsapp-button svg {
-    margin-right: 10px;
-  }
-
-  .whatsapp-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
-  }
-
-  /* Efecto de sacudida para el botón */
-  @keyframes sacudida {
-    0% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-    100% { transform: translateX(0); }
-  }
-
-  .whatsapp-button.con-sacudida {
-    animation: sacudida 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
-  }
-
-  .whatsapp-button.con-sacudida:hover {
-    animation: none;
-    transform: translateY(-2px);
-  }
-
-  /* Responsive */
-  @media screen and (max-width: 768px) {
-    .tabla-grid {
-      grid-template-columns: repeat(5, 1fr);
-    }
-
-    .premio-info {
-      flex-direction: column;
-    }
-
-    .section-title h2 {
-      font-size: 28px;
-    }
-
-    .tabla-item {
-      height: 36px;
-      font-size: 14px;
-    }
-    
-    .ganador-item {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    
-    .ganador-numero {
-      margin-right: 0;
-      margin-bottom: 10px;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    .tabla-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .leyenda {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-title h2 {
-      font-size: 24px;
-    }
-  }
-</style>
-
-  /* Estilos de la tabla de puestos */
-  .tabla-puestos-container {
-    margin-bottom: 50px;
-  }
-
-  .tabla-subtitle {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #cccccc;
-  }
-
-  .tabla-container {
-    background-color: #111111;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Se eliminó el selector de rangos */
-
-  .tabla-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-
-  .tabla-item {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 4px;
-  }
-
-  .tabla-item.disponible {
-    background-color: #25D366;
-    color: #FFFFFF;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .tabla-item.disponible:hover {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(37, 211, 102, 0.5);
-  }
-
-  .tabla-item.no-disponible {
-    background-color: #444444;
-  }
-
-  .leyenda {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 20px;
-  }
-
-  .leyenda-item {
-    display: flex;
-    align-items: center;
-  }
-
-  .leyenda-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    margin-right: 8px;
-  }
-
-  .leyenda-color.disponible {
-    background-color: #25D366;
-  }
-
-  .leyenda-color.no-disponible {
-    background-color: #444444;
-  }
-
-  /* Estilos del botón de WhatsApp */
-  .whatsapp-button-container {
-    text-align: center;
-  }
-
-  .whatsapp-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #25D366;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 15px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(37, 211, 102, 0.3);
-    text-transform: uppercase;
-    font-size: 16px;
-    transition: all 0.3s ease;
-  }
-
-  .whatsapp-button svg {
-    margin-right: 10px;
-  }
-
-  .whatsapp-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(37, 211, 102, 0.4);
-  }
-
-  /* Efecto de sacudida para el botón */
-  @keyframes sacudida {
-    0% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-    100% { transform: translateX(0); }
-  }
-
-  .whatsapp-button.con-sacudida {
-    animation: sacudida 2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
-  }
-
-  .whatsapp-button.con-sacudida:hover {
-    animation: none;
-    transform: translateY(-2px);
-  }
-
-  /* Responsive */
-  @media screen and (max-width: 768px) {
-    .tabla-grid {
-      grid-template-columns: repeat(5, 1fr);
-    }
-
-    .premio-info {
-      flex-direction: column;
-    }
-
-    .section-title h2 {
-      font-size: 28px;
-    }
-
-    .tabla-item {
-      height: 36px;
-      font-size: 14px;
-    }
-    
-    .ganador-item {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    
-    .ganador-numero {
-      margin-right: 0;
-      margin-bottom: 10px;
-    }
-  }
-
-  @media screen and (max-width: 480px) {
-    .tabla-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .leyenda {
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-title h2 {
-      font-size: 24px;
-    }
-  }
-</style>
 
 {% schema %}
 {
   "name": "Premio y Tabla de Puestos",
+  "tag": "section",
+  "class": "section",
   "settings": [
     {
       "type": "header",
@@ -1396,7 +988,8 @@
       "type": "text",
       "id": "button_link",
       "label": "Enlace del botón",
-      "default": "https://wa.me/573000000000"
+      "default": "https://wa.me/573000000000",
+      "info": "URL completa incluyendo https://"
     },
     {
       "type": "checkbox",
