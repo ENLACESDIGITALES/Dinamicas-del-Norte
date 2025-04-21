@@ -181,7 +181,8 @@
                 <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio1_valor }}</div>
               {% endif %}
               <div class="premio-lista">
-                {% for caracteristica in section.settings.premio1_caracteristicas %}
+                {% assign caracteristicas1 = section.settings.premio1_caracteristicas | newline_to_br | split: '<br />' %}
+                {% for caracteristica in caracteristicas1 %}
                   {% if caracteristica != blank %}
                     <div class="premio-caracteristica">
                       <div class="caracteristica-icono">✓</div>
@@ -220,7 +221,8 @@
                 <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio2_valor }}</div>
               {% endif %}
               <div class="premio-lista">
-                {% for caracteristica in section.settings.premio2_caracteristicas %}
+                {% assign caracteristicas2 = section.settings.premio2_caracteristicas | newline_to_br | split: '<br />' %}
+                {% for caracteristica in caracteristicas2 %}
                   {% if caracteristica != blank %}
                     <div class="premio-caracteristica">
                       <div class="caracteristica-icono">✓</div>
@@ -259,7 +261,8 @@
                 <div class="premio-valor"><strong>Valor:</strong> {{ section.settings.premio3_valor }}</div>
               {% endif %}
               <div class="premio-lista">
-                {% for caracteristica in section.settings.premio3_caracteristicas %}
+                {% assign caracteristicas3 = section.settings.premio3_caracteristicas | newline_to_br | split: '<br />' %}
+                {% for caracteristica in caracteristicas3 %}
                   {% if caracteristica != blank %}
                     <div class="premio-caracteristica">
                       <div class="caracteristica-icono">✓</div>
@@ -307,23 +310,33 @@
       <div class="tabla-container">
         <div class="tabla-grid">
           {% if section.settings.mostrar_solo_seleccionados %}
-            {% for numero in section.settings.numeros_mostrar %}
+            {% assign numeros_array = section.settings.numeros_mostrar | split: ',' %}
+            {% assign no_disponibles_array = section.settings.numeros_no_disponibles | split: ',' %}
+            
+            {% for numero in numeros_array %}
               {% if numero != blank %}
                 {% assign numero_int = numero | strip | plus: 0 %}
                 {% assign custom_texto = '' %}
                 {% assign es_disponible = true %}
                 
-                {% if section.settings.numeros_no_disponibles contains numero_int %}
-                  {% assign es_disponible = false %}
-                {% endif %}
+                {% for no_disp in no_disponibles_array %}
+                  {% assign no_disp_int = no_disp | strip | plus: 0 %}
+                  {% if no_disp_int == numero_int %}
+                    {% assign es_disponible = false %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
                 
-                {% for personalizado in section.settings.numeros_personalizados %}
-                  {% assign partes = personalizado | split: ':' %}
-                  {% if partes.size >= 2 %}
-                    {% assign num_personalizado = partes[0] | strip | plus: 0 %}
-                    {% if num_personalizado == numero_int %}
-                      {% assign custom_texto = partes[1] | strip %}
-                      {% break %}
+                {% assign numeros_personalizados_array = section.settings.numeros_personalizados | newline_to_br | split: '<br />' %}
+                {% for personalizado in numeros_personalizados_array %}
+                  {% if personalizado contains ':' %}
+                    {% assign partes = personalizado | split: ':' %}
+                    {% if partes.size >= 2 %}
+                      {% assign num_personalizado = partes[0] | strip | plus: 0 %}
+                      {% if num_personalizado == numero_int %}
+                        {% assign custom_texto = partes[1] | strip %}
+                        {% break %}
+                      {% endif %}
                     {% endif %}
                   {% endif %}
                 {% endfor %}
@@ -340,22 +353,30 @@
           {% else %}
             {% assign rango_inicio = section.settings.rango_inicio | default: 0 | plus: 0 %}
             {% assign rango_fin = section.settings.rango_fin | default: 99 | plus: 0 %}
+            {% assign no_disponibles_array = section.settings.numeros_no_disponibles | split: ',' %}
+            {% assign numeros_personalizados_array = section.settings.numeros_personalizados | newline_to_br | split: '<br />' %}
             
             {% for i in (rango_inicio..rango_fin) %}
               {% assign es_disponible = true %}
               {% assign custom_texto = '' %}
               
-              {% if section.settings.numeros_no_disponibles contains i %}
-                {% assign es_disponible = false %}
-              {% endif %}
+              {% for no_disp in no_disponibles_array %}
+                {% assign no_disp_int = no_disp | strip | plus: 0 %}
+                {% if no_disp_int == i %}
+                  {% assign es_disponible = false %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
               
-              {% for personalizado in section.settings.numeros_personalizados %}
-                {% assign partes = personalizado | split: ':' %}
-                {% if partes.size >= 2 %}
-                  {% assign num_personalizado = partes[0] | strip | plus: 0 %}
-                  {% if num_personalizado == i %}
-                    {% assign custom_texto = partes[1] | strip %}
-                    {% break %}
+              {% for personalizado in numeros_personalizados_array %}
+                {% if personalizado contains ':' %}
+                  {% assign partes = personalizado | split: ':' %}
+                  {% if partes.size >= 2 %}
+                    {% assign num_personalizado = partes[0] | strip | plus: 0 %}
+                    {% if num_personalizado == i %}
+                      {% assign custom_texto = partes[1] | strip %}
+                      {% break %}
+                    {% endif %}
                   {% endif %}
                 {% endif %}
               {% endfor %}
