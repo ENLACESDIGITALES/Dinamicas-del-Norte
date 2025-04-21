@@ -116,10 +116,10 @@
                 <div class="popup-overlay"></div>
                 <div class="popup-content">
                   <div class="popup-video-wrapper">
-                    {% if block.settings.video_file != blank %}
+                    {% if block.settings.video_mp4_url != blank %}
                       <div class="popup-video-inner">
                         <video controls playsinline preload="metadata" class="popup-video">
-                          <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
+                          <source src="{{ block.settings.video_mp4_url }}" type="video/mp4">
                           Tu navegador no soporta videos HTML5.
                         </video>
                       </div>
@@ -1769,11 +1769,11 @@
           "label": "URL del video (YouTube o Vimeo)",
           "info": "Ej: https://www.youtube.com/watch?v=XXXXXXXXXXX"
         },
-        {
-          "type": "video",
-          "id": "video_file",
-          "label": "Archivo de video",
-          "info": "Sube un archivo MP4 directamente"
+                {
+          "type": "text",
+          "id": "video_mp4_url",
+          "label": "URL del archivo MP4",
+          "info": "Introduce la URL completa al archivo de video MP4"
         },
         {
           "type": "image_picker",
