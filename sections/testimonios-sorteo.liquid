@@ -1,5 +1,5 @@
 {% comment %}
-  Testimonios Reviews - Con enlace directo al MP4
+  Testimonios Reviews - Con popup integrado (sin navegación externa)
 {% endcomment %}
 
 <section class="testimonios-reviews">
@@ -68,8 +68,8 @@
             {% elsif block.type == 'testimonio_video' %}
               <div class="review-slide video-slide" {{ block.shopify_attributes }}>
                 <div class="review-card">
-                  <!-- ENLACE DIRECTO AL VIDEO -->
-                  <div class="direct-video-link-container">
+                  <!-- Miniatura de video con popup -->
+                  <div class="popup-video-container" data-video-id="{{ block.id }}">
                     {% if block.settings.video_thumbnail != blank %}
                       <img
                         src="{{ block.settings.video_thumbnail | img_url: 'master' }}"
@@ -82,12 +82,12 @@
                       </div>
                     {% endif %}
 
-                    <div class="play-button-direct">
-                      <a href="{{ block.settings.video_file | file_url }}" target="_blank" class="direct-video-link">
+                    <div class="play-button-popup">
+                      <button class="play-button" aria-label="Reproducir video">
                         <svg viewBox="0 0 24 24" width="48" height="48">
                           <path d="M8 5v14l11-7z" fill="#ffffff"/>
                         </svg>
-                      </a>
+                      </button>
                     </div>
                   </div>
 
@@ -108,6 +108,24 @@
                       <p class="review-author-name">{{ block.settings.autor }}</p>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- HTML para el video popup (oculto inicialmente) -->
+              <div id="video-popup-{{ block.id }}" class="video-popup">
+                <div class="popup-overlay"></div>
+                <div class="popup-content">
+                  <div class="popup-video-wrapper">
+                    {% if block.settings.video_file != blank %}
+                      <div class="popup-video-inner">
+                        <video controls playsinline muted preload="metadata" class="popup-video">
+                          <source src="{{ block.settings.video_file | file_url }}" type="video/mp4">
+                          Tu navegador no soporta videos HTML5.
+                        </video>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <button class="popup-close">×</button>
                 </div>
               </div>
             {% endif %}
@@ -369,8 +387,8 @@
     -webkit-box-orient: vertical;
   }
 
-  /* NUEVO - Enlace directo al video */
-  .direct-video-link-container {
+  /* NUEVO SISTEMA DE POPUP DE VIDEO */
+  .popup-video-container {
     position: relative;
     width: 100%;
     {% if section.settings.video_format == 'vertical' %}
@@ -384,6 +402,7 @@
     overflow: hidden;
     margin-bottom: 10px;
     background-color: #000000;
+    cursor: pointer;
   }
 
   .video-thumbnail {
@@ -393,6 +412,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: {{ section.settings.video_border_radius }}px;
   }
 
   .video-thumbnail-placeholder {
@@ -407,9 +427,10 @@
     background-color: #222222;
     color: white;
     font-weight: bold;
+    border-radius: {{ section.settings.video_border_radius }}px;
   }
 
-  .play-button-direct {
+  .play-button-popup {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -417,7 +438,7 @@
     z-index: 2;
   }
 
-  .direct-video-link {
+  .play-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -428,11 +449,95 @@
     border: 3px solid white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
+    padding: 0;
+    cursor: pointer;
   }
 
-  .direct-video-link:hover {
+  .play-button:hover {
     transform: scale(1.1);
     background-color: rgba(255, 0, 0, 1);
+  }
+
+  /* Estilos del popup */
+  .video-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 999;
+  }
+
+  .video-popup.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1;
+  }
+
+  .popup-content {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: {% if section.settings.video_format == 'vertical' %}500px{% else %}1000px{% endif %};
+  }
+
+  .popup-video-wrapper {
+    position: relative;
+    width: 100%;
+    {% if section.settings.video_format == 'vertical' %}
+    padding-bottom: 177.78%; /* Aspect ratio 9:16 (vertical como Instagram Stories) */
+    {% elsif section.settings.video_format == 'square' %}
+    padding-bottom: 100%; /* Aspect ratio 1:1 (cuadrado) */
+    {% else %}
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 (horizontal estándar) */
+    {% endif %}
+    height: 0;
+    background-color: #000;
+    overflow: hidden;
+  }
+
+  .popup-video-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .popup-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .popup-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    font-weight: bold;
   }
 
   /* Indicadores de posición (dots) */
@@ -572,6 +677,114 @@
       
       if (!track || !slides.length) return;
       
+      // CONFIGURACIÓN DE VIDEOS POPUP
+      setupVideoPopups();
+      
+      function setupVideoPopups() {
+        // Obtener todos los contenedores de video
+        const videoContainers = document.querySelectorAll('.popup-video-container');
+        
+        videoContainers.forEach(container => {
+          const videoId = container.getAttribute('data-video-id');
+          const popup = document.getElementById(`video-popup-${videoId}`);
+          
+          if (!popup) return;
+          
+          // Añadir evento al botón de play y al contenedor
+          container.addEventListener('click', function() {
+            openVideoPopup(videoId);
+          });
+          
+          // Añadir evento para cerrar el popup
+          const closeBtn = popup.querySelector('.popup-close');
+          const overlay = popup.querySelector('.popup-overlay');
+          
+          if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+              closeVideoPopup(videoId);
+            });
+          }
+          
+          if (overlay) {
+            overlay.addEventListener('click', function() {
+              closeVideoPopup(videoId);
+            });
+          }
+        });
+        
+        // También cerrar con la tecla ESC
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            const activePopup = document.querySelector('.video-popup.active');
+            if (activePopup) {
+              const videoId = activePopup.id.replace('video-popup-', '');
+              closeVideoPopup(videoId);
+            }
+          }
+        });
+      }
+      
+      function openVideoPopup(videoId) {
+        const popup = document.getElementById(`video-popup-${videoId}`);
+        if (!popup) return;
+        
+        // Mostrar el popup
+        popup.classList.add('active');
+        
+        // Reproducir el video
+        const video = popup.querySelector('video');
+        if (video) {
+          // Forzar la carga del video
+          video.load();
+          
+          // Intentar reproducir con manejo de excepciones
+          try {
+            // Este timeout ayuda a que el navegador procese el video antes de intentar reproducirlo
+            setTimeout(function() {
+              const playPromise = video.play();
+              if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                  console.error('Error reproduciendo el video:', error);
+                  // Asegurar que se muestran los controles si falla la reproducción
+                  video.controls = true;
+                });
+              }
+            }, 100);
+          } catch(e) {
+            console.error('Error al intentar reproducir el video:', e);
+          }
+        }
+        
+        // Detener autoplay del slider
+        if (autoplayInterval) clearInterval(autoplayInterval);
+        
+        // Evitar scroll en el body
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeVideoPopup(videoId) {
+        const popup = document.getElementById(`video-popup-${videoId}`);
+        if (!popup) return;
+        
+        // Pausar el video
+        const video = popup.querySelector('video');
+        if (video && !video.paused) {
+          video.pause();
+        }
+        
+        // Ocultar el popup
+        popup.classList.remove('active');
+        
+        // Restaurar autoplay si estaba activo
+        if (isAutoplay) {
+          toggleAutoplay();
+        }
+        
+        // Restaurar scroll
+        document.body.style.overflow = '';
+      }
+      
+      // CONFIGURACIÓN DEL SLIDER
       let currentIndex = 0;
       let startX, endX;
       let isAutoplay = {{ section.settings.autoplay }};
@@ -651,6 +864,20 @@
         dots.forEach((dot, i) => {
           dot.classList.toggle('active', i === currentIndex);
         });
+        
+        // Pausar todos los videos cuando se cambia de slide
+        pauseAllVideos();
+      }
+      
+      function pauseAllVideos() {
+        // Pausar videos en popups
+        const videoPopups = document.querySelectorAll('.video-popup');
+        videoPopups.forEach(popup => {
+          const video = popup.querySelector('video');
+          if (video && !video.paused) {
+            video.pause();
+          }
+        });
       }
       
       function toggleAutoplay() {
@@ -712,13 +939,13 @@
       const trackWrapper = slider.querySelector('.reviews-track-wrapper');
       
       trackWrapper.addEventListener('touchstart', e => {
-        // Verificar si estamos tocando una miniatura de video
+        // Verificar si estamos tocando un elemento de video
         const touch = e.touches[0];
         const element = document.elementFromPoint(touch.clientX, touch.clientY);
         
         // No iniciar deslizamiento si tocamos un elemento de video
-        if (element.closest('.direct-video-link-container') || 
-            element.closest('.direct-video-link')) {
+        if (element.closest('.popup-video-container') || 
+            element.closest('.play-button')) {
           return;
         }
         
