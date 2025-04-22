@@ -269,7 +269,7 @@
         ],
         "settings": {
           "testimonios_title": "TESTIMONIOS",
-          "slides_per_view_desktop": 2,
+          "slides_per_view_desktop": 3,
           "slides_per_row": 3,
           "autoplay": true,
           "button_text": "QUIERO ACCEDER AL GRUPO DE WHATSAPP",
