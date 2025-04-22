@@ -314,7 +314,7 @@
           "linea_titulo_alto": 4,
           "linea_titulo_espacio": 10,
           "mostrar_imagen": true,
-          "nosotros_image": "shopify://shop_images/File_7.jpg",
+          "nosotros_image": "shopify://shop_images/Copia_de_Texto_del_parrafo_10.png",
           "alineacion_imagen": "center",
           "imagen_radio": 8,
           "imagen_sombra": true,
@@ -390,7 +390,7 @@
           "tablet_direccion": "column",
           "tablet_espacio_entre_elementos": 20,
           "mobile_cambiar_direccion": true,
-          "mobile_direccion": "column-reverse",
+          "mobile_direccion": "column",
           "mobile_espacio_entre_elementos": 10
         }
       },
