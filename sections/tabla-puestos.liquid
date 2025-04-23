@@ -3,7 +3,7 @@
 {% endcomment %}
 
 <style>
-  /* Estilos generales */
+  /* Estilos generales - Mantenidos igual */
   .premio-sorteo {
     padding: 40px 0;
     background-color: #000000;
@@ -29,7 +29,7 @@
     color: #ffffff;
   }
 
-  /* Estilos para la sección de premios */
+  /* Resto de estilos sin cambios... */
   .premios-container {
     margin-bottom: 30px;
   }
@@ -596,6 +596,7 @@
             {% for numero in numeros_array %}
               {% if numero != blank %}
                 {% assign numero_int = numero | strip | plus: 0 %}
+                {% assign numero_formateado = numero_int | prepend: '00' | slice: -2, 2 %}
                 {% assign custom_texto = '' %}
                 {% assign es_disponible = true %}
 
@@ -631,7 +632,7 @@
                   {% if custom_texto != '' %}
                     {{ custom_texto }}
                   {% else %}
-                    {{ numero_int }}
+                    {{ numero_formateado }}
                   {% endif %}
                 </div>
               {% endif %}
@@ -646,6 +647,7 @@
             %}
 
             {% for i in (rango_inicio..rango_fin) %}
+              {% assign numero_formateado = i | prepend: '00' | slice: -2, 2 %}
               {% assign es_disponible = true %}
               {% assign custom_texto = '' %}
 
@@ -677,7 +679,7 @@
                 {% if custom_texto != '' %}
                   {{ custom_texto }}
                 {% else %}
-                  {{ i }}
+                  {{ numero_formateado }}
                 {% endif %}
               </div>
             {% endfor %}
@@ -719,9 +721,11 @@
     numerosDisponibles.forEach(num => {
       num.addEventListener('click', function() {
         const numero = this.getAttribute('data-numero');
+        // Formatear el número a dos dígitos para el mensaje de WhatsApp
+        const numeroFormateado = String(numero).padStart(2, '0');
         // Redirigir a WhatsApp con el número seleccionado
         const whatsappLink = '{{ section.settings.button_link }}';
-        const mensaje = encodeURIComponent('Me interesa el número ' + numero + ' para el sorteo');
+        const mensaje = encodeURIComponent('Me interesa el número ' + numeroFormateado + ' para el sorteo');
         window.open(whatsappLink + (whatsappLink.includes('?') ? '&' : '?') + 'text=' + mensaje, '_blank');
       });
     });
